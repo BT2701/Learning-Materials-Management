@@ -7,10 +7,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,6 +22,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import View.ThanhVien.MemberView;
+import View.ThietBi.DeviceView;
+import View.ThongKe.StatisticView;
+import View.ViPham.HandleView;
 
 public class HomePage extends JFrame {
 //	components
@@ -40,8 +48,15 @@ public class HomePage extends JFrame {
 	private Font sgUI13 = new Font("Segoe UI", Font.PLAIN, 13);
 	private Font sgUI18b = new Font("Segoe UI", Font.BOLD, 18);
 	private Font tNR18b = new Font("Times New Roman", Font.BOLD, 18);
-
 	private Color mainColor = Color.decode("#dff9fb");
+
+//	Content
+	private JPanel pnMember = new MemberView();
+	private JPanel pnDevice = new DeviceView();
+	private JPanel pnHandle = new HandleView();
+	private JPanel pnStatistic = new StatisticView();
+
+	ArrayList<Boolean> mouseClicked;
 
 	public HomePage() {
 		setSize(1400, 800);
@@ -119,7 +134,7 @@ public class HomePage extends JFrame {
 		pnNorthContentTittle.add(lbTittle);
 
 		pnNorthContentUser = new JPanel();
-		pnNorthContentUser.setLayout(new FlowLayout(FlowLayout.RIGHT, 20,10));
+		pnNorthContentUser.setLayout(new FlowLayout(FlowLayout.RIGHT, 20, 10));
 		pnNorthContentUser.add(lbUserName);
 
 //		content of north panel
@@ -139,9 +154,10 @@ public class HomePage extends JFrame {
 		pnWestContent = new JPanel();
 		pnWestContent.setLayout(new BoxLayout(pnWestContent, BoxLayout.Y_AXIS));
 		listPanel = new ArrayList<>();
-
+		mouseClicked=new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			pnWestContent.add(listbtn.get(i));
+			mouseClicked.add(false);
 		}
 //		
 
@@ -152,6 +168,7 @@ public class HomePage extends JFrame {
 
 //		content of center panel
 		pnCenterContent = new JPanel();
+		setDisplayContent(1);
 
 //		north panel
 		pnNorth = new JPanel();
@@ -182,16 +199,20 @@ public class HomePage extends JFrame {
 	}
 
 	public void styles() {
-		for (JButton x : listbtn) {
-			x.setFocusPainted(false);
-			x.setBorder(new EmptyBorder(10, 10, 10, 10));
-			x.setPreferredSize(new Dimension(200, 45));
-			x.setMaximumSize(new Dimension(200, 45));
-			x.setFont(sgUI15b);
-			x.setHorizontalAlignment(SwingConstants.LEFT);
-			x.setBackground(mainColor);
-			x.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			hoverBtn(x,0);
+		for (int i = 0; i < listbtn.size(); i++) {
+			listbtn.get(i).setFocusPainted(false);
+			listbtn.get(i).setBorder(new EmptyBorder(10, 10, 10, 10));
+			listbtn.get(i).setPreferredSize(new Dimension(200, 45));
+			listbtn.get(i).setMaximumSize(new Dimension(200, 45));
+			listbtn.get(i).setFont(sgUI15b);
+			listbtn.get(i).setHorizontalAlignment(SwingConstants.LEFT);
+			listbtn.get(i).setBackground(mainColor);
+			listbtn.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			pressedBtn();
+			if (mouseClicked.get(i)==false) {
+				hoverBtn(listbtn.get(i), 0);
+			}
+
 		}
 
 		btnLogin.setBackground(Color.decode("#7ed6df"));
@@ -217,6 +238,7 @@ public class HomePage extends JFrame {
 		hoverLb(lbProcessHome);
 
 		pnCenter.setBackground(Color.white);
+		pnCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		pnNorth.setBackground(mainColor);
 		pnNorthContent.setBackground(mainColor);
 		pnNorthContentTittle.setBackground(mainColor);
@@ -228,7 +250,7 @@ public class HomePage extends JFrame {
 	}
 
 	public void hoverBtn(final JButton btn, int option) {
-		if(option ==1) {
+		if (option == 1) {
 			btn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
@@ -244,8 +266,7 @@ public class HomePage extends JFrame {
 
 				}
 			});
-		}
-		else {
+		} else {
 			btn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent e) {
@@ -264,6 +285,7 @@ public class HomePage extends JFrame {
 		}
 
 	}
+
 	public void hoverLb(final JLabel lb) {
 		lb.addMouseListener(new MouseAdapter() {
 			@Override
@@ -281,36 +303,55 @@ public class HomePage extends JFrame {
 			}
 		});
 	}
-//	public void setDisplayContent() {
-//        pnContent.removeAll();
-//        pnContent.revalidate();
-//        pnContent.repaint();
-//        pnContent.setLayout(new BorderLayout());
-//        switch (menu) {
-//            case 0:
-//                JPanel a = new PanelHome(getWidth(),getHeight());
-//                pnContent.setLayout(new BorderLayout());
-//                pnContent.add(a, BorderLayout.CENTER);
-//                break;
-//            case 1:
-//                pnContent.add(pnPhong, BorderLayout.CENTER);
-//                break;
-//            case 4:
-//                pnContent.add(pnKhachHang, BorderLayout.CENTER);
-//                break;
-//            case 3:
-//                pnContent.add(pnNhanVien, BorderLayout.CENTER);
-//                break;
-//            case 2:
-//                pnContent.add(pnDichVu, BorderLayout.CENTER);
-//                break;
-//            case 5:
-//                pnContent.add(pnHoaDon, BorderLayout.CENTER);
-//                break;
-//            case 6:
-//                pnContent.add(pnThongKe,BorderLayout.CENTER);
-//                break;
-//        }
-//    }
+
+	public void setDisplayContent(int option) {
+		pnCenterContent.removeAll();
+		pnCenterContent.revalidate();
+		pnCenterContent.repaint();
+		pnCenterContent.setLayout(new BorderLayout());
+		switch (option) {
+			case 1:
+				JPanel a = new PanelHome(getWidth(), getHeight());
+				pnCenterContent.setLayout(new BorderLayout());
+				pnCenterContent.add(a, BorderLayout.CENTER);
+				break;
+			case 2:
+				pnCenterContent.add(pnMember, BorderLayout.CENTER);
+				break;
+			case 5:
+				pnCenterContent.add(pnStatistic, BorderLayout.CENTER);
+				break;
+			case 4:
+				pnCenterContent.add(pnHandle, BorderLayout.CENTER);
+				break;
+			case 3:
+				pnCenterContent.add(pnDevice, BorderLayout.CENTER);
+				break;
+		}
+	}
+
+	public void pressedBtn() {
+		for (int i = 0; i < listbtn.size(); i++) {
+			final int index = i;
+			listbtn.get(index).addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+
+					listbtn.get(index).setBackground(Color.decode("#95afc0"));
+					mouseClicked.set(index, true);
+					setDisplayContent(index + 1);
+					for (int j=0;j<listbtn.size();j++) {
+						if(j!=index) {
+							listbtn.get(index).setBackground(mainColor);
+						}
+					}
+
+				}
+			});
+		}
+
+	}
 
 }

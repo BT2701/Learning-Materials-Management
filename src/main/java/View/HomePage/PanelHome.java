@@ -15,6 +15,6 @@ public class PanelHome extends JPanel {
 
     public void init(int width, int height) {
         setLayout(new BorderLayout());
-        add(new ImageSliderPanel(new String[]{"/GUI/assets/bn1.png", "/GUI/assets/bn2.png","/GUI/assets/bn3.png"}, width, height),BorderLayout.CENTER);
+        add(new ImageSliderPanel(new String[]{"/View/images/slide1.png", "/View/images/slide2.png","/View/images/slide3.png"}, width, height),BorderLayout.CENTER);
     }
 }

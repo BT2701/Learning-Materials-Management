@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -27,6 +28,19 @@ public class FormStatistic extends JDialog {
 	private JFreeChart chartTime, chartDepartment, chartBranch;
 	private JComboBox<String> cbbTop, cbbBot;
 
+	
+//	DEVICE
+	private JPanel pnDeviceContent, pnDeviceCbb;
+	private JComboBox<String> cbbYear, cbbMonth;
+	private JFreeChart chartDevice;
+	private ChartPanel pnChartDevice;
+	
+//	HANDLE
+	private JPanel pnHandleTop, pnHandleBot,pnHandleBotNorth, pnHandleBotContent, pnHandleDone, pnHandleUnDone, pnHandleFee;
+	private JFreeChart chartHandle;
+	private ChartPanel pnChartHandle;
+	private JLabel lbTxtHandleDone,lbTxtHandleUnDone,lbTxtHandleFee, lbHandleDone, lbHandleUnDone, lbHandleFee;
+	
 	public FormStatistic(int option) {
 		setSize(1000, 700);
 		setLocationRelativeTo(null);
@@ -141,27 +155,143 @@ public class FormStatistic extends JDialog {
 	}
 
 	public void initComponentsDevice() {
+//		subcomponent
+		chartDevice = ChartFactory.createBarChart(
+                "Thống kê thiết bị được mượn",
+                "Thiết bị",
+                "Số lượng",
+                createDatasetDevice(2024,2)
+        );
+		
+		cbbYear=new JComboBox<String>();
+		cbbMonth=new JComboBox<String>();
+		
+		pnChartDevice=new ChartPanel(chartDevice);
+		
+		
+//		pn device
+		pnDeviceContent=new JPanel();
+		pnDeviceContent.setLayout(new BorderLayout());
+		pnDeviceContent.add(pnChartDevice,BorderLayout.CENTER);
+		
+//		pn cbb
+		pnDeviceCbb=new JPanel();
+		pnDeviceCbb.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		pnDeviceCbb.add(cbbYear);
+		pnDeviceCbb.add(cbbMonth);
+		
+		
 		this.setLayout(new BorderLayout());
-		JPanel temPanel = new JPanel();
-		this.add(temPanel);
-		temPanel.setBackground(Color.white);
-		this.add(temPanel, BorderLayout.CENTER);
+		this.add(pnDeviceContent, BorderLayout.CENTER);
+		this.add(pnDeviceCbb,BorderLayout.SOUTH);
+		
 	}
 
 	public void initComponentsCurrent() {
+//		subcomponent
+		chartDevice = ChartFactory.createBarChart(
+                "Thống kê thiết bị đang được mượn",
+                "Thiết bị",
+                "Số lượng",
+                createDatasetCurrent(2024,2)
+        );
+		
+		cbbYear=new JComboBox<String>();
+		cbbMonth=new JComboBox<String>();
+		
+		pnChartDevice=new ChartPanel(chartDevice);
+		
+		
+//		pn device
+		pnDeviceContent=new JPanel();
+		pnDeviceContent.setLayout(new BorderLayout());
+		pnDeviceContent.add(pnChartDevice,BorderLayout.CENTER);
+		
+//		pn cbb
+		pnDeviceCbb=new JPanel();
+		pnDeviceCbb.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		pnDeviceCbb.add(cbbYear);
+		pnDeviceCbb.add(cbbMonth);
+		
+		
 		this.setLayout(new BorderLayout());
-		JPanel temPanel = new JPanel();
-		this.add(temPanel);
-		temPanel.setBackground(Color.blue);
-		this.add(temPanel, BorderLayout.CENTER);
+		this.add(pnDeviceContent, BorderLayout.CENTER);
+		this.add(pnDeviceCbb,BorderLayout.SOUTH);
+		
 	}
 
 	public void initComponentsHandle() {
+		
+		chartHandle = ChartFactory.createBarChart(
+                "Thống kê vi phạm",
+                "Tên vi phạm",
+                "Số lượng",
+                createDatasetHandle(2024,2)
+        );
+		
+		cbbYear=new JComboBox<String>();
+		cbbMonth=new JComboBox<String>();
+		
+		lbHandleDone=new JLabel();
+		
+		lbHandleFee=new JLabel();
+		
+		lbHandleUnDone= new JLabel();
+		
+		lbTxtHandleDone= new JLabel("Đã được xử lý:");
+		
+		lbTxtHandleFee= new JLabel("Số tiền bồi thường:");
+		
+		lbTxtHandleUnDone= new JLabel("Chưa được xử lý: ");
+		
+		pnChartHandle=new ChartPanel(chartHandle);
+//		top
+		pnHandleTop=new JPanel();
+		pnHandleTop.setLayout(new BorderLayout());
+		pnHandleTop.add(pnChartHandle,BorderLayout.CENTER);
+		
+		
+//		bot north
+		pnHandleBotNorth=new JPanel();
+		pnHandleBotNorth.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
+		pnHandleBotNorth.add(cbbYear);
+		pnHandleBotNorth.add(cbbMonth);
+		
+//		bot content component
+		pnHandleDone=new JPanel();
+		pnHandleDone.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 10));
+		pnHandleDone.add(lbTxtHandleDone);
+		pnHandleDone.add(lbHandleDone);
+		
+		pnHandleUnDone=new JPanel();
+		pnHandleUnDone.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 10));
+		pnHandleUnDone.add(lbTxtHandleUnDone);
+		pnHandleUnDone.add(lbHandleUnDone);
+		
+		pnHandleFee=new JPanel();
+		pnHandleFee.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 10));
+		pnHandleFee.add(lbTxtHandleFee);
+		pnHandleFee.add(lbHandleFee);
+		
+		
+//		bot content
+		pnHandleBotContent=new JPanel();
+		pnHandleBotContent.setLayout(new BoxLayout(pnHandleBotContent, BoxLayout.Y_AXIS));
+		pnHandleBotContent.add(pnHandleDone);
+		pnHandleBotContent.add(pnHandleUnDone);
+		pnHandleBotContent.add(pnHandleFee);
+		
+//		bot
+		pnHandleBot=new JPanel();
+		pnHandleBot.setLayout(new BorderLayout());
+		pnHandleBot.add(pnHandleBotNorth,BorderLayout.NORTH);
+		pnHandleBot.add(pnHandleBotContent,BorderLayout.CENTER);
+		
+//		container
 		this.setLayout(new BorderLayout());
-		JPanel temPanel = new JPanel();
-		this.add(temPanel);
-		temPanel.setBackground(Color.green);
-		this.add(temPanel, BorderLayout.CENTER);
+		this.add(pnHandleTop,BorderLayout.CENTER);
+		this.add(pnHandleBot,BorderLayout.SOUTH);
+		
 	}
 
 //	Member
@@ -174,6 +304,7 @@ public class FormStatistic extends JDialog {
 		return dataset;
 	}
 
+	
 	private DefaultCategoryDataset createDatasetBranch(int year) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -197,6 +328,43 @@ public class FormStatistic extends JDialog {
         dataset.addValue(25, "Civil Engineering", "CE");
         dataset.addValue(35, "Chemical Engineering", "ChemE");
 
+		return dataset;
+	}
+	
+//	DEVICE
+	private DefaultCategoryDataset createDatasetDevice(int year, int month) {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		dataset.addValue(50, "Computer Science", "CS");
+        dataset.addValue(30, "Electrical Engineering", "EE");
+        dataset.addValue(40, "Mechanical Engineering", "ME");
+        dataset.addValue(25, "Civil Engineering", "CE");
+        dataset.addValue(35, "Chemical Engineering", "ChemE");
+		return dataset;
+	}
+	
+	
+//	CURRENT
+	private DefaultCategoryDataset createDatasetCurrent(int year, int month) {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		dataset.addValue(50, "Computer Science", "CS");
+        dataset.addValue(30, "Electrical Engineering", "EE");
+        dataset.addValue(40, "Mechanical Engineering", "ME");
+        dataset.addValue(25, "Civil Engineering", "CE");
+        dataset.addValue(35, "Chemical Engineering", "ChemE");
+		return dataset;
+	}
+	
+//	HANDLE
+	private DefaultCategoryDataset createDatasetHandle(int year, int month) {
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+		dataset.addValue(50, "Computer Science", "CS");
+        dataset.addValue(30, "Electrical Engineering", "EE");
+        dataset.addValue(40, "Mechanical Engineering", "ME");
+        dataset.addValue(25, "Civil Engineering", "CE");
+        dataset.addValue(35, "Chemical Engineering", "ChemE");
 		return dataset;
 	}
 }

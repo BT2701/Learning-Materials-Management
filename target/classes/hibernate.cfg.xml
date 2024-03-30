@@ -15,6 +15,9 @@
 		
 		<property name="show_sql">true</property>
 		
-		<mapping class="model.Student"/>
+		<mapping class="Model.ThanhVienModel"/>
+		<mapping class="Model.ThietBiModel"/>
+		<mapping class="Model.ThongTinSdModel"/>
+		<mapping class="Model.XuLyModel"/>
 	</session-factory>
 </hibernate-configuration>

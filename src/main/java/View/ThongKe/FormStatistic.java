@@ -8,6 +8,7 @@ import java.util.Calendar;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -20,6 +21,7 @@ import javax.swing.plaf.basic.ComboPopup;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import View.Styles.Styles;
@@ -41,17 +43,26 @@ public class FormStatistic extends JDialog {
 	private ChartPanel pnChartDevice;
 
 //	HANDLE
-	private JPanel pnHandleTop, pnHandleBot, pnHandleBotNorth, pnHandleBotContent, pnHandleDone, pnHandleUnDone,
-			pnHandleFee;
+	private JPanel pnHandleTop, pnHandleBot, pnHandleBotNorth;
 	private JFreeChart chartHandle;
 	private ChartPanel pnChartHandle;
-	private JLabel lbTxtHandleDone, lbTxtHandleUnDone, lbTxtHandleFee, lbHandleDone, lbHandleUnDone, lbHandleFee;
+	
+//	base chart title
+	private final String titleTimeChart="Lượng sinh viên vào khu học liệu";
+	private final String titleDepartmentChart="Lượng sinh viên thuộc các khoa";
+	private final String titleBranchChart="Lượng sinh viên thuộc các ngành";
+	private final String titleDeviceChart="Lượng đã được mượn";
+	private final String titleTimeCurrentChart="Lượng đang được mượn";
+	private final String titleHandleChart="Thống kê vi phạm";
+	
 
 	public FormStatistic(int option) {
 		setSize(1000, 700);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
+		setTitle("Biểu đồ thống kê");
+		setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
 		switch (option) {
 			case 1:
 				initComponentsMember();
@@ -89,6 +100,110 @@ public class FormStatistic extends JDialog {
 		cbbTop.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbTop,1);
 
+		
+		cbbMonth = new JComboBox<String>();
+		cbbMonth.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+		cbbMonth.setBackground(Color.white);
+		cbbMonth.setFont(style.getSgUI13b());
+		cbbMonth.setPreferredSize(new Dimension(100, 30));
+		cbbMonth.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+		cbbMonth.setBorder(style.getMatteBorderCB());
+		rendererCbb(cbbMonth, 2);
+
+//		chart
+		chartTime = ChartFactory.createLineChart(titleTimeChart, "Month", "value",
+				createDatasetTime(2024));
+		setColorChart(chartTime);
+		
+		chartBranch = ChartFactory.createBarChart(titleBranchChart, "Branch", "value", createDatasetBranch(2024));
+		setColorChart(chartBranch);
+		
+		chartDepartment = ChartFactory.createBarChart(titleDepartmentChart, "Department", "value",
+				createDatasetDepartment(2024));
+		setColorChart(chartDepartment);
+		
+//		chart pn
+		pnChartBranch = new ChartPanel(chartBranch);
+		pnChartBranch.setPreferredSize(new Dimension(450, 200));
+		pnChartBranch.setBackground(Color.white);
+
+		pnChartDepartment = new ChartPanel(chartDepartment);
+		pnChartDepartment.setPreferredSize(new Dimension(450, 200));
+		pnChartDepartment.setBackground(Color.white);
+
+		pnChartTime = new ChartPanel(chartTime);
+		pnChartTime.setPreferredSize(new Dimension(900, 350));
+		pnChartTime.setBackground(Color.white);
+
+//		topcontent
+		pnTopContent = new JPanel();
+		pnTopContent.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		pnTopContent.add(pnChartTime);
+		pnTopContent.setBackground(Color.white);
+
+//		topcbb
+		pnTopCBB = new JPanel();
+		pnTopCBB.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		pnTopCBB.add(cbbTop);
+		pnTopCBB.setBackground(Color.white);
+
+//		top
+		pnTop = new JPanel();
+		pnTop.setLayout(new BorderLayout());
+		pnTop.add(pnTopContent, BorderLayout.CENTER);
+		pnTop.add(pnTopCBB, BorderLayout.SOUTH);
+		pnTop.setBackground(Color.white);
+
+//		botdepartment
+		pnBotDepartment = new JPanel();
+		pnBotDepartment.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		pnBotDepartment.add(pnChartDepartment);
+		pnBotDepartment.setBackground(Color.white);
+
+//		botbranch
+		pnBotBranch = new JPanel();
+		pnBotBranch.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		pnBotBranch.add(pnChartBranch);
+		pnBotBranch.setBackground(Color.white);
+
+//		botcontent
+		pnBotContent = new JPanel();
+		pnBotContent.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 0));
+		pnBotContent.add(pnBotDepartment);
+		pnBotContent.add(pnBotBranch);
+		pnBotContent.setBackground(Color.white);
+
+//		botcbb
+		pnBotCBB = new JPanel();
+		pnBotCBB.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
+		pnBotCBB.add(cbbMonth);
+		pnBotCBB.setBackground(Color.white);
+
+//		bot
+		pnBot = new JPanel();
+		pnBot.setLayout(new BorderLayout());
+		pnBot.add(pnBotContent, BorderLayout.CENTER);
+		pnBot.add(pnBotCBB, BorderLayout.SOUTH);
+		pnBot.setBackground(Color.white);
+
+//		container
+		this.setLayout(new BorderLayout());
+		this.add(pnTop, BorderLayout.CENTER);
+		this.add(pnBot, BorderLayout.SOUTH);
+	}
+
+	public void initComponentsDevice() {
+//		subcomponent
+		chartDevice = ChartFactory.createBarChart(titleDeviceChart, "Thiết bị", "Số lượng",
+				createDatasetDevice(2024, 2));
+		setColorChart(chartDevice);
 		cbbYear = new JComboBox<String>();
 		cbbYear.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
 		cbbYear.setBackground(Color.white);
@@ -121,95 +236,21 @@ public class FormStatistic extends JDialog {
 		cbbMonth.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbMonth, 2);
 
-//		chart
-		chartTime = ChartFactory.createLineChart("Lượng sinh viên vào khu học liệu theo thời gian", "Month", "value",
-				createDatasetTime(2024));
-
-		chartBranch = ChartFactory.createBarChart("Theo ngành", "Branch", "value", createDatasetBranch(2024));
-
-		chartDepartment = ChartFactory.createBarChart("Theo khoa", "Department", "value",
-				createDatasetDepartment(2024));
-
-//		chart pn
-		pnChartBranch = new ChartPanel(chartBranch);
-		pnChartBranch.setPreferredSize(new Dimension(450, 200));
-
-		pnChartDepartment = new ChartPanel(chartDepartment);
-		pnChartDepartment.setPreferredSize(new Dimension(450, 200));
-
-		pnChartTime = new ChartPanel(chartTime);
-		pnChartTime.setPreferredSize(new Dimension(900, 350));
-
-//		topcontent
-		pnTopContent = new JPanel();
-		pnTopContent.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		pnTopContent.add(pnChartTime);
-
-//		topcbb
-		pnTopCBB = new JPanel();
-		pnTopCBB.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		pnTopCBB.add(cbbTop);
-
-//		top
-		pnTop = new JPanel();
-		pnTop.setLayout(new BorderLayout());
-		pnTop.add(pnTopContent, BorderLayout.CENTER);
-		pnTop.add(pnTopCBB, BorderLayout.SOUTH);
-
-//		botdepartment
-		pnBotDepartment = new JPanel();
-		pnBotDepartment.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
-		pnBotDepartment.add(pnChartDepartment);
-
-//		botbranch
-		pnBotBranch = new JPanel();
-		pnBotBranch.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-		pnBotBranch.add(pnChartBranch);
-
-//		botcontent
-		pnBotContent = new JPanel();
-		pnBotContent.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 0));
-		pnBotContent.add(pnBotDepartment);
-		pnBotContent.add(pnBotBranch);
-
-//		botcbb
-		pnBotCBB = new JPanel();
-		pnBotCBB.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
-		pnBotCBB.add(cbbYear);
-		pnBotCBB.add(cbbMonth);
-
-//		bot
-		pnBot = new JPanel();
-		pnBot.setLayout(new BorderLayout());
-		pnBot.add(pnBotContent, BorderLayout.CENTER);
-		pnBot.add(pnBotCBB, BorderLayout.SOUTH);
-
-//		container
-		this.setLayout(new BorderLayout());
-		this.add(pnTop, BorderLayout.CENTER);
-		this.add(pnBot, BorderLayout.SOUTH);
-	}
-
-	public void initComponentsDevice() {
-//		subcomponent
-		chartDevice = ChartFactory.createBarChart("Thống kê thiết bị được mượn", "Thiết bị", "Số lượng",
-				createDatasetDevice(2024, 2));
-
-		cbbYear = new JComboBox<String>();
-		cbbMonth = new JComboBox<String>();
-
 		pnChartDevice = new ChartPanel(chartDevice);
+		pnChartDevice.setBackground(Color.white);
 
 //		pn device
 		pnDeviceContent = new JPanel();
 		pnDeviceContent.setLayout(new BorderLayout());
 		pnDeviceContent.add(pnChartDevice, BorderLayout.CENTER);
+		pnDeviceContent.setBackground(Color.white);
 
 //		pn cbb
 		pnDeviceCbb = new JPanel();
 		pnDeviceCbb.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		pnDeviceCbb.add(cbbYear);
 		pnDeviceCbb.add(cbbMonth);
+		pnDeviceCbb.setBackground(Color.white);
 
 		this.setLayout(new BorderLayout());
 		this.add(pnDeviceContent, BorderLayout.CENTER);
@@ -219,24 +260,56 @@ public class FormStatistic extends JDialog {
 
 	public void initComponentsCurrent() {
 //		subcomponent
-		chartDevice = ChartFactory.createBarChart("Thống kê thiết bị đang được mượn", "Thiết bị", "Số lượng",
+		chartDevice = ChartFactory.createBarChart(titleTimeCurrentChart, "Thiết bị", "Số lượng",
 				createDatasetCurrent(2024, 2));
-
+		setColorChart(chartDevice);
 		cbbYear = new JComboBox<String>();
+		cbbYear.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+		cbbYear.setBackground(Color.white);
+		cbbYear.setFont(style.getSgUI13b());
+		cbbYear.setPreferredSize(new Dimension(100, 30));
+		cbbYear.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+		cbbYear.setBorder(style.getMatteBorderCB());
+		rendererCbb(cbbYear, 3);
+		
 		cbbMonth = new JComboBox<String>();
+		cbbMonth.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+		cbbMonth.setBackground(Color.white);
+		cbbMonth.setFont(style.getSgUI13b());
+		cbbMonth.setPreferredSize(new Dimension(100, 30));
+		cbbMonth.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+		cbbMonth.setBorder(style.getMatteBorderCB());
+		rendererCbb(cbbMonth, 2);
 
 		pnChartDevice = new ChartPanel(chartDevice);
+		pnChartDevice.setBackground(Color.white);
 
 //		pn device
 		pnDeviceContent = new JPanel();
 		pnDeviceContent.setLayout(new BorderLayout());
 		pnDeviceContent.add(pnChartDevice, BorderLayout.CENTER);
-
+		pnDeviceContent.setBackground(Color.white);
+		
 //		pn cbb
 		pnDeviceCbb = new JPanel();
 		pnDeviceCbb.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 		pnDeviceCbb.add(cbbYear);
 		pnDeviceCbb.add(cbbMonth);
+		pnDeviceCbb.setBackground(Color.white);
 
 		this.setLayout(new BorderLayout());
 		this.add(pnDeviceContent, BorderLayout.CENTER);
@@ -246,64 +319,62 @@ public class FormStatistic extends JDialog {
 
 	public void initComponentsHandle() {
 
-		chartHandle = ChartFactory.createBarChart("Thống kê vi phạm", "Tên vi phạm", "Số lượng",
+		chartHandle = ChartFactory.createBarChart(titleHandleChart, "Tên vi phạm", "Số lượng",
 				createDatasetHandle(2024, 2));
-
+		setColorChart(chartHandle);
 		cbbYear = new JComboBox<String>();
+		cbbYear.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+		cbbYear.setBackground(Color.white);
+		cbbYear.setFont(style.getSgUI13b());
+		cbbYear.setPreferredSize(new Dimension(100, 30));
+		cbbYear.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+		cbbYear.setBorder(style.getMatteBorderCB());
+		rendererCbb(cbbYear, 3);
+		
 		cbbMonth = new JComboBox<String>();
-
-		lbHandleDone = new JLabel();
-
-		lbHandleFee = new JLabel();
-
-		lbHandleUnDone = new JLabel();
-
-		lbTxtHandleDone = new JLabel("Đã được xử lý:");
-
-		lbTxtHandleFee = new JLabel("Số tiền bồi thường:");
-
-		lbTxtHandleUnDone = new JLabel("Chưa được xử lý: ");
+		cbbMonth.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+		cbbMonth.setBackground(Color.white);
+		cbbMonth.setFont(style.getSgUI13b());
+		cbbMonth.setPreferredSize(new Dimension(100, 30));
+		cbbMonth.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+		cbbMonth.setBorder(style.getMatteBorderCB());
+		rendererCbb(cbbMonth, 2);
 
 		pnChartHandle = new ChartPanel(chartHandle);
+		pnChartHandle.setBackground(Color.white);
 //		top
 		pnHandleTop = new JPanel();
 		pnHandleTop.setLayout(new BorderLayout());
 		pnHandleTop.add(pnChartHandle, BorderLayout.CENTER);
+		pnHandleTop.setBackground(Color.white);
 
 //		bot north
 		pnHandleBotNorth = new JPanel();
 		pnHandleBotNorth.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 		pnHandleBotNorth.add(cbbYear);
 		pnHandleBotNorth.add(cbbMonth);
+		pnHandleBotNorth.setBackground(Color.white);
 
-//		bot content component
-		pnHandleDone = new JPanel();
-		pnHandleDone.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 10));
-		pnHandleDone.add(lbTxtHandleDone);
-		pnHandleDone.add(lbHandleDone);
-
-		pnHandleUnDone = new JPanel();
-		pnHandleUnDone.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 10));
-		pnHandleUnDone.add(lbTxtHandleUnDone);
-		pnHandleUnDone.add(lbHandleUnDone);
-
-		pnHandleFee = new JPanel();
-		pnHandleFee.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 10));
-		pnHandleFee.add(lbTxtHandleFee);
-		pnHandleFee.add(lbHandleFee);
-
-//		bot content
-		pnHandleBotContent = new JPanel();
-		pnHandleBotContent.setLayout(new BoxLayout(pnHandleBotContent, BoxLayout.Y_AXIS));
-		pnHandleBotContent.add(pnHandleDone);
-		pnHandleBotContent.add(pnHandleUnDone);
-		pnHandleBotContent.add(pnHandleFee);
 
 //		bot
 		pnHandleBot = new JPanel();
 		pnHandleBot.setLayout(new BorderLayout());
-		pnHandleBot.add(pnHandleBotNorth, BorderLayout.NORTH);
-		pnHandleBot.add(pnHandleBotContent, BorderLayout.CENTER);
+		pnHandleBot.add(pnHandleBotNorth, BorderLayout.CENTER);
+		pnHandleBot.setBackground(Color.white);
 
 //		container
 		this.setLayout(new BorderLayout());
@@ -411,4 +482,20 @@ public class FormStatistic extends JDialog {
 		dataset.addValue(35, "Chemical Engineering", "ChemE");
 		return dataset;
 	}
+	
+	public void setColorChart(JFreeChart chart) {
+		CategoryPlot plot = chart.getCategoryPlot();
+
+        // Thiết lập màu nền cho plot
+        plot.setBackgroundPaint(Color.white);
+	}
+	
+//	public void setTittleChart(JFreeChart chart, String newTittle) {
+//		chart.setTitle(newTittle);
+//	}
+//	public void comboboxEvent(JComboBox<String> cbb, JFreeChart chart) {
+//		
+//	}
+	
+	
 }

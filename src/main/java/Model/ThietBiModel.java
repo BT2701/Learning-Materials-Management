@@ -1,10 +1,13 @@
 package Model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,13 +22,25 @@ public class ThietBiModel {
 	@Column(name = "MoTaTB")
 	private String moTaTB;
 
+	@OneToMany(mappedBy = "thietBi")
+	private List<ThongTinSdModel> listInfomation;
+
 	public ThietBiModel() {
 	}
 
-	public ThietBiModel(Integer maTB, String tenTB, String moTaTB) {
+	public ThietBiModel(Integer maTB, String tenTB, String moTaTB, List<ThongTinSdModel> listInfomation) {
 		this.maTB = maTB;
 		this.tenTB = tenTB;
 		this.moTaTB = moTaTB;
+		this.listInfomation = listInfomation;
+	}
+
+	public List<ThongTinSdModel> getListInfomation() {
+		return listInfomation;
+	}
+
+	public void setListInfomation(List<ThongTinSdModel> listInfomation) {
+		this.listInfomation = listInfomation;
 	}
 
 	public Integer getMaTB() {
@@ -51,5 +66,12 @@ public class ThietBiModel {
 	public void setMoTaTB(String moTaTB) {
 		this.moTaTB = moTaTB;
 	}
+
+	@Override
+	public String toString() {
+		return "ThietBiModel [maTB=" + maTB + ", tenTB=" + tenTB + ", moTaTB=" + moTaTB + ", listInfomation="
+				+ listInfomation + "]";
+	}
+	
 
 }

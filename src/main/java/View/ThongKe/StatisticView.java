@@ -31,9 +31,12 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 
+import Controller.ThongKeCTL;
 import View.Styles.Styles;
 
 public class StatisticView extends JPanel {
+	static ThongKeCTL thongKeCTL= new ThongKeCTL();
+	
 //	container
 	private JPanel pnTop,pnTopTittle,pnTopTittleMain, pnTopTittleHiden,pnTopContent,pnCenter, pnCenterTittle, pnCenterContent, pnCenterContentSelection, pnCenterContentSelectionSpinner, pnCenterContentItems, pnItemMember, pnItemDevice, pnItemCurrent, pnItemDone, pnItemUnDone, pnItemFee,pnCbb;
 //	components
@@ -148,7 +151,7 @@ public class StatisticView extends JPanel {
 		
 		lbTxtFee= new JLabel("Tiền bồi thường: ");
 		
-		lbTxtMember= new JLabel("Sinh viên vào khu học tập: ");
+		lbTxtMember= new JLabel("Lượt vào khu học tập: ");
 		
 		lbTxtUnDone= new JLabel("Vi phạm Đang xử lý: ");
 		
@@ -156,6 +159,8 @@ public class StatisticView extends JPanel {
 		
 		cbbSelection= new JComboBox<String>();
 
+		
+		rendererData();
 //		tittle hiden
 		pnTopTittleHiden= new JPanel();
 		pnTopTittleHiden.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
@@ -409,6 +414,14 @@ public class StatisticView extends JPanel {
 				}
 			}
 		});
+	}
+	public void rendererData() {
+		lbCurrent.setText(thongKeCTL.countBorrowingDevice()+"");
+		lbDevice.setText(thongKeCTL.countBorrowedDevice()+"");
+		lbDone.setText(thongKeCTL.countHandledViolation()+"");
+		lbFee.setText(thongKeCTL.countFee()+"đ");
+		lbMember.setText(thongKeCTL.countMemberIntoMaterial()+"");
+		lbUnDone.setText(thongKeCTL.countHandlingViolation()+"");
 	}
 
 }

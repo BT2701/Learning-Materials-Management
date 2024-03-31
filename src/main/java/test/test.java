@@ -15,7 +15,7 @@ import java.util.Date;
 public class test {
     public static void main(String[] args) {
         ThanhVienCTL mem= new ThanhVienCTL();
-        for (ThanhVienModel m : mem.getListMembers()) {
+        for (ThanhVienModel m : mem.getList()) {
 			System.out.println(m);
 		}
     }

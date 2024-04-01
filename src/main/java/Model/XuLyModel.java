@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,9 +20,6 @@ public class XuLyModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MaXL")
 	private Integer maXL;
-
-	@Column(name = "MaTv")
-	private Integer maTV;
 
 	@Column(name = "HinhThucXL")
 	private String hinhThucXL;
@@ -35,16 +34,21 @@ public class XuLyModel {
 	@Column(name = "TrangThaiXL")
 	private Integer trangThaiXL;
 
+	@ManyToOne
+	@JoinColumn(name = "MaTV")
+	private ThanhVienModel thanhVien;
+
 	public XuLyModel() {
 	}
 
-	public XuLyModel(Integer maXL, Integer maTV, String hinhThucXL, Integer soTien, Date ngayXL, Integer trangThaiXL) {
+	public XuLyModel(Integer maXL, String hinhThucXL, Integer soTien, Date ngayXL, Integer trangThaiXL,
+			ThanhVienModel thanhVien) {
 		this.maXL = maXL;
-		this.maTV = maTV;
 		this.hinhThucXL = hinhThucXL;
 		this.soTien = soTien;
 		this.ngayXL = ngayXL;
 		this.trangThaiXL = trangThaiXL;
+		this.thanhVien = thanhVien;
 	}
 
 	public Integer getMaXL() {
@@ -53,14 +57,6 @@ public class XuLyModel {
 
 	public void setMaXL(Integer maXL) {
 		this.maXL = maXL;
-	}
-
-	public Integer getMaTV() {
-		return maTV;
-	}
-
-	public void setMaTV(Integer maTV) {
-		this.maTV = maTV;
 	}
 
 	public String getHinhThucXL() {
@@ -93,6 +89,20 @@ public class XuLyModel {
 
 	public void setTrangThaiXL(Integer trangThaiXL) {
 		this.trangThaiXL = trangThaiXL;
+	}
+
+	public ThanhVienModel getThanhVien() {
+		return thanhVien;
+	}
+
+	public void setThanhVien(ThanhVienModel thanhVien) {
+		this.thanhVien = thanhVien;
+	}
+
+	@Override
+	public String toString() {
+		return "XuLyModel [maXL=" + maXL + ", hinhThucXL=" + hinhThucXL + ", soTien=" + soTien + ", ngayXL=" + ngayXL
+				+ ", trangThaiXL=" + trangThaiXL +  "]";
 	}
 
 }

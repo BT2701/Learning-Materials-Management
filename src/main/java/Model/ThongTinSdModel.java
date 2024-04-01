@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,12 +22,6 @@ public class ThongTinSdModel {
 	@Column(name = "MaTT")
 	private Integer maTT;
 
-	@Column(name = "MaTV")
-	private Integer maTV;
-
-	@Column(name = "MaTB")
-	private Integer maTB;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TGVao")
 	private Date tgVao;
@@ -38,16 +34,25 @@ public class ThongTinSdModel {
 	@Column(name = "TGTra")
 	private Date tgTra;
 
+	@ManyToOne
+	@JoinColumn(name = "MaTV")
+	private ThanhVienModel thanhVien;
+
+	@ManyToOne
+	@JoinColumn(name = "MaTB")
+	private ThietBiModel thietBi;
+
 	public ThongTinSdModel() {
 	}
 
-	public ThongTinSdModel(Integer maTT, Integer maTV, Integer maTB, Date tgVao, Date tgMuon, Date tgTra) {
+	public ThongTinSdModel(Integer maTT, Date tgVao, Date tgMuon, Date tgTra, ThanhVienModel thanhVien,
+			ThietBiModel thietBi) {
 		this.maTT = maTT;
-		this.maTV = maTV;
-		this.maTB = maTB;
 		this.tgVao = tgVao;
 		this.tgMuon = tgMuon;
 		this.tgTra = tgTra;
+		this.thanhVien = thanhVien;
+		this.thietBi = thietBi;
 	}
 
 	public Integer getMaTT() {
@@ -56,22 +61,6 @@ public class ThongTinSdModel {
 
 	public void setMaTT(Integer maTT) {
 		this.maTT = maTT;
-	}
-
-	public Integer getMaTV() {
-		return maTV;
-	}
-
-	public void setMaTV(Integer maTV) {
-		this.maTV = maTV;
-	}
-
-	public Integer getMaTB() {
-		return maTB;
-	}
-
-	public void setMaTB(Integer maTB) {
-		this.maTB = maTB;
 	}
 
 	public Date getTgVao() {
@@ -98,4 +87,28 @@ public class ThongTinSdModel {
 		this.tgTra = tgTra;
 	}
 
+	public ThanhVienModel getThanhVien() {
+		return thanhVien;
+	}
+
+	public void setThanhVien(ThanhVienModel thanhVien) {
+		this.thanhVien = thanhVien;
+	}
+
+	public ThietBiModel getThietBi() {
+		return thietBi;
+	}
+
+	public void setThietBi(ThietBiModel thietBi) {
+		this.thietBi = thietBi;
+	}
+
+	@Override
+	public String toString() {
+		return "ThongTinSdModel [maTT=" + maTT + ", tgVao=" + tgVao + ", tgMuon=" + tgMuon + ", tgTra=" + tgTra
+				+"]";
+	}
+	
+
+	
 }

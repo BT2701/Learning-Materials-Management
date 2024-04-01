@@ -26,6 +26,7 @@ public class Styles {
     private Color texfieldColor = new Color(45, 52, 54);
     private MatteBorder matteBorderCB = new MatteBorder(2, 2, 2, 2, Color.decode("#EFEFEF"));
 	private LineBorder lineCB = new LineBorder(Color.white);
+	MatteBorder borderTxt = new MatteBorder(2, 2, 2, 2, Color.decode("#EFEFEF"));
 	public Styles() {
 	}
 	public Font getSgUI15b() {
@@ -123,6 +124,12 @@ public class Styles {
 	}
 	public void setLineCB(LineBorder lineCB) {
 		this.lineCB = lineCB;
+	}
+	public MatteBorder getBorderTxt() {
+		return borderTxt;
+	}
+	public void setBorderTxt(MatteBorder borderTxt) {
+		this.borderTxt = borderTxt;
 	}
 	
 	

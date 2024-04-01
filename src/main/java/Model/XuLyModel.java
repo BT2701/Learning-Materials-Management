@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 public class XuLyModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MaXL")
+	@Column(name = "MaXL", insertable = false, updatable = false)
 	private Integer maXL;
 
 	@Column(name = "HinhThucXL")

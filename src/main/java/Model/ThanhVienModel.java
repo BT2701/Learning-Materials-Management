@@ -15,8 +15,7 @@ import javax.persistence.Table;
 public class ThanhVienModel {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MaTV", insertable = false, updatable = false)
+	@Column(name = "MaTV")
 	private Integer maTV;
 
 	@Column(name = "HoTen")
@@ -29,7 +28,7 @@ public class ThanhVienModel {
 	private String nganh;
 
 	@Column(name = "SDT")
-	private Integer sdt;
+	private String sdt;
 
 	@OneToMany(mappedBy = "thanhVien")
 	private List<ThongTinSdModel> listInfomation;
@@ -37,13 +36,17 @@ public class ThanhVienModel {
 	@OneToMany(mappedBy = "thanhVien")
 	private List<XuLyModel> listHandle;
 
+	@Column
+	private String email;
+
+	@Column
+	private String password;
+
 	public ThanhVienModel() {
 	}
 
-	
-
-	public ThanhVienModel(Integer maTV, String hoTen, String khoa, String nganh, Integer sdt,
-			List<ThongTinSdModel> listInfomation, List<XuLyModel> listHandle) {
+	public ThanhVienModel(Integer maTV, String hoTen, String khoa, String nganh, String sdt,
+			List<ThongTinSdModel> listInfomation, List<XuLyModel> listHandle, String email, String password) {
 		this.maTV = maTV;
 		this.hoTen = hoTen;
 		this.khoa = khoa;
@@ -51,93 +54,81 @@ public class ThanhVienModel {
 		this.sdt = sdt;
 		this.listInfomation = listInfomation;
 		this.listHandle = listHandle;
+		this.email = email;
+		this.password = password;
 	}
-
-
 
 	public Integer getMaTV() {
 		return maTV;
 	}
 
-
-
 	public void setMaTV(Integer maTV) {
 		this.maTV = maTV;
 	}
-
-
 
 	public String getHoTen() {
 		return hoTen;
 	}
 
-
-
 	public void setHoTen(String hoTen) {
 		this.hoTen = hoTen;
 	}
-
-
 
 	public String getKhoa() {
 		return khoa;
 	}
 
-
-
 	public void setKhoa(String khoa) {
 		this.khoa = khoa;
 	}
-
-
 
 	public String getNganh() {
 		return nganh;
 	}
 
-
-
 	public void setNganh(String nganh) {
 		this.nganh = nganh;
 	}
 
-
-
-	public Integer getSdt() {
+	public String getSdt() {
 		return sdt;
 	}
 
-
-
-	public void setSdt(Integer sdt) {
+	public void setSdt(String sdt) {
 		this.sdt = sdt;
 	}
-
-
 
 	public List<ThongTinSdModel> getListInfomation() {
 		return listInfomation;
 	}
 
-
-
 	public void setListInfomation(List<ThongTinSdModel> listInfomation) {
 		this.listInfomation = listInfomation;
 	}
-
-
 
 	public List<XuLyModel> getListHandle() {
 		return listHandle;
 	}
 
-
-
 	public void setListHandle(List<XuLyModel> listHandle) {
 		this.listHandle = listHandle;
 	}
 
+	public String getEmail() {
+		return email;
+	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	@Override
 	public String toString() {

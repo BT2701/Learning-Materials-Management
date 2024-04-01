@@ -21,16 +21,24 @@ public class ThongTinSdDAL {
 		return list;
 	}
 	public ThongTinSdModel getModel(int id) {
+		session.beginTransaction();
 		ThongTinSdModel thongtin= session.get(ThongTinSdModel.class, id);
+		session.getTransaction().commit();
 		return thongtin;
 	}
 	public void addModel(ThongTinSdModel infor) {
+		session.beginTransaction();
 		session.save(infor);
+		session.getTransaction().commit();
 	}
 	public void updateModel(ThongTinSdModel infor) {
+		session.beginTransaction();
 		session.update(infor);
+		session.getTransaction().commit();
 	}
 	public void deleteModel(ThongTinSdModel infor) {
+		session.beginTransaction();
 		session.delete(infor);
+		session.getTransaction().commit();
 	}
 }

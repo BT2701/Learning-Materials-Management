@@ -21,17 +21,25 @@ public class ThanhVienDAL {
 		return list;
 	}
 	public ThanhVienModel getModel(int id) {
+		session.beginTransaction();
 		ThanhVienModel thongtin= session.get(ThanhVienModel.class, id);
+		session.getTransaction().commit();
 		return thongtin;
 	}
 	public void addModel(ThanhVienModel member) {
+		session.beginTransaction();
 		session.save(member);
+		session.getTransaction().commit();
 	}
 	public void updateModel(ThanhVienModel member) {
+		session.beginTransaction();
 		session.update(member);
+		session.getTransaction().commit();
 	}
 	public void deleteModel(ThanhVienModel member) {
+		session.beginTransaction();
 		session.delete(member);
+		session.getTransaction().commit();
 	}
 	
 

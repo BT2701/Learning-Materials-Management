@@ -85,19 +85,21 @@ public class StatisticView extends JPanel {
 		dcsDate.getCalendarButton().setBackground(Color.decode("#EEEEEE"));
 		dcsDate.getCalendarButton().setFocusPainted(false);
 		dcsDate.setFont(style.getSgUI13b());
+		dcsDate.setPreferredSize(new Dimension(120,30));
         JTextFieldDateEditor editorNgaySinhFrom = (JTextFieldDateEditor) dcsDate.getDateEditor();
         editorNgaySinhFrom.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         editorNgaySinhFrom.setBackground(Color.decode("#FFFFFF"));
 
 //		dateModel1 = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
-		dcsDate1 = new JDateChooser();
+        dcsDate1 = new JDateChooser();
 		dcsDate1.setDate(new Date());
 		dcsDate1.setDateFormatString("dd/MM/yyyy");
 		dcsDate1.getCalendarButton().setBorder(new EmptyBorder(0, 5, 0, 5));
 		dcsDate1.getCalendarButton().setBackground(Color.decode("#EEEEEE"));
 		dcsDate1.getCalendarButton().setFocusPainted(false);
 		dcsDate1.setFont(style.getSgUI13b());
-        JTextFieldDateEditor editorNgaySinhFrom1 = (JTextFieldDateEditor) dcsDate.getDateEditor();
+		dcsDate1.setPreferredSize(new Dimension(120,30));
+        JTextFieldDateEditor editorNgaySinhFrom1 = (JTextFieldDateEditor) dcsDate1.getDateEditor();
         editorNgaySinhFrom1.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         editorNgaySinhFrom1.setBackground(Color.decode("#FFFFFF"));
 

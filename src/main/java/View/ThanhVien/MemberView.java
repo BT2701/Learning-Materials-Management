@@ -2,6 +2,7 @@ package View.ThanhVien;
 
 
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -30,6 +31,7 @@ public class MemberView extends javax.swing.JPanel {
      * Creates new form MemberView
      */
     public MemberView() {
+    	this.setLayout(new BorderLayout());
         initComponents();
         initMyComponents();
     }
@@ -141,7 +143,7 @@ public class MemberView extends javax.swing.JPanel {
         JLHeader.setPreferredSize(new java.awt.Dimension(341, 50));
         JPHeader.add(JLHeader, java.awt.BorderLayout.CENTER);
 
-        add(JPHeader, java.awt.BorderLayout.PAGE_START);
+        add(JPHeader, java.awt.BorderLayout.NORTH);
 
         JPMainContent.setLayout(new java.awt.BorderLayout());
 
@@ -309,7 +311,7 @@ public class MemberView extends javax.swing.JPanel {
 
         btnThem.getAccessibleContext().setAccessibleName("btnThem");
 
-        add(JPContainOperation, java.awt.BorderLayout.PAGE_END);
+        add(JPContainOperation, java.awt.BorderLayout.SOUTH);
 
     }// </editor-fold>//GEN-END:initComponents
 

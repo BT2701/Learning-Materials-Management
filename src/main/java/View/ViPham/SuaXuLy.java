@@ -102,7 +102,7 @@ public class SuaXuLy extends javax.swing.JDialog {
         btnHuy.setBackground(new java.awt.Color(126, 214, 223));
         btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnHuy.setForeground(new java.awt.Color(204, 0, 0));
-        btnHuy.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\cancel button.png")); // NOI18N
+        btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/cancel button.png"))); // NOI18N
         btnHuy.setText("Hủy");
         btnHuy.setBorderPainted(false);
         btnHuy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -116,7 +116,7 @@ public class SuaXuLy extends javax.swing.JDialog {
         btnThem.setBackground(new java.awt.Color(126, 214, 223));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem.setForeground(new java.awt.Color(0, 153, 0));
-        btnThem.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\icon submit.png")); // NOI18N
+        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icon submit.png"))); // NOI18N
         btnThem.setText("Xác nhận");
         btnThem.setBorderPainted(false);
         btnThem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

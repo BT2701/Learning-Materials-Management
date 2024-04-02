@@ -88,7 +88,7 @@ public class HandleView extends javax.swing.JPanel {
         btnXoa2.setBackground(new java.awt.Color(126, 214, 223));
         btnXoa2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnXoa2.setForeground(new java.awt.Color(204, 0, 0));
-        btnXoa2.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\delete button.png")); // NOI18N
+        btnXoa2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/delete button.png"))); // NOI18N
         btnXoa2.setText("Xóa");
         btnXoa2.setBorderPainted(false);
         btnXoa2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -96,7 +96,7 @@ public class HandleView extends javax.swing.JPanel {
 
         btnLamMoi2.setBackground(new java.awt.Color(126, 214, 223));
         btnLamMoi2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btnLamMoi2.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\Refresh_icon.png")); // NOI18N
+        btnLamMoi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
         btnLamMoi2.setBorderPainted(false);
         btnLamMoi2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLamMoi2.setFocusPainted(false);
@@ -128,7 +128,7 @@ public class HandleView extends javax.swing.JPanel {
 
         btnTimKiem2.setBackground(new java.awt.Color(126, 214, 223));
         btnTimKiem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btnTimKiem2.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\search icon.png")); // NOI18N
+        btnTimKiem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/search icon.png"))); // NOI18N
         btnTimKiem2.setText("Tìm Kiếm");
         btnTimKiem2.setBorderPainted(false);
         btnTimKiem2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -137,7 +137,7 @@ public class HandleView extends javax.swing.JPanel {
         btnSua2.setBackground(new java.awt.Color(126, 214, 223));
         btnSua2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnSua2.setForeground(new java.awt.Color(0, 0, 153));
-        btnSua2.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\buttonDetails.png")); // NOI18N
+        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
         btnSua2.setText("Sửa");
         btnSua2.setBorderPainted(false);
         btnSua2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -146,7 +146,7 @@ public class HandleView extends javax.swing.JPanel {
         btnThem2.setBackground(new java.awt.Color(126, 214, 223));
         btnThem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem2.setForeground(new java.awt.Color(0, 153, 51));
-        btnThem2.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\add button.png")); // NOI18N
+        btnThem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/add button.png"))); // NOI18N
         btnThem2.setText("Thêm");
         btnThem2.setBorderPainted(false);
         btnThem2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

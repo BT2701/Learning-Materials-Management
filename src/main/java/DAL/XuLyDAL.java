@@ -20,16 +20,24 @@ public class XuLyDAL {
 		return list;
 	}
 	public XuLyModel getModel(int id) {
+		session.beginTransaction();
 		XuLyModel thongtin= session.get(XuLyModel.class, id);
+		session.getTransaction().commit();
 		return thongtin;
 	}
 	public void addModel(XuLyModel handle) {
+		session.beginTransaction();
 		session.save(handle);
+		session.getTransaction().commit();
 	}
 	public void updateModel(XuLyModel handle) {
+		session.beginTransaction();
 		session.update(handle);
+		session.getTransaction().commit();
 	}
 	public void deleteModel(XuLyModel handle) {
+		session.beginTransaction();
 		session.delete(handle);
+		session.getTransaction().commit();
 	}
 }

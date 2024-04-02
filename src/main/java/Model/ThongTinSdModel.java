@@ -19,7 +19,7 @@ public class ThongTinSdModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "MaTT")
+	@Column(name = "MaTT", insertable = false, updatable = false)
 	private Integer maTT;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -34,6 +34,10 @@ public class ThongTinSdModel {
 	@Column(name = "TGTra")
 	private Date tgTra;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "TGDatCho")
+	private Date tgDatCho;
+
 	@ManyToOne
 	@JoinColumn(name = "MaTV")
 	private ThanhVienModel thanhVien;
@@ -45,12 +49,13 @@ public class ThongTinSdModel {
 	public ThongTinSdModel() {
 	}
 
-	public ThongTinSdModel(Integer maTT, Date tgVao, Date tgMuon, Date tgTra, ThanhVienModel thanhVien,
+	public ThongTinSdModel(Integer maTT, Date tgVao, Date tgMuon, Date tgTra, Date tgDatCho, ThanhVienModel thanhVien,
 			ThietBiModel thietBi) {
 		this.maTT = maTT;
 		this.tgVao = tgVao;
 		this.tgMuon = tgMuon;
 		this.tgTra = tgTra;
+		this.tgDatCho = tgDatCho;
 		this.thanhVien = thanhVien;
 		this.thietBi = thietBi;
 	}
@@ -87,6 +92,14 @@ public class ThongTinSdModel {
 		this.tgTra = tgTra;
 	}
 
+	public Date getTgDatCho() {
+		return tgDatCho;
+	}
+
+	public void setTgDatCho(Date tgDatCho) {
+		this.tgDatCho = tgDatCho;
+	}
+
 	public ThanhVienModel getThanhVien() {
 		return thanhVien;
 	}
@@ -105,10 +118,7 @@ public class ThongTinSdModel {
 
 	@Override
 	public String toString() {
-		return "ThongTinSdModel [maTT=" + maTT + ", tgVao=" + tgVao + ", tgMuon=" + tgMuon + ", tgTra=" + tgTra
-				+"]";
+		return "ThongTinSdModel [maTT=" + maTT + ", tgVao=" + tgVao + ", tgMuon=" + tgMuon + ", tgTra=" + tgTra + "]";
 	}
-	
 
-	
 }

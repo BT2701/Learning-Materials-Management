@@ -22,7 +22,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
+import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
+
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -38,12 +40,12 @@ public class StatisticView extends JPanel {
 	static ThongKeCTL thongKeCTL= new ThongKeCTL();
 	
 //	container
-	private JPanel pnTop,pnTopTittle,pnTopTittleMain, pnTopTittleHiden,pnTopContent,pnCenter, pnCenterTittle, pnCenterContent, pnCenterContentSelection, pnCenterContentSelectionSpinner, pnCenterContentItems, pnItemMember, pnItemDevice, pnItemCurrent, pnItemDone, pnItemUnDone, pnItemFee,pnCbb;
+	private JPanel pnTop,pnTopTittle,pnTopTittleMain, pnTopTittleHiden,pnTopContent,pnCenter, pnCenterTittle, pnCenterContent, pnCenterContentSelection, pnCenterContentSelectionSpinner, pnCenterContentItems, pnItemMember, pnItemDevice, pnItemCurrent, pnItemDone, pnItemUnDone, pnItemFee,pnCbb, pnItemViolation;
 //	components
 	private JButton btnCountMember, btnCountDevice, btnCountDeviceCurrent, btnHandle;
-	private JLabel lbTittleTop, lbTittleBot, lbHiden, lbSelectionDate, lbTxtMember, lbTxtDevice, lbTxtCurrent, lbTxtDone, lbTxtUnDone, lbTxtFee,lbMember, lbDevice, lbCurrent, lbDone, lbUnDone, lbFee;
+	private JLabel lbTittleTop, lbTittleBot, lbHiden, lbSelectionDate, lbTxtMember, lbTxtDevice, lbTxtCurrent, lbTxtDone, lbTxtUnDone, lbTxtFee,lbTxtViolation,lbMember, lbDevice, lbCurrent, lbDone, lbUnDone, lbFee,lbViolation;
 	private JComboBox<String> cbbSelection;
-	private JSpinner spnDate, spnDate1;
+	private JDateChooser dcsDate, dcsDate1;
 	private SpinnerDateModel dateModel, dateModel1;
 
 //	styles
@@ -75,17 +77,32 @@ public class StatisticView extends JPanel {
 	}
 
 	private void initComponents() {
-		dateModel = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
-		spnDate = new JSpinner(dateModel);
-		spnDate.setFont(style.getSgUI13b());
-		JSpinner.DateEditor editor = new JSpinner.DateEditor(spnDate, "dd/MM/yyyy");
-		spnDate.setEditor(editor);
+//		dateModel = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
+		dcsDate = new JDateChooser();
+		dcsDate.setDate(new Date());
+		dcsDate.setDateFormatString("dd/MM/yyyy");
+		dcsDate.getCalendarButton().setBorder(new EmptyBorder(0, 5, 0, 5));
+		dcsDate.getCalendarButton().setBackground(Color.decode("#EEEEEE"));
+		dcsDate.getCalendarButton().setFocusPainted(false);
+		dcsDate.setFont(style.getSgUI13b());
+		dcsDate.setPreferredSize(new Dimension(120,30));
+        JTextFieldDateEditor editorNgaySinhFrom = (JTextFieldDateEditor) dcsDate.getDateEditor();
+        editorNgaySinhFrom.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
+        editorNgaySinhFrom.setBackground(Color.decode("#FFFFFF"));
 
-		dateModel1 = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
-		spnDate1 = new JSpinner(dateModel1);
-		spnDate1.setFont(style.getSgUI13b());
-		JSpinner.DateEditor editor1 = new JSpinner.DateEditor(spnDate1, "dd/MM/yyyy");
-		spnDate1.setEditor(editor1);
+//		dateModel1 = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
+        dcsDate1 = new JDateChooser();
+		dcsDate1.setDate(new Date());
+		dcsDate1.setDateFormatString("dd/MM/yyyy");
+		dcsDate1.getCalendarButton().setBorder(new EmptyBorder(0, 5, 0, 5));
+		dcsDate1.getCalendarButton().setBackground(Color.decode("#EEEEEE"));
+		dcsDate1.getCalendarButton().setFocusPainted(false);
+		dcsDate1.setFont(style.getSgUI13b());
+		dcsDate1.setPreferredSize(new Dimension(120,30));
+        JTextFieldDateEditor editorNgaySinhFrom1 = (JTextFieldDateEditor) dcsDate1.getDateEditor();
+        editorNgaySinhFrom1.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
+        editorNgaySinhFrom1.setBackground(Color.decode("#FFFFFF"));
+
 
 		btnCountMember = new JButton("");
 		btnCountMember.setIcon(member1);
@@ -127,6 +144,7 @@ public class StatisticView extends JPanel {
 		
 		lbCurrent= new JLabel();
 		
+		
 		lbDevice= new JLabel();
 		
 		lbDone= new JLabel();
@@ -147,13 +165,18 @@ public class StatisticView extends JPanel {
 		
 		lbTxtDevice= new JLabel("Thiết bị đã được mượn: ");
 		
-		lbTxtDone= new JLabel("Vi phạm đã xử lý: ");
+		lbViolation=new JLabel();
+		
+		lbTxtViolation=new JLabel("Vi phạm: ");
+		
+		lbTxtDone= new JLabel("Đã xử lý: ");
 		
 		lbTxtFee= new JLabel("Tiền bồi thường: ");
 		
 		lbTxtMember= new JLabel("Lượt vào khu học tập: ");
 		
-		lbTxtUnDone= new JLabel("Vi phạm Đang xử lý: ");
+		lbTxtUnDone= new JLabel("Đang xử lý: ");
+		
 		
 		lbUnDone= new JLabel();
 		
@@ -199,9 +222,9 @@ public class StatisticView extends JPanel {
 //		spinner
 		pnCenterContentSelectionSpinner= new JPanel();
 		pnCenterContentSelectionSpinner.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		pnCenterContentSelectionSpinner.add(spnDate);
+		pnCenterContentSelectionSpinner.add(dcsDate);
 		pnCenterContentSelectionSpinner.add(lbSelectionDate);
-		pnCenterContentSelectionSpinner.add(spnDate1);
+		pnCenterContentSelectionSpinner.add(dcsDate1);
 		pnCenterContentSelectionSpinner.setVisible(false);
 		
 //		center selection
@@ -228,15 +251,21 @@ public class StatisticView extends JPanel {
 		pnItemCurrent.add(lbTxtCurrent);
 		pnItemCurrent.add(lbCurrent);
 		
+//		violation
+		pnItemViolation=new JPanel();
+		pnItemViolation.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		pnItemViolation.add(lbTxtViolation);
+		pnItemViolation.add(lbViolation);
+		
 //		Done
 		pnItemDone= new JPanel();
-		pnItemDone.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		pnItemDone.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
 		pnItemDone.add(lbTxtDone);
 		pnItemDone.add(lbDone);
 		
 //		UnDone
 		pnItemUnDone= new JPanel();
-		pnItemUnDone.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		pnItemUnDone.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
 		pnItemUnDone.add(lbTxtUnDone);
 		pnItemUnDone.add(lbUnDone);
 		
@@ -252,6 +281,7 @@ public class StatisticView extends JPanel {
 		pnCenterContentItems.add(pnItemMember);
 		pnCenterContentItems.add(pnItemDevice);
 		pnCenterContentItems.add(pnItemCurrent);
+		pnCenterContentItems.add(pnItemViolation);
 		pnCenterContentItems.add(pnItemDone);
 		pnCenterContentItems.add(pnItemUnDone);
 		pnCenterContentItems.add(pnItemFee);
@@ -338,6 +368,7 @@ public class StatisticView extends JPanel {
 		pnTopTittle.setBackground(Color.white);
 		pnTopTittleHiden.setBackground(Color.white);
 		pnTopTittleMain.setBackground(Color.white);
+		pnItemViolation.setBackground(Color.white);
 		
 		pnTopContent.setBorder(BorderFactory.createMatteBorder(0, 0, 3, 0, Color.decode("#7ed6df")));
 		
@@ -350,6 +381,8 @@ public class StatisticView extends JPanel {
 		pnItemFee.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.decode("#c7ecee")));
 		
 		pnItemUnDone.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.decode("#c7ecee")));
+		
+		pnItemViolation.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.decode("#c7ecee")));
 //		label
 		lbCurrent.setFont(style.getSgUI15p());
 		lbUnDone.setFont(style.getSgUI15p());
@@ -361,12 +394,19 @@ public class StatisticView extends JPanel {
 		lbSelectionDate.setFont(style.getSgUI15p());
 		lbTittleBot.setFont(style.getSgUI18b());
 		lbTittleTop.setFont(style.getSgUI18b());
-		lbTxtUnDone.setFont(style.getSgUI15b());
+		lbTxtUnDone.setFont(style.getSgUI15p());
 		lbTxtMember.setFont(style.getSgUI15b());
 		lbTxtFee.setFont(style.getSgUI15b());
-		lbTxtDone.setFont(style.getSgUI15b());
+		lbTxtDone.setFont(style.getSgUI15p());
 		lbTxtDevice.setFont(style.getSgUI15b());
 		lbTxtCurrent.setFont(style.getSgUI15b());
+		lbViolation.setFont(style.getSgUI15p());
+		lbTxtViolation.setFont(style.getSgUI15b());
+		lbFee.setForeground(Color.decode("#f0932b"));
+		lbViolation.setForeground(Color.decode("#eb4d4b"));
+		lbUnDone.setForeground(Color.decode("#ee5253"));
+		lbDone.setForeground(Color.decode("#1dd1a1"));
+		
 		
 //		button
 		btnCountDevice.setBackground(Color.decode("#dff9fb"));
@@ -415,6 +455,22 @@ public class StatisticView extends JPanel {
 			}
 		});
 	}
+	public void SpinnerEvent() {
+		dcsDate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		dcsDate1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
 	public void rendererData() {
 		lbCurrent.setText(thongKeCTL.countBorrowingDevice()+"");
 		lbDevice.setText(thongKeCTL.countBorrowedDevice()+"");
@@ -422,6 +478,10 @@ public class StatisticView extends JPanel {
 		lbFee.setText(thongKeCTL.countFee()+"đ");
 		lbMember.setText(thongKeCTL.countMemberIntoMaterial()+"");
 		lbUnDone.setText(thongKeCTL.countHandlingViolation()+"");
+		lbViolation.setText(thongKeCTL.countViolation()+"");
+	}
+	public void changeValueByDate() {
+		
 	}
 
 }

@@ -20,16 +20,24 @@ public class ThietBiDAL {
 		return list;
 	}
 	public ThietBiModel getModel(int id) {
+		session.beginTransaction();
 		ThietBiModel thongtin= session.get(ThietBiModel.class, id);
+		session.getTransaction().commit();
 		return thongtin;
 	}
 	public void addModel(ThietBiModel device) {
+		session.beginTransaction();
 		session.save(device);
+		session.getTransaction().commit();
 	}
 	public void updateModel(ThietBiModel device) {
+		session.beginTransaction();
 		session.update(device);
+		session.getTransaction().commit();
 	}
 	public void deleteModel(ThietBiModel device) {
+		session.beginTransaction();
 		session.delete(device);
+		session.getTransaction().commit();
 	}
 }

@@ -14,7 +14,6 @@ import javax.persistence.Table;
 @Table(name = "thietbi")
 public class ThietBiModel {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MaTB")
 	private Integer maTB;
 	@Column(name = "TenTB")

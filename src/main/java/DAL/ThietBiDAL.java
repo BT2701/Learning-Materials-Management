@@ -15,7 +15,7 @@ public class ThietBiDAL {
 	public ArrayList<ThietBiModel> getList(){
 		ArrayList<ThietBiModel> list;
 		session.beginTransaction();
-		list= (ArrayList<ThietBiModel>) session.createQuery("FROM ThietBiModel",ThietBiModel.class).list();
+		list = (ArrayList<ThietBiModel>) session.createQuery("FROM ThietBiModel",ThietBiModel.class).list();
 		session.getTransaction().commit();
 		return list;
 	}
@@ -25,19 +25,62 @@ public class ThietBiDAL {
 		session.getTransaction().commit();
 		return thongtin;
 	}
-	public void addModel(ThietBiModel device) {
-		session.beginTransaction();
-		session.save(device);
-		session.getTransaction().commit();
-	}
-	public void updateModel(ThietBiModel device) {
-		session.beginTransaction();
+	public boolean addModel(ThietBiModel device) {
+            try {
+                session.beginTransaction();
+                session.save(device);
+                session.getTransaction().commit();
+                return true; // Trả về true khi thêm thành công
+            } catch (Exception ex) {
+                return false; // Trả về false khi có lỗi
+            }
+        }
+
+	public boolean updateModel(ThietBiModel device) {
+            try {
+                session.beginTransaction();
 		session.update(device);
 		session.getTransaction().commit();
+                return true; // Trả về true khi thêm thành công
+            } catch (Exception ex) {
+                return false; // Trả về false khi có lỗi
+            }
+		
 	}
-	public void deleteModel(ThietBiModel device) {
-		session.beginTransaction();
+	public boolean deleteModel(ThietBiModel device) {            
+            try {
+                session.beginTransaction();
 		session.delete(device);
 		session.getTransaction().commit();
+                return true; // Trả về true khi thêm thành công
+            } catch (Exception ex) {
+                return false; // Trả về false khi có lỗi
+            }
 	}
+        
+        public boolean addListModel(ArrayList<ThietBiModel> list) {
+            try {
+                for(ThietBiModel device: list) {
+                    session.beginTransaction();
+                    session.save(device);
+                    session.getTransaction().commit();
+                }
+                return true; // Trả về true khi thêm thành công
+            } catch (Exception ex) {
+                return false; // Trả về false khi có lỗi
+            }
+        }
+        
+        public boolean deleteListModel(ArrayList<ThietBiModel> list) {
+            try {
+                for(ThietBiModel device: list) {
+                    session.beginTransaction();
+                    session.delete(device);
+                    session.getTransaction().commit();
+                }
+                return true; // Trả về true khi thêm thành công
+            } catch (Exception ex) {
+                return false; // Trả về false khi có lỗi
+            }
+        }
 }

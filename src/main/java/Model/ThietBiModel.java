@@ -27,6 +27,12 @@ public class ThietBiModel {
 	public ThietBiModel() {
 	}
 
+	public ThietBiModel(Integer maTB, String tenTB, String moTaTB) {
+		this.maTB = maTB;
+		this.tenTB = tenTB;
+		this.moTaTB = moTaTB;
+	}
+
 	public ThietBiModel(Integer maTB, String tenTB, String moTaTB, List<ThongTinSdModel> listInfomation) {
 		this.maTB = maTB;
 		this.tenTB = tenTB;
@@ -71,6 +77,5 @@ public class ThietBiModel {
 		return "ThietBiModel [maTB=" + maTB + ", tenTB=" + tenTB + ", moTaTB=" + moTaTB + ", listInfomation="
 				+ listInfomation + "]";
 	}
-	
 
 }

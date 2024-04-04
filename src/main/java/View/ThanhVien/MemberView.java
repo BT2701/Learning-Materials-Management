@@ -1,20 +1,29 @@
 package View.ThanhVien;
 
-
+import Controller.ThanhVienCTL;
+import Model.ThanhVienModel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -27,6 +36,8 @@ import javax.swing.table.JTableHeader;
  */
 public class MemberView extends javax.swing.JPanel {
 
+    ThanhVienCTL tvCtl = new ThanhVienCTL();
+    DefaultTableModel model;
     /**
      * Creates new form MemberView
      */
@@ -104,8 +115,29 @@ public class MemberView extends javax.swing.JPanel {
         btnMuonTraThietBi.setFocusPainted(false);
         btnMuonTraThietBi.setBorderPainted(false);
         btnMuonTraThietBi.setBackground(Color.decode("#7ed6df"));
+
+        loadData(null);
     }
 
+    // Hàm để nạp dữ liệu từ ArrayList<ThanhVienModel> vào jTable2
+    private void loadData(ArrayList<ThanhVienModel> tvLstAfterUpdated) {
+        // Lấy danh sách thành viên từ ThanhVienController
+        ArrayList<ThanhVienModel> tvLst = tvCtl.getList();
+        if(tvLstAfterUpdated != null) {
+            tvLst = tvLstAfterUpdated;
+        }
+        // Lấy DefaultTableModel từ jTable2
+        model = (DefaultTableModel) jTable2.getModel();
+
+        // Xóa tất cả các dòng hiện tại trong jTable2
+        model.setRowCount(0);
+
+        // Duyệt qua từng thành viên và thêm vào jTable2
+        for (ThanhVienModel tv : tvLst) {
+            Object[] row = {tv.getMaTV(), tv.getHoTen(), tv.getKhoa(), tv.getNganh(), tv.getSdt()};
+            model.addRow(row);
+        }
+    }
   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
@@ -151,7 +183,7 @@ public class MemberView extends javax.swing.JPanel {
         JPContainSearchOperation.setAutoscrolls(true);
         JPContainSearchOperation.setPreferredSize(new java.awt.Dimension(752, 100));
 
-        txtTimKiem.setText("Nhập từ khóa...");
+        txtTimKiem.setText("Tìm kiếm theo họ tên...");
         txtTimKiem.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtTimKiemFocusGained(evt);
@@ -168,6 +200,19 @@ public class MemberView extends javax.swing.JPanel {
         btnTimKiem.setText("Tìm kiếm");
         btnTimKiem.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
         btnTimKiem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTimKiem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchText = txtTimKiem.getText().toLowerCase().trim();
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
+                jTable2.setRowSorter(sorter);
+                if (searchText.isEmpty() || searchText.equals("Tìm kiếm theo họ tên...".toLowerCase())) {
+                    sorter.setRowFilter(null);
+                } else {
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText, 1)); // Tìm kiếm theo cột "Họ và Tên"
+                }
+            }
+        });
 
         javax.swing.GroupLayout JPContainSearchOperationLayout = new javax.swing.GroupLayout(JPContainSearchOperation);
         JPContainSearchOperation.setLayout(JPContainSearchOperationLayout);
@@ -192,16 +237,17 @@ public class MemberView extends javax.swing.JPanel {
 
         JPMainContent.add(JPContainSearchOperation, java.awt.BorderLayout.PAGE_START);
 
+        jTable2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+                new Object [][] {
 
-            },
-            new String [] {
-                "Họ và Tên", "Khoa", "Ngành", "Số điện thoại"
-            }
+                },
+                new String [] {
+                        "Mã TV", "Họ và Tên", "Khoa", "Ngành", "Số điện thoại"
+                }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                    java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -209,8 +255,7 @@ public class MemberView extends javax.swing.JPanel {
             }
         });
         jTable2.setGridColor(new java.awt.Color(255, 255, 255));
-        jTable2.setSelectionBackground(new java.awt.Color(255, 255, 255));
-        jTable2.setShowGrid(true);
+        jTable2.setRowHeight(30);
         jScrollPane2.setViewportView(jTable2);
 
         JPMainContent.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -315,10 +360,9 @@ public class MemberView extends javax.swing.JPanel {
 
     }// </editor-fold>//GEN-END:initComponents
 
-   
+
     // MỞ JDIALOG THÊM THÀNH VIÊN KHI CLICK VÀO NÚT "Thêm"
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {
         String[] options = { "Thông qua form nhập ", "Thông qua file excel" };
         int userChoice = JOptionPane.showOptionDialog(null,
                 "Chọn cách thêm thành viên",
@@ -331,15 +375,53 @@ public class MemberView extends javax.swing.JPanel {
         if (userChoice == 0) {
             // user chọn thêm thông qua form
             new FormThemCapNhatThanhVien("Thêm Thành Viên");
+            loadData(null);
         } else {
             // user chọn thêm thông qua
-        }
+            // Tạo một hộp thoại chọn tệp
+            JFileChooser fileChooser = new JFileChooser();
 
+            // Thiết lập bộ lọc để chỉ chọn các tệp có phần mở rộng là .xlsx
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel files", "xlsx");
+            fileChooser.setFileFilter(filter);
+
+            // Hiển thị hộp thoại chọn tệp
+            int result = fileChooser.showOpenDialog(null);
+
+            // Kiểm tra xem người dùng đã chọn tệp hay chưa
+            if (result == JFileChooser.APPROVE_OPTION) {
+                // Lấy đường dẫn tệp đã chọn
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+
+                // Gọi phương thức để thêm thành viên từ tệp Excel = filePath
+                JOptionPane.showMessageDialog(MemberView.this, addThanhVienFromExcel(filePath));
+            } else if (result == JFileChooser.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(MemberView.this, "Bạn đã hủy bỏ việc chọn tệp.");
+            }
+
+            loadData(null);
+        }
+    }
+
+    private static String addThanhVienFromExcel(String filepath) {
+        ThanhVienCTL thanhVienController = new ThanhVienCTL();
+        return thanhVienController.addModelFromFileExcel(filepath);
     }
 
     // MỞ JDIALOG CẬP NHẬT THÔNG TIN THÀNH VIÊN KHI CLICK VÀO NÚT "Cập Nhật"
     private void btnCapNhatActionPerformed(java.awt.event.ActionEvent evt) {
-        new FormThemCapNhatThanhVien("Cập Nhật Thông Tin Thành Viên");
+        int selectedRow = jTable2.getSelectedRow();
+        if (selectedRow != -1) { // Kiểm tra xem có dòng nào được chọn hay không
+            // Xóa dòng được chọn khỏi JTable
+            Integer maTV = (Integer) jTable2.getValueAt(selectedRow, 0);
+            // chuyển thành viên đc chọn qua form
+            new FormThemCapNhatThanhVien("Cập Nhật Thông Tin Thành Viên", maTV);
+            ArrayList<ThanhVienModel> tvLstAfterUpdate = tvCtl.getListForUpdateMethod();
+            loadData(tvLstAfterUpdate);
+        } else {
+            JOptionPane.showMessageDialog(MemberView.this, "Chọn dòng cần sửa !");
+        }
     }
 
     // MỞ JDIALOG KHU VỰC HỌC TẬP KHI CLICK VÀO NÚT "Khu Vực Học Tập"
@@ -359,15 +441,14 @@ public class MemberView extends javax.swing.JPanel {
 
     // XÓA PLACEHODER CỦA TEXTFIELD TÌM KIẾM
     private void txtTimKiemFocusGained(java.awt.event.FocusEvent evt) {
-        if (txtTimKiem.getText().equals("Nhập từ khóa...")) {
+        if (txtTimKiem.getText().equals("Tìm kiếm theo họ tên...")) {
             txtTimKiem.setText("");
         }
     }
     
     private void txtTimKiemFocusLost(java.awt.event.FocusEvent evt) {
-        
         if (txtTimKiem.getText().isEmpty()) {
-            txtTimKiem.setText("Nhập từ khóa...");
+            txtTimKiem.setText("Tìm kiếm theo họ tên...");
         }
     }
 
@@ -384,9 +465,20 @@ public class MemberView extends javax.swing.JPanel {
         if (userChoice == 0) {
             // user chọn thêm thông qua form
             new FormThemCapNhatThanhVien("Xóa Nhiều Thành Viên");
-              
+            loadData(null);
         } else {
             // user chọn thêm thông qua
+            int selectedRow = jTable2.getSelectedRow();
+            if (selectedRow != -1) { // Kiểm tra xem có dòng nào được chọn hay không
+                // Xóa dòng được chọn khỏi JTable
+                Integer maTV = (Integer) jTable2.getValueAt(selectedRow, 0);
+                ThanhVienCTL ctl = new ThanhVienCTL();
+                ctl.deleteModel(maTV);
+                JOptionPane.showMessageDialog(MemberView.this, "Xóa 1 thành viên thành công!");
+                loadData(null);
+            } else {
+                JOptionPane.showMessageDialog(MemberView.this, "Chọn dòng cần xóa !");
+            }
         }
     }
 

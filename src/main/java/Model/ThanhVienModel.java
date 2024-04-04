@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -45,8 +43,8 @@ public class ThanhVienModel {
 	public ThanhVienModel() {
 	}
 
-	public ThanhVienModel(Integer maTV, String hoTen, String khoa, String nganh, String sdt,
-			List<ThongTinSdModel> listInfomation, List<XuLyModel> listHandle, String email, String password) {
+	public ThanhVienModel(Integer maTV, String hoTen, String khoa, String nganh, String sdt, String email,
+			String password) {
 		this.maTV = maTV;
 		this.hoTen = hoTen;
 		this.khoa = khoa;

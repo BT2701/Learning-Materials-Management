@@ -1,9 +1,12 @@
 package Controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import DAL.ThongTinSdDAL;
 import Model.ThongTinSdModel;
+
+import javax.persistence.Query;
 
 public class ThongTinSdCTL {
 	private ThongTinSdDAL dal;
@@ -16,6 +19,9 @@ public class ThongTinSdCTL {
 	public ThongTinSdModel getModel(int id) {
 		return dal.getModel(id);
 	}
+	public ThongTinSdModel getModelByMaTVAndMaTB(int matv, int matb) {
+        return dal.getModelByMaTVAndMaTB(matv, matb);
+    };
 	public void addModel(ThongTinSdModel infor) {
 		dal.addModel(infor);
 	}

@@ -1,14 +1,21 @@
 package View.ThanhVien;
 
 
+import Controller.ThanhVienCTL;
+import Controller.XuLyCTL;
+import Model.ThanhVienModel;
+import Model.XuLyModel;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.stream.Collectors;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -25,7 +32,9 @@ import javax.swing.plaf.basic.ComboPopup;
  * @author phamv
  */
 public class FormCanhBaoViPham extends javax.swing.JDialog {
-
+    ThanhVienCTL tvCtl = new ThanhVienCTL();
+    XuLyCTL xuLyCTL = new XuLyCTL();
+    String[] viPhamList = {"Khóa thẻ 1 tháng", "Khóa thẻ 2 tháng", "Bồi thường mất tài sản", "Phạt tiền 10$", "Hủy thẻ"};
     /**
      * Creates new form FormCanhBaoViPham
      */
@@ -50,7 +59,9 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         jlThanhVien.setFont(sgUI13b); // NOI18N
         
         jlViPham.setFont(sgUI13b); // NOI18N
-        
+
+        jlSoTien.setFont(sgUI13b);
+
         cbThanhVien.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
         cbThanhVien.setBackground(Color.white);
         cbThanhVien.setFont(sgUI13b);
@@ -69,15 +80,11 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         cbViPham.setBackground(Color.white);
         cbViPham.setFont(sgUI13b);
         cbViPham.setPreferredSize(new Dimension(100, 30));
-        cbViPham.setUI(new BasicComboBoxUI() {
-            @Override
-            protected ComboPopup createPopup() {
-                BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
-                basicComboPopup.setBorder(lineCB);
-                return basicComboPopup;
-            }
-        });
-        
+
+        txtSoTien.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        txtSoTien.setBackground(Color.white);
+        txtSoTien.setFont(sgUI13b);
+        txtSoTien.setPreferredSize(new Dimension(100, 30));
         
         btnXacNhan.setFont(sgUI13b);
         btnXacNhan.setFocusPainted(false);
@@ -85,6 +92,23 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         btnXacNhan.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnXacNhan.setPreferredSize(new java.awt.Dimension(100, 23));
         btnXacNhan.setBackground(Color.decode("#7ed6df"));
+        btnXacNhan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                String maTV = cbThanhVien.getSelectedItem().toString().split("-")[0];
+                String viPham = cbViPham.getText();
+                String soTien = txtSoTien.getText();
+
+                ThanhVienModel thanhVienModel = tvCtl.getModel(Integer.parseInt(maTV));
+
+                int xulyLength = xuLyCTL.getList().size();
+                int id = xuLyCTL.getList().get(xulyLength - 1).getMaXL() + 1;
+                XuLyModel xuLyModel = new XuLyModel(id, viPham, Integer.parseInt(soTien), null, 0, thanhVienModel);
+                xuLyCTL.addModel(xuLyModel);
+
+                JOptionPane.showMessageDialog(FormCanhBaoViPham.this,  " Đã thêm cảnh báo với thành viên có mã : " + maTV + " thành công !");
+                setVisible(false);
+            }
+        });
         
         btnLamMoi.setFont(sgUI13b);
         btnLamMoi.setFocusPainted(false);
@@ -92,6 +116,13 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         btnLamMoi.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnLamMoi.setPreferredSize(new java.awt.Dimension(100, 23));
         btnLamMoi.setBackground(Color.decode("#7ed6df"));
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbThanhVien.setSelectedIndex(0);
+                cbViPham.setText("");
+                txtSoTien.setText("");
+            }
+        });
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -110,10 +141,11 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         jlThanhVien = new javax.swing.JLabel();
         jlViPham = new javax.swing.JLabel();
         cbThanhVien = new javax.swing.JComboBox<>();
-        cbViPham = new javax.swing.JComboBox<>();
+        cbViPham = new javax.swing.JTextField();
+        jlSoTien = new javax.swing.JLabel();
+        txtSoTien = new javax.swing.JTextField();
         btnXacNhan = new javax.swing.JButton();
         btnLamMoi = new javax.swing.JButton();
-
 
         jpHeader.setBackground(new java.awt.Color(15, 145, 232));
         jpHeader.setPreferredSize(new java.awt.Dimension(400, 50));
@@ -128,12 +160,13 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         getContentPane().add(jpHeader, java.awt.BorderLayout.PAGE_START);
 
         jlThanhVien.setText("Thành viên ");
-
         jlViPham.setText("Vi phạm ");
+        jlSoTien.setText("Số tiền ");
 
-        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cbViPham.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        String[] tvArr = tvCtl.getList().stream()
+                .map(tv -> tv.getMaTV() + "-" + tv.getHoTen())
+                .toArray(String[]::new);
+        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(tvArr));
 
         btnXacNhan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/xacnhan_icon.png"))); // NOI18N
         btnXacNhan.setText("Xác Nhận");
@@ -156,12 +189,15 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
                     .addGroup(jpContentLayout.createSequentialGroup()
                         .addGroup(jpContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlThanhVien)
-                            .addComponent(jlViPham))
+                            .addComponent(jlViPham)
+                            .addComponent(jlSoTien))
                         .addGap(37, 37, 37)
+                    .addGroup(jpContentLayout.createSequentialGroup()
                         .addGroup(jpContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cbThanhVien, 0, 180, Short.MAX_VALUE)
-                            .addComponent(cbViPham, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(47, Short.MAX_VALUE))
+                            .addComponent(cbViPham, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtSoTien, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                ).addContainerGap(47, Short.MAX_VALUE))
         );
         jpContentLayout.setVerticalGroup(
             jpContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,6 +210,10 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
                 .addGroup(jpContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlViPham)
                     .addComponent(cbViPham, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(jpContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlSoTien)
+                    .addComponent(txtSoTien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(45, 45, 45)
                 .addGroup(jpContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXacNhan)
@@ -229,8 +269,10 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
     private javax.swing.JButton btnLamMoi;
     private javax.swing.JButton btnXacNhan;
     private javax.swing.JComboBox<String> cbThanhVien;
-    private javax.swing.JComboBox<String> cbViPham;
+    private javax.swing.JTextField cbViPham;
+    private javax.swing.JTextField txtSoTien;
     private javax.swing.JLabel jlThanhVien;
+    private javax.swing.JLabel jlSoTien;
     private javax.swing.JLabel jlTitle;
     private javax.swing.JLabel jlViPham;
     private javax.swing.JPanel jpContent;

@@ -4,6 +4,8 @@
  */
 package View.ViPham;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author TOAN
@@ -13,9 +15,16 @@ public class ThemXyLy extends javax.swing.JDialog {
     /**
      * Creates new form ThemXyLy1
      */
-    public ThemXyLy(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public ThemXyLy() {
+    	setSize(350, 400);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setModal(true);
+		setTitle("Thêm");
+		setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
+//        super(parent, modal);
         initComponents();
+        setVisible(true);
     }
 
     /**
@@ -41,7 +50,6 @@ public class ThemXyLy extends javax.swing.JDialog {
         btnHuy = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 204, 255));
 
@@ -240,14 +248,13 @@ public class ThemXyLy extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ThemXyLy dialog = new ThemXyLy(new javax.swing.JFrame(), true);
+                ThemXyLy dialog = new ThemXyLy();
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
                     }
                 });
-                dialog.setVisible(true);
             }
         });
     }

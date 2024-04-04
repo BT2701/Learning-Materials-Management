@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import Controller.ThanhVienCTL;
+import Controller.ThongKeCTL;
 import Model.ThanhVienModel;
 import Model.XuLyModel;
 import Util.HibernateUtil;
@@ -15,34 +16,53 @@ import java.util.Scanner;
 
 public class test {
 	static ThanhVienCTL mem= new ThanhVienCTL();
+	static ThongKeCTL tk= new ThongKeCTL();
 	static Scanner sc= new Scanner(System.in);
     public static void main(String[] args) {
+    	for (Integer a : tk.listCountTime(2024)) {
+			System.out.println(a);
+		}
+    	System.out.println("KHOA");
+    	for (String string : tk.listDeparment()) {
+			System.out.println(string);
+		}
+    	for (Integer a : tk.listCountDeparment()) {
+			System.out.println(a);
+		}
     	
-        while (true) {
-        	System.out.println("1. thêm thành viên");
-        	System.out.println("2. xóa thành viên");
-        	System.out.println("3. sửa thành viên");
-        	System.out.println("4. xem danh sách thành viên");
-        	System.out.println("0. thoát");
-        	System.out.println("Nhập lựa chọn: ");
-        	int choose=Integer.parseInt(sc.nextLine());
-        	if(choose==1) {
-        		insertMember();
-        	}
-        	else if(choose==2) {
-        		deletemMember();
-        	}
-        	else if(choose==3) {
-        		updateMember();
-        	}
-        	else if(choose==4) {
-        		showList();
-        	}
-        	else {
-        		break;
-        	}
-        	
-        }
+    	System.out.println("NGÀNH");
+    	for (String string : tk.listBranch()) {
+			System.out.println(string);
+		}
+    	for (Integer a : tk.listCountBranch()) {
+			System.out.println(a);
+		}
+    	
+//        while (true) {
+//        	System.out.println("1. thêm thành viên");
+//        	System.out.println("2. xóa thành viên");
+//        	System.out.println("3. sửa thành viên");
+//        	System.out.println("4. xem danh sách thành viên");
+//        	System.out.println("0. thoát");
+//        	System.out.println("Nhập lựa chọn: ");
+//        	int choose=Integer.parseInt(sc.nextLine());
+//        	if(choose==1) {
+//        		insertMember();
+//        	}
+//        	else if(choose==2) {
+//        		deletemMember();
+//        	}
+//        	else if(choose==3) {
+//        		updateMember();
+//        	}
+//        	else if(choose==4) {
+//        		showList();
+//        	}
+//        	else {
+//        		break;
+//        	}
+//        	
+//        }
     }
     public static void insertMember() {
     	ThanhVienModel member= new ThanhVienModel();

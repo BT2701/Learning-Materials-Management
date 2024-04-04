@@ -4,13 +4,22 @@
  */
 package View.ThanhVien;
 
+import Controller.ThanhVienCTL;
+import Controller.ThietBiCTL;
+import Controller.ThongTinSdCTL;
+import Model.ThanhVienModel;
+import Model.ThietBiModel;
+import Model.ThongTinSdModel;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
+import java.util.Date;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
@@ -23,7 +32,9 @@ import javax.swing.plaf.basic.ComboPopup;
  * @author phamv
  */
 public class FormKhuVucHocTap extends javax.swing.JDialog {
-
+    ThanhVienCTL tvCtl = new ThanhVienCTL();
+    ThietBiCTL tbCtl = new ThietBiCTL();
+    ThongTinSdCTL sdCtl = new ThongTinSdCTL();
     /**
      * Creates new form FormKhuVucHocTap
      */
@@ -37,16 +48,34 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
 //        super(parent, modal);
         initComponents();
         intiMyComponents();
+        changeValueOfTextfileWhenMaTVChange();
+
         setVisible(true);
     }
     
-  
+    public void changeValueOfTextfileWhenMaTVChange() {
+        int id = Integer.parseInt((String) cbThanhVien.getSelectedItem());
+        ThanhVienModel thanhVienModel = tvCtl.getModel(id);
+        cbThanhVien.setSelectedItem(thanhVienModel.getMaTV());
+
+        txtHoTen.setText(thanhVienModel.getHoTen());
+        txtHoTen.setEditable(false);
+
+        txtSdt.setText(thanhVienModel.getSdt());
+        txtSdt.setEditable(false);
+
+        cbKhoa.setText(thanhVienModel.getKhoa());
+        cbKhoa.setEditable(false);
+
+        cbNganh.setText(thanhVienModel.getNganh());
+        cbKhoa.setEditable(false);
+    }
 
     private void intiMyComponents(){
         jlTitle.setFont(sgUI15b); // NOI18N
         jlThanhVien.setFont(sgUI13b); // NOI18N
         jlHoTen.setFont(sgUI13b); // NOI18N
-        jlKhoa.setFont(sgUI13b); // NOI18N 
+        jlKhoa.setFont(sgUI13b); // NOI18N
         jlNganh.setFont(sgUI13b); // NOI18N
         jlSdt.setFont(sgUI13b); // NOI18N
         
@@ -54,24 +83,29 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         txtHoTen.setFont(sgUI13p);
         txtHoTen.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtHoTen.setForeground(Color.black);
-        
+
         txtSdt.setPreferredSize(new Dimension(200, 30));
         txtSdt.setFont(sgUI13p);
         txtSdt.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtSdt.setForeground(Color.black);
-        
+
         
         btnXacNhan.setFont(sgUI13b);
         btnXacNhan.setFocusPainted(false);
         btnXacNhan.setBorderPainted(false);
         btnXacNhan.setPreferredSize(new java.awt.Dimension(100, 23));
         btnXacNhan.setBackground(Color.decode("#7ed6df"));
-         
+
         btnLamMoi.setFont(sgUI13b);
         btnLamMoi.setFocusPainted(false);
         btnLamMoi.setBorderPainted(false);
         btnLamMoi.setPreferredSize(new java.awt.Dimension(100, 23));
         btnLamMoi.setBackground(Color.decode("#7ed6df"));
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbThanhVien.setSelectedIndex(0);
+            }
+        });
         
         cbThanhVien.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
         cbThanhVien.setBackground(Color.white);
@@ -85,34 +119,22 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
                 return basicComboPopup;
             }
         });
-        
-        
+        cbThanhVien.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeValueOfTextfileWhenMaTVChange();
+            }
+        });
+
         cbKhoa.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
-        cbKhoa.setBackground(Color.white);
         cbKhoa.setFont(sgUI13b);
+        cbNganh.setBackground(null);
         cbKhoa.setPreferredSize(new Dimension(100, 30));
-        cbKhoa.setUI(new BasicComboBoxUI() {
-            @Override
-            protected ComboPopup createPopup() {
-                BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
-                basicComboPopup.setBorder(lineCB);
-                return basicComboPopup;
-            }
-        });
-        
-        
+
         cbNganh.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
-        cbNganh.setBackground(Color.white);
         cbNganh.setFont(sgUI13b);
+        cbNganh.setBackground(null);
         cbNganh.setPreferredSize(new Dimension(100, 30));
-        cbNganh.setUI(new BasicComboBoxUI() {
-            @Override
-            protected ComboPopup createPopup() {
-                BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
-                basicComboPopup.setBorder(lineCB);
-                return basicComboPopup;
-            }
-        });
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -136,8 +158,8 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         txtHoTen = new javax.swing.JTextField();
         txtSdt = new javax.swing.JTextField();
         cbThanhVien = new javax.swing.JComboBox<>();
-        cbKhoa = new javax.swing.JComboBox<>();
-        cbNganh = new javax.swing.JComboBox<>();
+        cbKhoa = new javax.swing.JTextField();
+        cbNganh = new javax.swing.JTextField();
 
 
         jpHeader.setBackground(new java.awt.Color(15, 145, 232));
@@ -154,7 +176,7 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
 
         getContentPane().add(jpHeader, java.awt.BorderLayout.PAGE_START);
 
-        jlThanhVien.setText("Thành viên");
+        jlThanhVien.setText("Mã thành viên");
 
         jlHoTen.setText("Họ và Tên");
 
@@ -177,11 +199,10 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         btnLamMoi.setText("Làm Mới");
         btnLamMoi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cbKhoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        cbNganh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        String[] maTVArr = tvCtl.getList().stream()
+                .map(tv -> Integer.toString(tv.getMaTV()))
+                .toArray(String[]::new);
+        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(maTVArr));
 
         javax.swing.GroupLayout jpContentLayout = new javax.swing.GroupLayout(jpContent);
         jpContent.setLayout(jpContentLayout);
@@ -254,7 +275,23 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
-        // TODO add your handling code here:
+        int maTV = Integer.parseInt(cbThanhVien.getSelectedItem().toString().split("-")[0]);
+
+        ThanhVienModel thanhVienModel = tvCtl.getModel(maTV);
+        ThongTinSdModel thongTinSdModel = sdCtl.getModelByMaTVAndMaTB(maTV, -1);
+        if(thongTinSdModel != null && thongTinSdModel.getTgVao() != null) {
+            JOptionPane.showMessageDialog(FormKhuVucHocTap.this,  "Thành viên có mã : " + maTV + " đã vào khu vực này! Vui lòng kiểm tra lại !");
+        } else if(thongTinSdModel != null && thongTinSdModel.getTgVao() == null) {
+            thongTinSdModel.setTgVao(new Date());
+            sdCtl.updateModel(thongTinSdModel);
+            JOptionPane.showMessageDialog(FormKhuVucHocTap.this,  "Đã thêm thành viên có mã : " + maTV + " vào khu vực học  thành công !");
+            setVisible(false);
+        } else if(thongTinSdModel == null) {
+            thongTinSdModel = new ThongTinSdModel(maTV, new Date(), null, null, null, thanhVienModel, null);
+            sdCtl.addModel(thongTinSdModel);
+            JOptionPane.showMessageDialog(FormKhuVucHocTap.this,  "Đã thêm thành viên có mã : " + maTV + " vào khu vực học  thành công !");
+            setVisible(false);
+        }
     }//GEN-LAST:event_btnXacNhanActionPerformed
 
     /**
@@ -290,8 +327,8 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLamMoi;
     private javax.swing.JButton btnXacNhan;
-    private javax.swing.JComboBox<String> cbKhoa;
-    private javax.swing.JComboBox<String> cbNganh;
+    private javax.swing.JTextField cbKhoa;
+    private javax.swing.JTextField cbNganh;
     private javax.swing.JComboBox<String> cbThanhVien;
     private javax.swing.JLabel jlHoTen;
     private javax.swing.JLabel jlKhoa;

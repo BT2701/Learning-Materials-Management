@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 
 import javax.swing.BoxLayout;
@@ -23,6 +25,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.Dataset;
 
 import View.Styles.Styles;
 
@@ -99,6 +102,17 @@ public class FormStatistic extends JDialog {
 		});
 		cbbTop.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbTop,1);
+		cbbTop.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int year= Integer.parseInt(cbbTop.getSelectedItem().toString().split(" ")[1]);
+				chartTime=createLineChart(titleTimeChart, "Month", "value", createDatasetTime(year));
+				setColorChart(chartTime);
+				pnChartTime.setChart(chartTime);
+			}
+		});
 
 		
 		cbbMonth = new JComboBox<String>();
@@ -118,15 +132,16 @@ public class FormStatistic extends JDialog {
 		rendererCbb(cbbMonth, 2);
 
 //		chart
+		int year= Integer.parseInt(cbbTop.getSelectedItem().toString().split(" ")[1]);
 		chartTime = ChartFactory.createLineChart(titleTimeChart, "Month", "value",
-				createDatasetTime(2024));
+				createDatasetTime(year));
 		setColorChart(chartTime);
 		
-		chartBranch = ChartFactory.createBarChart(titleBranchChart, "Branch", "value", createDatasetBranch(2024));
+		chartBranch = ChartFactory.createBarChart(titleBranchChart, "Branch", "value", createDatasetBranch());
 		setColorChart(chartBranch);
 		
 		chartDepartment = ChartFactory.createBarChart(titleDepartmentChart, "Department", "value",
-				createDatasetDepartment(2024));
+				createDatasetDepartment());
 		setColorChart(chartDepartment);
 		
 //		chart pn
@@ -183,7 +198,7 @@ public class FormStatistic extends JDialog {
 //		botcbb
 		pnBotCBB = new JPanel();
 		pnBotCBB.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
-		pnBotCBB.add(cbbMonth);
+//		pnBotCBB.add(cbbMonth);
 		pnBotCBB.setBackground(Color.white);
 
 //		bot
@@ -201,9 +216,7 @@ public class FormStatistic extends JDialog {
 
 	public void initComponentsDevice() {
 //		subcomponent
-		chartDevice = ChartFactory.createBarChart(titleDeviceChart, "Thiết bị", "Số lượng",
-				createDatasetDevice(2024, 2));
-		setColorChart(chartDevice);
+		
 		cbbYear = new JComboBox<String>();
 		cbbYear.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
 		cbbYear.setBackground(Color.white);
@@ -219,6 +232,18 @@ public class FormStatistic extends JDialog {
 		});
 		cbbYear.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbYear, 3);
+		cbbYear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int year1= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+				int month1= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+				chartDevice=createBarChart(titleDeviceChart, "Thiết bị", "Số lượng", createDatasetDevice(year1 ,month1));
+				setColorChart(chartDevice);
+				pnChartDevice.setChart(chartDevice);
+			}
+		});
 		
 		cbbMonth = new JComboBox<String>();
 		cbbMonth.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
@@ -235,6 +260,23 @@ public class FormStatistic extends JDialog {
 		});
 		cbbMonth.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbMonth, 2);
+		cbbMonth.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int year1= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+				int month1= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+				chartDevice=createBarChart(titleDeviceChart, "Thiết bị", "Số lượng", createDatasetDevice(year1 ,month1));
+				setColorChart(chartDevice);
+				pnChartDevice.setChart(chartDevice);
+			}
+		});
+		int year= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+		int month= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+		chartDevice = ChartFactory.createBarChart(titleDeviceChart, "Thiết bị", "Số lượng",
+				createDatasetDevice(year, month));
+		setColorChart(chartDevice);
 
 		pnChartDevice = new ChartPanel(chartDevice);
 		pnChartDevice.setBackground(Color.white);
@@ -260,9 +302,7 @@ public class FormStatistic extends JDialog {
 
 	public void initComponentsCurrent() {
 //		subcomponent
-		chartDevice = ChartFactory.createBarChart(titleTimeCurrentChart, "Thiết bị", "Số lượng",
-				createDatasetCurrent(2024, 2));
-		setColorChart(chartDevice);
+		
 		cbbYear = new JComboBox<String>();
 		cbbYear.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
 		cbbYear.setBackground(Color.white);
@@ -278,6 +318,18 @@ public class FormStatistic extends JDialog {
 		});
 		cbbYear.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbYear, 3);
+		cbbYear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int year1= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+				int month1= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+				chartDevice=createBarChart(titleTimeCurrentChart, "Thiết bị", "Số lượng", createDatasetCurrent(year1 ,month1));
+				setColorChart(chartDevice);
+				pnChartDevice.setChart(chartDevice);
+			}
+		});
 		
 		cbbMonth = new JComboBox<String>();
 		cbbMonth.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
@@ -294,7 +346,23 @@ public class FormStatistic extends JDialog {
 		});
 		cbbMonth.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbMonth, 2);
-
+		cbbMonth.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int year1= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+				int month1= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+				chartDevice=createBarChart(titleTimeCurrentChart, "Thiết bị", "Số lượng", createDatasetCurrent(year1 ,month1));
+				setColorChart(chartDevice);
+				pnChartDevice.setChart(chartDevice);
+			}
+		});
+		int year= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+		int month= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+		chartDevice = ChartFactory.createBarChart(titleTimeCurrentChart, "Thiết bị", "Số lượng",
+				createDatasetCurrent(year, month));
+		setColorChart(chartDevice);
 		pnChartDevice = new ChartPanel(chartDevice);
 		pnChartDevice.setBackground(Color.white);
 
@@ -318,10 +386,7 @@ public class FormStatistic extends JDialog {
 	}
 
 	public void initComponentsHandle() {
-
-		chartHandle = ChartFactory.createBarChart(titleHandleChart, "Tên vi phạm", "Số lượng",
-				createDatasetHandle(2024, 2));
-		setColorChart(chartHandle);
+		
 		cbbYear = new JComboBox<String>();
 		cbbYear.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
 		cbbYear.setBackground(Color.white);
@@ -337,6 +402,18 @@ public class FormStatistic extends JDialog {
 		});
 		cbbYear.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbYear, 3);
+		cbbYear.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int year1= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+				int month1= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+				chartHandle=createBarChart(titleHandleChart, "Xử lý vi phạm", "Số lượng", createDatasetHandle(year1 ,month1));
+				setColorChart(chartHandle);
+				pnChartHandle.setChart(chartHandle);
+			}
+		});
 		
 		cbbMonth = new JComboBox<String>();
 		cbbMonth.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
@@ -353,7 +430,23 @@ public class FormStatistic extends JDialog {
 		});
 		cbbMonth.setBorder(style.getMatteBorderCB());
 		rendererCbb(cbbMonth, 2);
-
+		cbbMonth.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int year1= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+				int month1= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+				chartHandle=createBarChart(titleHandleChart, "Xử lý vi phạm", "Số lượng", createDatasetHandle(year1 ,month1));
+				setColorChart(chartHandle);
+				pnChartHandle.setChart(chartHandle);
+			}
+		});
+		int year= Integer.parseInt(cbbYear.getSelectedItem().toString().split(" ")[1]);
+		int month= Integer.parseInt(cbbMonth.getSelectedItem().toString().split(" ")[1]);
+		chartHandle = ChartFactory.createBarChart(titleHandleChart, "Xử lý vi phạm", "Số lượng",
+				createDatasetHandle(year, month));
+		setColorChart(chartHandle);
 		pnChartHandle = new ChartPanel(chartHandle);
 		pnChartHandle.setBackground(Color.white);
 //		top
@@ -388,34 +481,29 @@ public class FormStatistic extends JDialog {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		for (int i = 0; i < 12; i++) {
-			dataset.addValue(i, "Students", (i + 1)+"");
+			dataset.addValue(StatisticView.thongKeCTL.listCountTime(year).get(i), "Students", (i + 1)+"");
 		}
 		return dataset;
 	}
 
-	private DefaultCategoryDataset createDatasetBranch(int year) {
+	private DefaultCategoryDataset createDatasetBranch() {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		// Insert data for each department
-		dataset.addValue(50, "Computer Science", "CS");
-		dataset.addValue(30, "Electrical Engineering", "EE");
-		dataset.addValue(40, "Mechanical Engineering", "ME");
-		dataset.addValue(25, "Civil Engineering", "CE");
-		dataset.addValue(35, "Chemical Engineering", "ChemE");
+		for(int i =0;i<StatisticView.thongKeCTL.listBranch().size();i++) {
+			dataset.addValue(StatisticView.thongKeCTL.listCountBranch().get(i), StatisticView.thongKeCTL.listBranch().get(i), StatisticView.thongKeCTL.listBranch().get(i));
+		}
 
 		return dataset;
 	}
 
-	private DefaultCategoryDataset createDatasetDepartment(int year) {
+	private DefaultCategoryDataset createDatasetDepartment() {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		// Insert data for each department
-		dataset.addValue(50, "Computer Science", "CS");
-		dataset.addValue(30, "Electrical Engineering", "EE");
-		dataset.addValue(40, "Mechanical Engineering", "ME");
-		dataset.addValue(25, "Civil Engineering", "CE");
-		dataset.addValue(35, "Chemical Engineering", "ChemE");
-
+		for(int i =0;i<StatisticView.thongKeCTL.listDeparment().size();i++) {
+			dataset.addValue(StatisticView.thongKeCTL.listCountDeparment().get(i), StatisticView.thongKeCTL.listDeparment().get(i), StatisticView.thongKeCTL.listDeparment().get(i));
+		}
 		return dataset;
 	}
 
@@ -435,7 +523,6 @@ public class FormStatistic extends JDialog {
 				}
 				break;
 			case 3:// cbb đặc biệt
-				model.addElement("Tất cả");
 				Calendar calendar1 = Calendar.getInstance();
 				int year1 = calendar1.get(Calendar.YEAR);
 				for (int i = year1; i > year1 - 5; i--) {
@@ -450,12 +537,9 @@ public class FormStatistic extends JDialog {
 //	DEVICE
 	private DefaultCategoryDataset createDatasetDevice(int year, int month) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		dataset.addValue(50, "Computer Science", "CS");
-		dataset.addValue(30, "Electrical Engineering", "EE");
-		dataset.addValue(40, "Mechanical Engineering", "ME");
-		dataset.addValue(25, "Civil Engineering", "CE");
-		dataset.addValue(35, "Chemical Engineering", "ChemE");
+		for(int i =0;i<StatisticView.thongKeCTL.listDevice().size();i++) {
+			dataset.addValue(StatisticView.thongKeCTL.listCountDevice(year, month).get(i), StatisticView.thongKeCTL.listDevice().get(i), StatisticView.thongKeCTL.listDevice().get(i));
+		}
 		return dataset;
 	}
 
@@ -463,11 +547,9 @@ public class FormStatistic extends JDialog {
 	private DefaultCategoryDataset createDatasetCurrent(int year, int month) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		dataset.addValue(50, "Computer Science", "CS");
-		dataset.addValue(30, "Electrical Engineering", "EE");
-		dataset.addValue(40, "Mechanical Engineering", "ME");
-		dataset.addValue(25, "Civil Engineering", "CE");
-		dataset.addValue(35, "Chemical Engineering", "ChemE");
+		for(int i =0;i<StatisticView.thongKeCTL.listDevice().size();i++) {
+			dataset.addValue(StatisticView.thongKeCTL.listCountCurrent(year, month).get(i), StatisticView.thongKeCTL.listDevice().get(i), StatisticView.thongKeCTL.listDevice().get(i));
+		}
 		return dataset;
 	}
 
@@ -475,11 +557,9 @@ public class FormStatistic extends JDialog {
 	private DefaultCategoryDataset createDatasetHandle(int year, int month) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		dataset.addValue(50, "Computer Science", "CS");
-		dataset.addValue(30, "Electrical Engineering", "EE");
-		dataset.addValue(40, "Mechanical Engineering", "ME");
-		dataset.addValue(25, "Civil Engineering", "CE");
-		dataset.addValue(35, "Chemical Engineering", "ChemE");
+		for(int i =0;i<StatisticView.thongKeCTL.listHandle().size();i++) {
+			dataset.addValue(StatisticView.thongKeCTL.listCountHandle(year, month).get(i), StatisticView.thongKeCTL.listHandle().get(i), StatisticView.thongKeCTL.listHandle().get(i));
+		}
 		return dataset;
 	}
 	
@@ -490,12 +570,17 @@ public class FormStatistic extends JDialog {
         plot.setBackgroundPaint(Color.white);
 	}
 	
-//	public void setTittleChart(JFreeChart chart, String newTittle) {
-//		chart.setTitle(newTittle);
-//	}
-//	public void comboboxEvent(JComboBox<String> cbb, JFreeChart chart) {
-//		
-//	}
+	public JFreeChart createLineChart(String title, String bot, String left, DefaultCategoryDataset dataset) {
+		JFreeChart chart =ChartFactory.createLineChart(title, bot, left,
+				dataset);
+		return chart;
+	}
+	
+	public JFreeChart createBarChart(String title, String bot, String left, DefaultCategoryDataset dataset) {
+		JFreeChart chart=ChartFactory.createBarChart(title, bot, left,
+				dataset);
+		return chart;
+	}
 	
 	
 }

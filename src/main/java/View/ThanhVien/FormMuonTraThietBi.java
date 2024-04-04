@@ -4,14 +4,23 @@
  */
 package View.ThanhVien;
 
+import Controller.ThanhVienCTL;
+import Controller.ThietBiCTL;
+import Controller.ThongTinSdCTL;
+import Model.ThanhVienModel;
+import Model.ThietBiModel;
+import Model.ThongTinSdModel;
+import Model.XuLyModel;
+
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -23,7 +32,9 @@ import javax.swing.plaf.basic.ComboPopup;
  * @author phamv
  */
 public class FormMuonTraThietBi extends javax.swing.JDialog {
-
+    ThanhVienCTL tvCtl = new ThanhVienCTL();
+    ThietBiCTL tbCtl = new ThietBiCTL();
+    ThongTinSdCTL sdCtl = new ThongTinSdCTL();
     /**
      * Creates new form FormMuonTraThietBij
      */
@@ -69,6 +80,13 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
         btnLamMoi.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnLamMoi.setPreferredSize(new java.awt.Dimension(100, 23));
         btnLamMoi.setBackground(Color.decode("#7ed6df"));
+        btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbThanhVien.setSelectedIndex(0);
+                cbThietBi.setSelectedIndex(0);
+            }
+        });
 
         btnHuy.setFont(sgUI13b);
         btnHuy.setFocusPainted(false);
@@ -76,6 +94,12 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
         btnHuy.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnHuy.setPreferredSize(new java.awt.Dimension(100, 23));
         btnHuy.setBackground(Color.decode("#7ed6df"));
+        btnHuy.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setVisible(false);
+            }
+        });
 
         cbThanhVien.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
         cbThanhVien.setBackground(Color.white);
@@ -167,9 +191,15 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
             }
         });
 
-        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        String[] tvArr = tvCtl.getList().stream()
+                .map(tv -> tv.getMaTV() + "-" + tv.getHoTen())
+                .toArray(String[]::new);
+        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(tvArr));
 
-        cbThietBi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        String[] tbArr = tbCtl.getList().stream()
+                .map(tb -> tb.getMaTB() + "-" + tb.getTenTB())
+                .toArray(String[]::new);
+        cbThietBi.setModel(new javax.swing.DefaultComboBoxModel<>(tbArr));
 
         btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
         btnLamMoi.setText("Làm Mới");
@@ -234,11 +264,49 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMuonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMuonActionPerformed
-        // TODO add your handling code here:
+        int maTV = Integer.parseInt(cbThanhVien.getSelectedItem().toString().split("-")[0]);
+        int maThietBi = Integer.parseInt(cbThietBi.getSelectedItem().toString().split("-")[0]);
+
+        ThanhVienModel thanhVienModel = tvCtl.getModel(maTV);
+        ThietBiModel thietBiModel = tbCtl.getModel(maThietBi);
+        ThongTinSdModel thongTinSdModel = sdCtl.getModelByMaTVAndMaTB(maTV, maThietBi);
+
+        if(thongTinSdModel != null) {
+            int id = thongTinSdModel.getMaTT();
+            thongTinSdModel.setTgMuon(new Date());
+            thongTinSdModel.setTgTra(null);
+            sdCtl.updateModel(thongTinSdModel);
+
+            JOptionPane.showMessageDialog(FormMuonTraThietBi.this,  "Thành viên có mã : " + maTV + " mượn lại thiết bị thành công !");
+            setVisible(false);
+            return;
+        }
+
+        int xulyLength = sdCtl.getList().size();
+        int id = sdCtl.getList().get(xulyLength - 1).getMaTT() + 1;
+        ThongTinSdModel ttModel = new ThongTinSdModel(id, null, new Date(), null, null, thanhVienModel, thietBiModel);
+        sdCtl.addModel(ttModel);
+
+        JOptionPane.showMessageDialog(FormMuonTraThietBi.this,  "Đã cho thành viên có mã : " + maTV + " mượn thiết bị thành công !");
+        setVisible(false);
     }//GEN-LAST:event_btnMuonActionPerformed
 
     private void btnTraActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnTraActionPerformed
-        // TODO add your handling code here:
+        int maTV = Integer.parseInt(cbThanhVien.getSelectedItem().toString().split("-")[0]);
+        int maThietBi = Integer.parseInt(cbThietBi.getSelectedItem().toString().split("-")[0]);
+        ThongTinSdModel thongTinSdModel = sdCtl.getModelByMaTVAndMaTB(maTV, maThietBi);
+
+        if(thongTinSdModel == null || thongTinSdModel.getTgMuon() == null) {
+            JOptionPane.showMessageDialog(FormMuonTraThietBi.this,  "Thành viên có mã : " + maTV + " chưa mượn thiết bị này! Vui lòng kiểm tra lại !");
+            return;
+        }
+
+        ThongTinSdModel ttModel = sdCtl.getModelByMaTVAndMaTB(maTV, maThietBi);
+        ttModel.setTgTra(new Date());
+        sdCtl.updateModel(ttModel);
+
+        JOptionPane.showMessageDialog(FormMuonTraThietBi.this,  "Thành viên có mã : " + maTV + " đã trả thiết bị thành công !");
+        setVisible(false);
     }// GEN-LAST:event_btnTraActionPerformed
 
     /**

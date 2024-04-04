@@ -142,6 +142,11 @@ public class HandleView extends javax.swing.JPanel {
         btnSua2.setBorderPainted(false);
         btnSua2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSua2.setFocusPainted(false);
+        btnSua2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSua2ActionPerformed(evt);
+            }
+        });
 
         btnThem2.setBackground(new java.awt.Color(126, 214, 223));
         btnThem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
@@ -246,6 +251,11 @@ public class HandleView extends javax.swing.JPanel {
 
     private void btnThem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThem2ActionPerformed
         // TODO add your handling code here:
+    	new ThemXyLy();
+    }//GEN-LAST:event_btnThem2ActionPerformed
+    private void btnSua2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThem2ActionPerformed
+        // TODO add your handling code here:
+    	new SuaXuLy();
     }//GEN-LAST:event_btnThem2ActionPerformed
 
 

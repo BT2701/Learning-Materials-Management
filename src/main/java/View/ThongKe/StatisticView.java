@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -79,7 +81,10 @@ public class StatisticView extends JPanel {
 	private void initComponents() {
 //		dateModel = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
 		dcsDate = new JDateChooser();
-		dcsDate.setDate(new Date());
+		Calendar calendar = Calendar.getInstance();
+        calendar.set(2000, Calendar.JANUARY, 1);
+        Date date = calendar.getTime();
+		dcsDate.setDate(date);
 		dcsDate.setDateFormatString("dd/MM/yyyy");
 		dcsDate.getCalendarButton().setBorder(new EmptyBorder(0, 5, 0, 5));
 		dcsDate.getCalendarButton().setBackground(Color.decode("#EEEEEE"));
@@ -439,6 +444,7 @@ public class StatisticView extends JPanel {
 	
 	public void events() {
 		ComboboxEvent();
+		ChooserEvents();
 	}
 	public void ComboboxEvent() {
 		cbbSelection.addActionListener(new ActionListener() {
@@ -448,6 +454,7 @@ public class StatisticView extends JPanel {
 				// TODO Auto-generated method stub
 				if (cbbSelection.getSelectedIndex()==0) {
 					pnCenterContentSelectionSpinner.setVisible(false);
+					rendererData();
 				}
 				else if (cbbSelection.getSelectedIndex()==1) {
 					pnCenterContentSelectionSpinner.setVisible(true);
@@ -455,19 +462,47 @@ public class StatisticView extends JPanel {
 			}
 		});
 	}
-	public void SpinnerEvent() {
-		dcsDate.addMouseListener(new MouseAdapter() {
+	public void ChooserEvents() {
+		dcsDate.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+			
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void propertyChange(PropertyChangeEvent evt) {
 				// TODO Auto-generated method stub
-				
+				Date from= dcsDate.getDate();
+				if(from==null) {
+					Calendar calendar = Calendar.getInstance();
+			        calendar.set(2000, Calendar.JANUARY, 1);
+			        from = calendar.getTime();
+				}
+				Date to= dcsDate1.getDate();
+				if(to == null) {
+					to = new Date();
+				}
+				if(from.after(to)) {
+					return;
+				}
+				changeValueByDate(from, to);
 			}
 		});
-		dcsDate1.addMouseListener(new MouseAdapter() {
+		dcsDate1.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+			
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void propertyChange(PropertyChangeEvent evt) {
 				// TODO Auto-generated method stub
-				
+				Date from= dcsDate.getDate();
+				if(from==null) {
+					Calendar calendar = Calendar.getInstance();
+			        calendar.set(2000, Calendar.JANUARY, 1);
+			        from = calendar.getTime();
+				}
+				Date to= dcsDate1.getDate();
+				if(to == null) {
+					to = new Date();
+				}
+				if(from.after(to)) {
+					return;
+				}
+				changeValueByDate(from, to);
 			}
 		});
 	}
@@ -480,8 +515,14 @@ public class StatisticView extends JPanel {
 		lbUnDone.setText(thongKeCTL.countHandlingViolation()+"");
 		lbViolation.setText(thongKeCTL.countViolation()+"");
 	}
-	public void changeValueByDate() {
-		
+	public void changeValueByDate(Date from, Date to) {
+		lbCurrent.setText(thongKeCTL.countBorrowingDeviceOverTime(from, to)+"");
+		lbDevice.setText(thongKeCTL.countBorrowedDeviceOverTime(from, to)+"");
+		lbDone.setText(thongKeCTL.countHandledViolationOverTime(from, to)+"");
+		lbFee.setText(thongKeCTL.countFeeOverTime(from, to)+"đ");
+		lbMember.setText(thongKeCTL.countIntoMaterialOverTime(from, to)+"");
+		lbUnDone.setText(thongKeCTL.countHandlingViolationOverTime(from, to)+"");
+		lbViolation.setText(thongKeCTL.countViolationOverTime(from, to)+"");
 	}
 
 }

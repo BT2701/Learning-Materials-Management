@@ -8,11 +8,13 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
@@ -20,16 +22,24 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
 
+import Controller.ThanhVienCTL;
+import Model.ThanhVienModel;
+
 /**
  *
  * @author phamv
  */
 public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
-
+    ThanhVienCTL tvCtl = new ThanhVienCTL();
+    ThanhVienModel oldThanhVien = null;
+    private String[] nganhList = {"", "Giáo dục tiểu học", "Quản trị kinh doanh", "Quản lý giáo ", "Khoa học máy tính", "Khoa học dữ liệu", "Khoa học môi trường", "Khoa học xã hội"};
+    private String[] khoaList = {"", "GDTH", "TLH", "QTKD", "CNTT", "VL", "MT", "XH"};
+    String titleForm;
     /**
      * Creates new form FormThemThanhVien
      */
     public FormThemCapNhatThanhVien(String titleForm) {
+        this.titleForm = titleForm;
     	setSize(450, 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -43,24 +53,49 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         setVisible(true);
        
     }
-    
-    
+
+    public FormThemCapNhatThanhVien(String titleForm, int idOfoldThanhVien) {
+        this.oldThanhVien = tvCtl.getModel(idOfoldThanhVien);
+        this.titleForm = titleForm;
+        setSize(450, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setModal(true);
+        setTitle("Xử lý");
+        setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
+        initComponents();
+        initMyComponents(titleForm);
+        changeComponentForDiffForm(titleForm);
+        setVisible(true);
+    }
+
     private void changeComponentForDiffForm(String titleForm){
-        if(titleForm == "Xóa Nhiều Thành Viên"){
-            txtThanhVien.setVisible(true);
-            lbThanhVien.setVisible(true);
+//        if(titleForm == "Xóa Nhiều Thành Viên"){
+//            txtThanhVien.setVisible(true);
+//            lbThanhVien.setVisible(true);
+//        }
+//        else{
+//            txtThanhVien.setVisible(false);
+//            lbThanhVien.setVisible(false);
+//        }
+        if(titleForm.equals("Cập Nhật Thông Tin Thành Viên")) {
+            txtMaTV.setEditable(false);
+            txtMaTV.setText(Integer.toString(oldThanhVien.getMaTV()));
+
+            txtSdt.setText(oldThanhVien.getSdt());
+            txtHoTen.setText(oldThanhVien.getHoTen());
+            cbKhoa.addItem(oldThanhVien.getKhoa());
+            cbKhoa.setSelectedItem(oldThanhVien.getKhoa());
+            cbNganh.addItem(oldThanhVien.getNganh());
+            cbNganh.setSelectedItem(oldThanhVien.getNganh());
         }
-        else{
-            txtThanhVien.setVisible(false);
-            lbThanhVien.setVisible(false);
-        }
-        
     }
     
     private void initMyComponents(String titleForm){
         title.setText(titleForm);
         title.setFont(sgUI15b);
         lbHoTen.setFont(sgUI13b); // NOI18N
+        lbMaTV.setFont(sgUI13b); // NOI18N
         lbKhoa.setFont(sgUI13b); // NOI18N 
         lbNganh.setFont(sgUI13b); // NOI18N
         lbSdt.setFont(sgUI13b); // NOI18N
@@ -77,6 +112,120 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         btnXacNhan.setBorderPainted(false);
         btnXacNhan.setPreferredSize(new java.awt.Dimension(100, 23));
         btnXacNhan.setBackground(Color.decode("#7ed6df"));
+
+        // Xử lý sự kiện khi nhấn nút Xác Nhận
+        btnXacNhan.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Trích xuất dữ liệu từ các trường và combobox
+                String maTVStr = txtMaTV.getText();
+                if (maTVStr.isEmpty() && !titleForm.equals("Xóa Nhiều Thành Viên")) {
+                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Vui lòng nhập mã thành viên!");
+                    return;
+                }
+
+                int maTV;
+                try {
+                    if(titleForm.equals("Xóa Nhiều Thành Viên") && maTVStr.isEmpty()) {
+                        maTV = 0;
+                    } else {
+                        maTV = Integer.parseInt(maTVStr);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Mã thành viên phải là một số nguyên!");
+                    return;
+                }
+
+                String hoTen = txtHoTen.getText();
+                String sdt = txtSdt.getText();
+                String khoa = (String) cbKhoa.getSelectedItem();
+                String nganh = (String) cbNganh.getSelectedItem();
+                ThanhVienModel thanhvien = tvCtl.getModel(maTV);
+
+                if(!titleForm.equals("Xóa Nhiều Thành Viên")) {
+                    if((khoa == null || khoa.isEmpty()) || (nganh == null || nganh.isEmpty()) || hoTen.isEmpty() || sdt.isEmpty()) {
+                        JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Vui lòng nhập đầy đủ các trường!");
+                        return;
+                    }
+                }
+
+                if (titleForm.equals("Thêm Thành Viên")) {
+                    // Kiểm tra xem đối tượng đã tồn tại trong cơ sở dữ liệu chưa
+                    if (thanhvien != null) {
+                        JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Thành viên đã tồn tại!");
+                        return;
+                    }
+
+                    // Thêm dữ liệu vào cơ sở dữ liệu
+                    tvCtl.addModel(new ThanhVienModel(maTV, hoTen, khoa, nganh, sdt, "", ""));
+
+                    // Xóa dữ liệu sau khi thêm thành công
+                    txtMaTV.setText("");
+                    txtHoTen.setText("");
+                    txtSdt.setText("");
+                    cbKhoa.setSelectedIndex(0);
+                    cbNganh.setSelectedIndex(0);
+
+                    // Hiển thị thông báo thành công (có thể thêm)
+                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Thêm thành viên thành công!");
+                    setVisible(false);
+                } else if (titleForm.equals("Cập Nhật Thông Tin Thành Viên")) {
+                    if (thanhvien == null) {
+                        JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Thành viên chưa tồn tại!");
+                        return;
+                    }
+                    ThanhVienModel updatedThanhvien = new ThanhVienModel(maTV, hoTen, khoa, nganh, sdt, "", "");
+                    tvCtl.updateModel(updatedThanhvien);
+
+                    txtMaTV.setText("");
+                    txtHoTen.setText("");
+                    txtSdt.setText("");
+                    cbKhoa.setSelectedIndex(0);
+                    cbNganh.setSelectedIndex(0);
+
+                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Cập Nhật thành viên thành công!");
+                    setVisible(false);
+                } else if (titleForm.equals("Xóa Nhiều Thành Viên")) {
+                    if(maTV == 0 && hoTen.isEmpty() && (khoa != null && khoa.isEmpty()) && (nganh != null && nganh.isEmpty()) && sdt.isEmpty()) {
+                        JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Nhập 1 trong những điều kiện để xóa !");
+                        return;
+                    }
+                    String queryToDelete = "";
+                    if(maTV != 0) {
+                        String query = "MaTV = '" + maTV + "'";
+                        queryToDelete += !queryToDelete.isEmpty() ? " and " + query : query;
+                    }
+                    if(!hoTen.isEmpty()) {
+                        String query = "HoTen = '" + hoTen + "'";
+                        queryToDelete += !queryToDelete.isEmpty() ? " and " + query : query;
+                    }
+                    if (khoa != null && !khoa.isEmpty()) {
+                        String query = "Khoa = '" + khoa + "'";
+                        queryToDelete += !queryToDelete.isEmpty() ? " and " + query : query;
+                    }
+                    if(nganh != null && !nganh.isEmpty()) {
+                        String query = "Nganh = '" + nganh + "'";
+                        queryToDelete += !queryToDelete.isEmpty() ? " and " + query : query;
+                    }
+                    if(!sdt.isEmpty()) {
+                        String query = "Sdt = '" + sdt + "'";
+                        queryToDelete += !queryToDelete.isEmpty() ? " and " + query : query;
+                    }
+
+                    tvCtl.deleteMultipleModelByCondition(queryToDelete);
+//                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Xóa nhiều thành viên thành công! " + queryToDelete + "--123");
+
+                    txtMaTV.setText("");
+                    txtHoTen.setText("");
+                    txtSdt.setText("");
+                    cbKhoa.setSelectedIndex(0);
+                    cbNganh.setSelectedIndex(0);
+
+                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Xóa nhiều thành viên thành công!");
+                    setVisible(false);
+                }
+            }
+        });
         
         btnHuy.setFont(sgUI13b);
         btnHuy.setFocusPainted(false);
@@ -95,6 +244,11 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         txtHoTen.setFont(sgUI13p);
         txtHoTen.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtHoTen.setForeground(Color.black);
+
+        txtMaTV.setPreferredSize(new Dimension(200, 30));
+        txtMaTV.setFont(sgUI13p);
+        txtMaTV.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
+        txtMaTV.setForeground(Color.black);
         
         txtSdt.setPreferredSize(new Dimension(200, 30));
         txtSdt.setFont(sgUI13p);
@@ -119,8 +273,7 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                 return basicComboPopup;
             }
         });
-        
-        
+
         cbNganh.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
         cbNganh.setBackground(Color.white);
         cbNganh.setFont(sgUI13b);
@@ -146,12 +299,14 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         title = new javax.swing.JLabel();
         content = new javax.swing.JPanel();
         lbHoTen = new javax.swing.JLabel();
+        lbMaTV = new javax.swing.JLabel();
         lbKhoa = new javax.swing.JLabel();
         lbNganh = new javax.swing.JLabel();
         lbSdt = new javax.swing.JLabel();
         btnXacNhan = new javax.swing.JButton();
         btnLamMoi = new javax.swing.JButton();
         txtHoTen = new javax.swing.JTextField();
+        txtMaTV = new javax.swing.JTextField();
         txtSdt = new javax.swing.JTextField();
         cbKhoa = new javax.swing.JComboBox<>();
         cbNganh = new javax.swing.JComboBox<>();
@@ -174,6 +329,8 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
 
         getContentPane().add(header, java.awt.BorderLayout.PAGE_START);
 
+        lbMaTV.setText("Mã thành viên");
+
         lbHoTen.setText("Họ và Tên");
 
         lbKhoa.setText("Khoa");
@@ -190,9 +347,9 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         btnLamMoi.setText("Làm mới");
         btnLamMoi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        cbKhoa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbKhoa.setModel(new javax.swing.DefaultComboBoxModel<>(khoaList));
 
-        cbNganh.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbNganh.setModel(new javax.swing.DefaultComboBoxModel<>(nganhList));
 
         btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/comeback_icon.png"))); // NOI18N
         btnHuy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -211,6 +368,7 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                     .addComponent(lbNganh)
                     .addComponent(btnXacNhan)
                     .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(lbMaTV, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbHoTen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbSdt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(lbThanhVien))
@@ -221,6 +379,7 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                             .addComponent(txtSdt, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                             .addComponent(cbNganh, 0, 189, Short.MAX_VALUE)
                             .addComponent(cbKhoa, 0, 189, Short.MAX_VALUE)
+                            .addComponent(txtMaTV, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                             .addComponent(txtHoTen, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                             .addComponent(txtThanhVien)))
                     .addGroup(contentLayout.createSequentialGroup()
@@ -237,6 +396,10 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                 .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbThanhVien))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                     .addComponent(txtMaTV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                     .addComponent(lbMaTV))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -313,12 +476,14 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> cbNganh;
     private javax.swing.JPanel content;
     private javax.swing.JPanel header;
+    private javax.swing.JLabel lbMaTV;
     private javax.swing.JLabel lbHoTen;
     private javax.swing.JLabel lbKhoa;
     private javax.swing.JLabel lbNganh;
     private javax.swing.JLabel lbSdt;
     private javax.swing.JLabel lbThanhVien;
     private javax.swing.JLabel title;
+    private javax.swing.JTextField txtMaTV;
     private javax.swing.JTextField txtHoTen;
     private javax.swing.JTextField txtSdt;
     private javax.swing.JTextField txtThanhVien;

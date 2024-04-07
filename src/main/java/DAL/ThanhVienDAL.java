@@ -124,5 +124,41 @@ public class ThanhVienDAL {
 				return null;
 		}
 	}
+	public Integer login(String username, String password) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+
+        ThanhVienModel userByEmail = session.createQuery("FROM ThanhVienModel WHERE email = :username AND password = :password", ThanhVienModel.class)
+                .setParameter("username", username)
+                .setParameter("password", password)
+                .uniqueResult();
+        if (userByEmail != null) {
+            session.getTransaction().commit();
+            session.close();
+            return userByEmail.getMaTV(); // Trả về maTV nếu đăng nhập thành công
+        }
+
+        // Thử tìm bằng mã thành viên nếu username là một số nguyên hợp lệ
+        try {
+            int maTV = Integer.parseInt(username);
+            ThanhVienModel userByMaTV = session.createQuery("FROM ThanhVienModel WHERE maTV = :maTV AND password = :password", ThanhVienModel.class)
+                    .setParameter("maTV", maTV)
+                    .setParameter("password", password)
+                    .uniqueResult();
+
+            session.getTransaction().commit();
+            session.close();
+
+            if (userByMaTV != null) {
+                return userByMaTV.getMaTV(); // Trả về maTV nếu đăng nhập thành công
+            }
+        } catch (NumberFormatException e) {
+            // Nếu username không phải là một số nguyên hợp lệ, tiếp tục tìm bằng email
+        }
+
+        session.getTransaction().commit();
+        session.close();
+        return null; // Trả về null nếu không đăng nhập thành công
+    }
 
 }

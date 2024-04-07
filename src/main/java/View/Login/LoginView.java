@@ -1,6 +1,8 @@
 package View.Login;
 
-
+import Controller.ThanhVienCTL;
+import Model.ThanhVienModel;
+import View.HomePage.HomePage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,12 +35,12 @@ public class LoginView extends javax.swing.JDialog {
     private JCheckBox showPasswordCheckbox;
 
     public LoginView() {
-    	setSize(700, 500);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setModal(true);
-		setTitle("Đăng nhập");
-		setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
+        setSize(850, 550);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setModal(true);
+        setTitle("Đăng nhập");
+//		setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
         initComponents();
         setVisible(true);
     }
@@ -52,6 +54,8 @@ public class LoginView extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
+
         jLabel3 = new javax.swing.JLabel();
         btnLogin = new JButton("Login");
 
@@ -97,7 +101,7 @@ public class LoginView extends javax.swing.JDialog {
         jPanel4.add(Box.createVerticalStrut(20));
 
         jLabel2.setFont(new Font("Arial", Font.PLAIN, 15));
-        jLabel2.setText("USERNAME");
+        jLabel2.setText("USERNAME/EMAIL");
         jLabel2.setAlignmentX(Component.CENTER_ALIGNMENT);
         jLabel2.setName("usernameLabel");
         jPanel4.add(jLabel2);
@@ -120,13 +124,27 @@ public class LoginView extends javax.swing.JDialog {
         jPanel4.add(Box.createVerticalStrut(5));
         jPanel4.add(Box.createVerticalStrut(5)); // Khoảng cách dọc
 
-        final JPasswordField txtPassword = new JPasswordField();
         txtPassword.setMaximumSize(new Dimension(300, 30));
         txtPassword.setName("txtPassword");
         txtPassword.setFont(sgUI13b);
         txtPassword.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtPassword.setForeground(Color.black);
         jPanel4.add(txtPassword);
+
+        //khi an enter o username//pass thi goi toi login
+        txtPassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        });
+
+        txtUserName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        });
 
         // Tạo JCheckBox để ẩn/hiện mật khẩu
         showPasswordCheckbox = new JCheckBox("Show password");
@@ -174,6 +192,30 @@ public class LoginView extends javax.swing.JDialog {
         parentPanel.add(panel114);
 
         add(parentPanel, BorderLayout.CENTER); // Thêm panel cha vào BorderLayout.CENTER của panel login11
+
+        // Thiết lập xử lý sự kiện cho nút Login
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                login();
+            }
+        });
+    }
+
+    private void login() {
+        String username = txtUserName.getText().trim();
+        String password = new String(txtPassword.getPassword());
+
+        Integer user;
+        ThanhVienCTL ctl = new ThanhVienCTL();
+
+        user = ctl.login(username, password);
+        if (user != null) {
+            JOptionPane.showMessageDialog(LoginView.this, "Đăng nhập thành công!"+user);
+            dispose();
+            new HomePage(ctl.getModel(user).getHoTen());
+        } else {
+            JOptionPane.showMessageDialog(LoginView.this, "Đăng nhập thất bại! Vui lòng kiểm tra lại thông tin đăng nhập.", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private javax.swing.JButton btnLogin;
@@ -184,4 +226,6 @@ public class LoginView extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField txtUserName;
+    private javax.swing.JPasswordField txtPassword;
+
 }

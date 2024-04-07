@@ -1,7 +1,11 @@
 package View.ThanhVien;
 
 import Controller.ThanhVienCTL;
+import Controller.ThongTinSdCTL;
+import Controller.XuLyCTL;
 import Model.ThanhVienModel;
+import Model.ThongTinSdModel;
+import Model.XuLyModel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -473,6 +477,26 @@ public class MemberView extends javax.swing.JPanel {
                 // Xóa dòng được chọn khỏi JTable
                 Integer maTV = (Integer) jTable2.getValueAt(selectedRow, 0);
                 ThanhVienCTL ctl = new ThanhVienCTL();
+                XuLyCTL xuLyCTL = new XuLyCTL();
+                ThongTinSdCTL thongTinSdCTL = new ThongTinSdCTL();
+
+                boolean check = false;
+                for(XuLyModel xl : xuLyCTL.getList()) {
+                    if(xl.getThanhVien().getMaTV().equals(maTV)) {
+                        check = true;
+                    }
+                }
+                for(ThongTinSdModel ttsd : thongTinSdCTL.getList()) {
+                    if(ttsd.getThanhVien().getMaTV().equals(maTV)) {
+                        check = true;
+                    }
+                }
+
+                if(check) {
+                    JOptionPane.showMessageDialog(MemberView.this, "Sinh viên này đang thực hiện 1 hành động!");
+                    return;
+                }
+
                 ctl.deleteModel(maTV);
                 JOptionPane.showMessageDialog(MemberView.this, "Xóa 1 thành viên thành công!");
                 loadData(null);

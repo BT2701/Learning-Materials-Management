@@ -98,6 +98,26 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
                 String viPham = cbViPham.getText();
                 String soTien = txtSoTien.getText();
 
+                if (!soTien.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(FormCanhBaoViPham.this,  " Tiền phải là số nguyên !");
+                    return;
+                }
+
+                if(viPham.toLowerCase().equals("khóa thẻ") || viPham.toLowerCase().equals("khoa the")) {
+                    if(soTien.isEmpty()) {
+                        ThanhVienModel thanhVienModel = tvCtl.getModel(Integer.parseInt(maTV));
+
+                        int xulyLength = xuLyCTL.getList().size();
+                        int id = xuLyCTL.getList().get(xulyLength - 1).getMaXL() + 1;
+                        XuLyModel xuLyModel = new XuLyModel(id, viPham, null, null, 0, thanhVienModel);
+                        xuLyCTL.addModel(xuLyModel);
+
+                        JOptionPane.showMessageDialog(FormCanhBaoViPham.this,  " Đã thêm cảnh báo với thành viên có mã : " + maTV + " thành công !");
+                        setVisible(false);
+                        return;
+                    }
+                }
+
                 ThanhVienModel thanhVienModel = tvCtl.getModel(Integer.parseInt(maTV));
 
                 int xulyLength = xuLyCTL.getList().size();

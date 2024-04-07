@@ -81,4 +81,8 @@ public class ThanhVienCTL {
 
 		return true;
 	}
+	public Integer login(String username, String password) {
+        return dal.login(username, password);
+    }
+
 }

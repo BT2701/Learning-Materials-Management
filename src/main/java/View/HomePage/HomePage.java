@@ -58,20 +58,20 @@ public class HomePage extends JFrame {
 
 	ArrayList<Boolean> mouseClicked;
 
-	public HomePage() {
+	public HomePage(String user) {
 		setSize(1400, 800);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setTitle("Phần mềm quản lý học liệu");
 		setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
-		initComponent();
+		initComponent(user);
 		styles();
 		events();
 		setVisible(true);
 	}
 
-	public void initComponent() {
+	public void initComponent(String user) {
 //		sub components
 
 		lbProcessFunc = new JLabel();
@@ -87,7 +87,7 @@ public class HomePage extends JFrame {
 
 		ImageIcon usericon = new ImageIcon(new ImageIcon(getClass().getResource("/View/images/user.png")).getImage()
 				.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-		lbUserName = new JLabel("Nguyễn Văn A");
+		lbUserName = new JLabel(user);
 		lbUserName.setIcon(usericon);
 
 		ImageIcon deviceicon = new ImageIcon(new ImageIcon(getClass().getResource("/View/images/device.png")).getImage()

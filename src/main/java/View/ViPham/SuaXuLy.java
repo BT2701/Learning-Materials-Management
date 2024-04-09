@@ -2,28 +2,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-
 package View.ViPham;
 
-import javax.swing.ImageIcon;
+import Model.XuLyModel;
+import Controller.ThanhVienCTL;
+import Controller.XuLyCTL;
+import View.ViPham.HandleView;
+import Model.ThanhVienModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author TOAN
  */
 public class SuaXuLy extends javax.swing.JDialog {
-
     /**
      * Creates new form SuaXuLy1
      */
-    public SuaXuLy() {
-    	setSize(350, 400);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setModal(true);
-		setTitle("Sửa");
-		setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
-//        super(parent, modal);
+    public SuaXuLy(XuLyModel xuly) {
+        this.xuly = xuly;
         initComponents();
         setVisible(true);
     }
@@ -36,21 +38,21 @@ public class SuaXuLy extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        cbbThanhVien = new javax.swing.JComboBox<>();
         cbbHinhThuc = new javax.swing.JComboBox<>();
         txtSoTien = new javax.swing.JTextField();
-        dtNgayXuLy = new com.toedter.calendar.JDateChooser();
         btnHuy = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
+        cbbName = new javax.swing.JComboBox<>();
+        xulyCtl = new XuLyCTL();
+        tvCTL =new ThanhVienCTL();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(197, 80));
@@ -84,51 +86,53 @@ public class SuaXuLy extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Số tiền");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel5.setText("Ngày xử lý");
-
-        cbbThanhVien.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        cbbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbbThanhVien.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
         cbbHinhThuc.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        cbbHinhThuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng", "Bồi thường mất tài sản", " " }));
+        cbbHinhThuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng","Khóa thẻ 1 tháng", "Khóa thẻ vĩnh viễn", "Bồi thường","Khoá thẻ 1 tháng và bồi " }));
         cbbHinhThuc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cbbHinhThuc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbHinhThucActionPerformed(evt);
-            }
-        });
 
         txtSoTien.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        txtSoTien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSoTienActionPerformed(evt);
-            }
-        });
+        if (this.xuly.getSoTien() != null)   txtSoTien.setText(this.xuly.getSoTien().toString());
 
         btnHuy.setBackground(new java.awt.Color(126, 214, 223));
-        btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18Nthường
         btnHuy.setForeground(new java.awt.Color(204, 0, 0));
-        btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/cancel button.png"))); // NOI18N
+        btnHuy.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\cancel button.png")); // NOI18N
         btnHuy.setText("Hủy");
         btnHuy.setBorderPainted(false);
         btnHuy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHuy.setFocusPainted(false);
-        btnHuy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHuyActionPerformed(evt);
-            }
+        btnHuy.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+                    dispose();
+                }
         });
+        
 
         btnThem.setBackground(new java.awt.Color(126, 214, 223));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem.setForeground(new java.awt.Color(0, 153, 0));
-        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icon submit.png"))); // NOI18N
+        btnThem.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\icon submit.png")); // NOI18N
         btnThem.setText("Xác nhận");
         btnThem.setBorderPainted(false);
         btnThem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnThem.setFocusPainted(false);
+        btnThem.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+                    update();
+                    dispose();
+                }
+        });
+
+        cbbName.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        List<ThanhVienModel> tvList = tvCTL.getList();
+        DefaultComboBoxModel<String> cbbTvModel = new DefaultComboBoxModel<>();
+        for (ThanhVienModel thanhVien : tvList) {
+            cbbTvModel.addElement(thanhVien.getHoTen()); // Thêm tên thành viên vào model
+        }
+        cbbName.setModel(cbbTvModel);
+        cbbName.setSelectedItem(xuly.getThanhVien().getHoTen());
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -143,22 +147,19 @@ public class SuaXuLy extends javax.swing.JDialog {
                             .addComponent(jLabel3))
                         .addGap(48, 48, 48)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbbThanhVien, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbbHinhThuc, 0, 0, Short.MAX_VALUE))
-                        .addGap(100, 100, 100))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(cbbHinhThuc, 0, 0, Short.MAX_VALUE)
+                                .addGap(100, 100, 100))
+                            .addComponent(cbbName, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(83, 83, 83)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtSoTien)
-                            .addComponent(dtNgayXuLy, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jLabel4)
+                        .addGap(112, 112, 112)
+                        .addComponent(txtSoTien, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)))
                 .addGap(43, 43, 43))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addGap(47, 47, 47)
                 .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(95, 95, 95))
         );
@@ -168,7 +169,7 @@ public class SuaXuLy extends javax.swing.JDialog {
                 .addGap(36, 36, 36)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
-                    .addComponent(cbbThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbbName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(cbbHinhThuc, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -177,15 +178,11 @@ public class SuaXuLy extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(txtSoTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(dtNgayXuLy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                .addGap(48, 48, 48)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,81 +197,49 @@ public class SuaXuLy extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbbHinhThucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbHinhThucActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbbHinhThucActionPerformed
-
-    private void txtSoTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoTienActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSoTienActionPerformed
-
-    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHuyActionPerformed
+    public void update(){
+        int maxl = this.xuly.getMaXL();
+        String tenTV = cbbName.getSelectedItem().toString();
+        ThanhVienModel tv = tvCTL.getModelByName(tenTV);
+        String hinhthuc = cbbHinhThuc.getSelectedItem().toString();
+        Date date = this.xuly.getNgayXL();
+        int soTien = 0;
+        if (!txtSoTien.getText().isEmpty()){
+            soTien = Integer.parseInt(txtSoTien.getText());
+        }
+        
+        int tinhtrang = this.xuly.getTrangThaiXL();
+        XuLyModel xl =new XuLyModel(maxl,hinhthuc,soTien,date,tinhtrang,tv);
+        JOptionPane.showMessageDialog(null, xulyCtl.updateModel(xl), "Thong bao",
+								JOptionPane.INFORMATION_MESSAGE);
+    }
+    
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SuaXuLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SuaXuLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SuaXuLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SuaXuLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                SuaXuLy dialog = new SuaXuLy();
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnThem;
     private javax.swing.JComboBox<String> cbbHinhThuc;
-    private javax.swing.JComboBox<String> cbbThanhVien;
-    private com.toedter.calendar.JDateChooser dtNgayXuLy;
+    private javax.swing.JComboBox<String> cbbName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField txtSoTien;
+    private XuLyModel xuly;
+    private XuLyCTL xulyCtl;
+    private ThanhVienCTL tvCTL;
     // End of variables declaration//GEN-END:variables
 }

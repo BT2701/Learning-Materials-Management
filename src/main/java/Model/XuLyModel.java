@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "xuly")
@@ -33,6 +34,9 @@ public class XuLyModel {
 
 	@Column(name = "TrangThaiXL")
 	private Integer trangThaiXL;
+	
+	@Transient
+    private String trangthai;
 
 	@ManyToOne
 	@JoinColumn(name = "MaTV")
@@ -98,6 +102,14 @@ public class XuLyModel {
 	public void setThanhVien(ThanhVienModel thanhVien) {
 		this.thanhVien = thanhVien;
 	}
+	public String getTrangthai() {
+        if (this.trangThaiXL == 0) return "Chưa xử lý";
+        else return "Đã xử lý";
+    }
+
+    public void setTrangthai(String trangthai) {
+        this.trangthai = trangthai;
+    }
 
 	@Override
 	public String toString() {

@@ -4,18 +4,21 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import Model.ThanhVienModel;
 import javax.persistence.Query;
 import org.apache.poi.ss.usermodel.*;
 import Util.HibernateUtil;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
-import javax.persistence.Query;
 
 public class ThanhVienDAL {
 	Session session;
+	private SessionFactory factory= new Configuration().configure().buildSessionFactory();
 	public ThanhVienDAL() {
 		session= HibernateUtil.getSessionFactory().openSession();
 	}
@@ -160,5 +163,19 @@ public class ThanhVienDAL {
         session.close();
         return null; // Trả về null nếu không đăng nhập thành công
     }
+	public ThanhVienModel getModelByName(String name) {
+        ThanhVienModel result = new ThanhVienModel();
+        try(Session session = factory.openSession()){
+            session.beginTransaction();
+            String hql = "FROM ThanhVienModel WHERE HoTen = :name";
+            org.hibernate.Query<ThanhVienModel> query = session.createQuery(hql, ThanhVienModel.class);
+            query.setParameter("name", name);
+            result = query.uniqueResult();
+            session.getTransaction().commit();
+        }catch (HibernateException e){
+            e.printStackTrace();
+        } 
+        return result;
+}
 
 }

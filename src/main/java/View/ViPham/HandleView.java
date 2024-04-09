@@ -1,5 +1,32 @@
 package View.ViPham;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.BorderFactory;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+
+import Model.XuLyModel;
+import Controller.XuLyCTL;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import static java.awt.image.ImageObserver.WIDTH;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
@@ -11,7 +38,6 @@ package View.ViPham;
  * @author TOAN
  */
 public class HandleView extends javax.swing.JPanel {
-
     /** Creates new form HandleView1 */
     public HandleView() {
         initComponents();
@@ -25,7 +51,6 @@ public class HandleView extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jPanel1 = new javax.swing.JPanel();
         label1 = new java.awt.Label();
         jPanel4 = new javax.swing.JPanel();
@@ -33,10 +58,14 @@ public class HandleView extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cbbTimKiem2 = new javax.swing.JComboBox<>();
+        cbbTinhTrang = new javax.swing.JComboBox<>();
+        cbbTinhTrang.setVisible(false);
         btnXoa2 = new javax.swing.JButton();
+        btnXuLy2 = new javax.swing.JButton();
         btnLamMoi2 = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jScrollPane3 = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jTable3 = new JTable(model);
         btnTimKiem2 = new javax.swing.JButton();
         btnSua2 = new javax.swing.JButton();
         btnThem2 = new javax.swing.JButton();
@@ -78,92 +107,226 @@ public class HandleView extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel6.setText("Tìm kiếm theo:");
 
-        cbbTimKiem2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã xử lý", "Mã thành viên", "Hình thức xử lý", "Số tiền", "Ngày xử lý", "Trạng thái" }));
-        cbbTimKiem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbTimKiem2ActionPerformed(evt);
+        cbbTimKiem2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã xử lý", "Tên thành viên", "Hình thức xử lý", "Số tiền", "Ngày xử lý", "Trạng thái" }));
+        cbbTimKiem2.setPreferredSize(new Dimension(200, 30));
+        cbbTimKiem2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String str = (String) cbbTimKiem2.getSelectedItem();
+                if (str.equals("Trạng thái")){
+                    cbbTinhTrang.setVisible(true);
+                    txtThongTin2.setVisible(false);
+                }else{
+                    cbbTinhTrang.setVisible(false);
+                    txtThongTin2.setVisible(true);
+
+                }
             }
         });
+        
+        cbbTinhTrang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Chưa xử lý", "Đã xử lý" }));
+        cbbTinhTrang.setPreferredSize(new Dimension(200, 30));
 
         btnXoa2.setBackground(new java.awt.Color(126, 214, 223));
         btnXoa2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnXoa2.setForeground(new java.awt.Color(204, 0, 0));
-        btnXoa2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/delete button.png"))); // NOI18N
+//        btnXoa2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/delete button.png"))); // NOI18N
         btnXoa2.setText("Xóa");
         btnXoa2.setBorderPainted(false);
         btnXoa2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnXoa2.setFocusPainted(false);
+        btnXoa2.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+                    int selectedRow = jTable3.getSelectedRow();
+                    if (selectedRow >= 0){
+                        int maxl = (Integer) jTable3.getValueAt(selectedRow, 0);
+                        JOptionPane.showMessageDialog(null, xlCTL.deleteModel(maxl));
+                    }else JOptionPane.showMessageDialog(null, "Vui lòng chọn 1 dòng để thực hiện tác vụ");
+                    refeshTable();
+                }
+        });
 
         btnLamMoi2.setBackground(new java.awt.Color(126, 214, 223));
         btnLamMoi2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btnLamMoi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
+//        btnLamMoi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
         btnLamMoi2.setBorderPainted(false);
+        btnLamMoi2.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+                    refeshTable();
+                }
+        });
         btnLamMoi2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLamMoi2.setFocusPainted(false);
         btnLamMoi2.setLabel("Refresh");
-
-        jTable3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                { new Integer(1),  new Integer(1), "Khóa Thẻ",  new Integer(2000000), "03/09/2003",  new Integer(0)},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Mã xử lý", "Mã thành viên", "Hình thức xử lý", "Số tiền", "Ngày xử lý", "Trạng thái"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        
+        
+        jTable3.setFont(fontTable); // NOI18N
+        String column [] = {"Mã xử lý", "Tên thành viên", "Hình thức xử lý", "Số tiền", "Ngày xử lý", "Trạng thái"};
+        model = new DefaultTableModel(column, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Không cho phép chỉnh sửa ô trong JTable
+			}
+		};
+        
+        List<XuLyModel> list = xlCTL.getList();
+		for (XuLyModel xuly : list) {
+                    Object[] duLieu = { xuly.getMaXL(), xuly.getThanhVien().getHoTen(), xuly.getHinhThucXL(),
+					xuly.getSoTien(), xuly.getNgayXL(),xuly.getTrangthai()};
+                    model.addRow(duLieu);
+		}
+             
+        jTable3.setModel(model);
         jTable3.setGridColor(new java.awt.Color(255, 255, 255));
         jTable3.setRowHeight(40);
+        jTable3.getTableHeader().setPreferredSize(new Dimension(1, 30));
+        jTable3.setPreferredSize(new Dimension(0, 350));
+
         jScrollPane3.setViewportView(jTable3);
+	jScrollPane3.setBorder(BorderFactory.createEmptyBorder());
+	jScrollPane3.setViewportView(jTable3);
+	jScrollPane3.getViewport().setBackground(Color.white);
+	jTable3.getTableHeader().setBackground(Color.decode(colorTableCode));
+        jTable3.setBorder(matteBorderCB);
+	jScrollPane3.setViewportBorder(null);
+        jTable3.getTableHeader().setBorder(null);
+	jTable3.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	jTable3.getColumnModel().getColumn(0).setPreferredWidth(50);
+
+	jTable3.getColumnModel().getColumn(1).setPreferredWidth(200);
+	jTable3.getColumnModel().getColumn(2).setPreferredWidth(50);
+	jTable3.getColumnModel().getColumn(3).setPreferredWidth(50);
+	jTable3.getColumnModel().getColumn(4).setPreferredWidth(200);
+        jTable3.getColumnModel().getColumn(5).setPreferredWidth(200);
+	for (int i = 0; i < jTable3.getColumnCount(); i++) {
+		jTable3.getColumnModel().getColumn(i).setCellEditor(null);
+	}
+
+	jTable3.setShowGrid(false);
+	jTable3.setIntercellSpacing(new Dimension(0, 0));
+      
+        
+        
 
         btnTimKiem2.setBackground(new java.awt.Color(126, 214, 223));
         btnTimKiem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btnTimKiem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/search icon.png"))); // NOI18N
+//        btnTimKiem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/search icon.png"))); // NOI18N
         btnTimKiem2.setText("Tìm Kiếm");
         btnTimKiem2.setBorderPainted(false);
         btnTimKiem2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnTimKiem2.setFocusPainted(false);
+        btnTimKiem2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<XuLyModel> list =new ArrayList();
+                String condition = txtThongTin2.getText();
+                String str = (String) cbbTimKiem2.getSelectedItem();
+                String type = null;
+                int con = 0;
+                if (str.equals("Mã xử lý")){
+                    type = "MaXL";
+                }
+                else if (str.equals("Tên thành viên")){
+                    type = "ten";
+                }
+                else if (str.equals("Hình thức xử lý")){
+                    type = "HinhThucXL";
+                }
+                else if (str.equals("Số tiền")){
+                    type = "SoTien";
+                }
+                else if (str.equals("Ngày xử lý")){
+                    type = "NgayXL";
+                    
+                }
+                else if (str.equals("Trạng thái")){
+                    type = "tt";
+                    con = cbbTinhTrang.getSelectedIndex();
+                }
+                if (type.equals("ten")){
+                   list =xlCTL.findListByName(condition);
+                }else if (type.equals("tt")){
+                    list = xlCTL.findListByTinhTrang(con);
+                }
+                else list = xlCTL.findByCondition(type, condition);
+                model.setRowCount(0);
+                for (XuLyModel xuly : list){
+                    Object[] duLieu = { xuly.getMaXL(), xuly.getThanhVien().getHoTen(), xuly.getHinhThucXL(),
+					xuly.getSoTien(), xuly.getNgayXL(),xuly.getTrangthai()};
+                    model.addRow(duLieu);
+                }
+            }
+        });
 
         btnSua2.setBackground(new java.awt.Color(126, 214, 223));
         btnSua2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnSua2.setForeground(new java.awt.Color(0, 0, 153));
-        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
+//        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
         btnSua2.setText("Sửa");
         btnSua2.setBorderPainted(false);
         btnSua2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSua2.setFocusPainted(false);
-        btnSua2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSua2ActionPerformed(evt);
-            }
+        btnSua2.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+                    int selectedRow = jTable3.getSelectedRow();
+                    if (selectedRow >= 0){
+                        int maxl = (Integer) jTable3.getValueAt(selectedRow, 0);
+                        XuLyModel xl = xlCTL.getModel(maxl);
+                        new SuaXuLy(xl);    
+                        refeshTable();
+                    }
+                    else JOptionPane.showMessageDialog(null, "Vui lòng chọn 1 dòng để thực hiện tác vụ");
+                   
+                }
+        });
+        
+        btnXuLy2.setBackground(new java.awt.Color(126, 188, 223));
+        btnXuLy2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnXuLy2.setForeground(new java.awt.Color(130, 11, 153));
+//        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
+        btnXuLy2.setText("Xử lý");
+        btnXuLy2.setBorderPainted(false);
+        btnXuLy2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnXuLy2.setFocusPainted(false);
+        btnXuLy2.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+                    int selectedRow = jTable3.getSelectedRow();
+                    if (selectedRow >= 0){
+                        int maxl = (Integer) jTable3.getValueAt(selectedRow, 0);
+                        int trangthai = xlCTL.getModel(maxl).getTrangThaiXL();
+                        if (trangthai == 0){
+                            JOptionPane.showMessageDialog(null, xlCTL.updateTinhTrang(maxl, 1));
+                        }
+                        else JOptionPane.showMessageDialog(null, "Vi phạm đã được xử lý không thể thực hiện tác vụ");
+                    }
+                    else JOptionPane.showMessageDialog(null, "Vui lòng chọn 1 dòng để thực hiện tác vụ");
+                    refeshTable();
+                }
         });
 
         btnThem2.setBackground(new java.awt.Color(126, 214, 223));
         btnThem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem2.setForeground(new java.awt.Color(0, 153, 51));
-        btnThem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/add button.png"))); // NOI18N
+//        btnThem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/add button.png"))); // NOI18N
         btnThem2.setText("Thêm");
         btnThem2.setBorderPainted(false);
         btnThem2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnThem2.setFocusPainted(false);
-        btnThem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThem2ActionPerformed(evt);
-            }
+        btnThem2.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+                    new ThemXuLy();
+                    refeshTable();
+                }
         });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
+        jPanel4.setPreferredSize(new Dimension(0, 10));
+
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -176,6 +339,8 @@ public class HandleView extends javax.swing.JPanel {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnThem2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnXuLy2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnSua2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnXoa2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -184,6 +349,7 @@ public class HandleView extends javax.swing.JPanel {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtThongTin2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbbTinhTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnTimKiem2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -195,6 +361,7 @@ public class HandleView extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addGap(18, 18, 18)
                     .addComponent(cbbTimKiem2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbbTinhTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(735, Short.MAX_VALUE)))
         );
         jPanel4Layout.setVerticalGroup(
@@ -212,6 +379,7 @@ public class HandleView extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnThem2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXuLy2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnXoa2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSua2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
@@ -221,6 +389,7 @@ public class HandleView extends javax.swing.JPanel {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel6)
                         .addComponent(cbbTimKiem2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbbTinhTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(457, Short.MAX_VALUE)))
         );
 
@@ -251,21 +420,33 @@ public class HandleView extends javax.swing.JPanel {
 
     private void btnThem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThem2ActionPerformed
         // TODO add your handling code here:
-    	new ThemXyLy();
     }//GEN-LAST:event_btnThem2ActionPerformed
-    private void btnSua2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThem2ActionPerformed
-        // TODO add your handling code here:
-    	new SuaXuLy();
-    }//GEN-LAST:event_btnThem2ActionPerformed
-
+    
+    public void refeshTable(){
+        model.setRowCount(0); // Xóa tất cả dòng trong mô hình
+	List<XuLyModel> list = xlCTL.getList();
+	for (XuLyModel xuly : list) {
+            Object[] duLieu = { xuly.getMaXL(), xuly.getThanhVien().getHoTen(), xuly.getHinhThucXL(),
+					xuly.getSoTien(), xuly.getNgayXL(),xuly.getTrangthai()};
+            model.addRow(duLieu);
+        }
+        model.fireTableDataChanged();
+    }
+    
+//    public void findByCondition(){
+//        String type =  
+//    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLamMoi2;
     private javax.swing.JButton btnSua2;
     private javax.swing.JButton btnThem2;
+    private javax.swing.JButton btnXuLy2;
     private javax.swing.JButton btnTimKiem2;
     private javax.swing.JButton btnXoa2;
     private javax.swing.JComboBox<String> cbbTimKiem2;
+    private javax.swing.JComboBox<String> cbbTinhTrang;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
@@ -274,6 +455,31 @@ public class HandleView extends javax.swing.JPanel {
     private javax.swing.JTable jTable3;
     private java.awt.Label label1;
     private javax.swing.JTextField txtThongTin2;
+    private DefaultTableModel model;
+    private XuLyCTL xlCTL = new XuLyCTL();
+    
     // End of variables declaration//GEN-END:variables
+    private Font sgUI13b = new Font("Segoe UI", Font.BOLD, 13);
+    private Font sgUI15b = new Font("Segoe UI", Font.BOLD, 15);
+    private Font sgUI18b = new Font("Segoe UI", Font.BOLD, 17);
+    private Font sgUI13p = new Font("Segoe UI", Font.PLAIN, 13);
+    private Font sgUI15p = new Font("Segoe UI", Font.PLAIN, 15);
+    private Font sgUI15I = new Font("Segoe UI", Font.ITALIC, 15);
+    private Font tNR13i = new Font("Times New Roman", Font.ITALIC, 13);
+    private Font fontTittle = new Font("Tahoma", Font.BOLD, 25);
+    private Font fontSubTittle = new Font("Tahoma", Font.BOLD, 20);
+    private Font fontTable = new Font("Segoe UI", Font.BOLD, 13);
+    private DecimalFormat dcf = new DecimalFormat("###,###");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private Color btnoldColor = new Color(52, 152, 219);
+    private Color texfieldColor = new Color(45, 52, 54);
+    private MatteBorder matteBorderCB = new MatteBorder(2, 2, 2, 2, Color.decode("#EFEFEF"));
+    private LineBorder lineCB = new LineBorder(Color.white);
+    private MatteBorder borderTxt = new MatteBorder(2, 2, 2, 2, Color.decode("#EFEFEF"));
+    MatteBorder matteBorderCBDark = new MatteBorder(2, 2, 2, 2, Color.decode("#919191"));
+    MatteBorder borderTxtDark = new MatteBorder(2, 2, 2, 2, Color.decode("#919191"));
+    EmptyBorder emptyBorderTxt = new EmptyBorder(0, 7, 0, 7);
+    EmptyBorder emptyBorderCB = new EmptyBorder(0, 7, 0, 0);
+    private String colorTableCode = "#dee9fc";
 
 }

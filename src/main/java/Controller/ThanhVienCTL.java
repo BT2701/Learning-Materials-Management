@@ -84,5 +84,8 @@ public class ThanhVienCTL {
 	public Integer login(String username, String password) {
         return dal.login(username, password);
     }
+	public ThanhVienModel getModelByName(String name) {
+		return dal.getModelByName(name);
+	}
 
 }

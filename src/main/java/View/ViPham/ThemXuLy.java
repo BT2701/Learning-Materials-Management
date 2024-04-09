@@ -4,25 +4,42 @@
  */
 package View.ViPham;
 
-import javax.swing.ImageIcon;
+import Controller.ThanhVienCTL;
+import Controller.XuLyCTL;
+import Model.ThanhVienModel;
+import Model.XuLyModel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
 /**
  *
  * @author TOAN
  */
-public class ThemXyLy extends javax.swing.JDialog {
+public class ThemXuLy extends javax.swing.JDialog {
 
     /**
      * Creates new form ThemXyLy1
      */
-    public ThemXyLy() {
-    	setSize(350, 400);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setModal(true);
-		setTitle("Thêm");
-		setIconImage(new ImageIcon(getClass().getResource("/View/images/material.png")).getImage());
-//        super(parent, modal);
+    public ThemXuLy() {
+        setSize(350, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setModal(true);
+        setTitle("Thêm");
         initComponents();
         setVisible(true);
     }
@@ -42,14 +59,13 @@ public class ThemXyLy extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         cbbThanhVien = new javax.swing.JComboBox<>();
         cbbHinhThuc = new javax.swing.JComboBox<>();
         txtSoTien = new javax.swing.JTextField();
-        dtNgayXuLy = new com.toedter.calendar.JDateChooser();
         btnHuy = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 204, 255));
 
@@ -61,72 +77,96 @@ public class ThemXyLy extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(139, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addContainerGap(140, Short.MAX_VALUE))
+                .addGap(137, 137, 137))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addComponent(jLabel1)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Thành Viên");
+        jLabel2.setPreferredSize(new Dimension(200, 30));
+        jLabel2.setFont(sgUI13b);
+        jLabel2.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
+        jLabel2.setForeground(Color.black);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Hình thức xử lý");
+        jLabel3.setPreferredSize(new Dimension(200, 30));
+        jLabel3.setFont(sgUI13b);
+        jLabel3.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
+        jLabel3.setForeground(Color.black);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Số tiền");
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel5.setText("Ngày xử lý");
+        jLabel4.setPreferredSize(new Dimension(300, 30));
+        jLabel4.setFont(sgUI13b);
+        jLabel4.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
+        jLabel4.setForeground(Color.black);
 
         cbbThanhVien.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        cbbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        List<ThanhVienModel> tvList = tvCTL.getList();
+        DefaultComboBoxModel<String> cbbTvModel = new DefaultComboBoxModel<>();
+        for (ThanhVienModel thanhVien : tvList) {
+            cbbTvModel.addElement(thanhVien.getHoTen()); // Thêm tên thành viên vào model
+        }
+        cbbThanhVien.setModel(cbbTvModel);
         cbbThanhVien.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         cbbHinhThuc.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        cbbHinhThuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng", "Bồi thường mất tài sản", " " }));
+        cbbHinhThuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng","Khóa thẻ 2 tháng", "Khóa thẻ vĩnh viễn", "Bồi thường","Khoá thẻ 1 tháng và bồi thường" }));
         cbbHinhThuc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cbbHinhThuc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbHinhThucActionPerformed(evt);
-            }
-        });
+        
 
         txtSoTien.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        txtSoTien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSoTienActionPerformed(evt);
-            }
-        });
+        
 
         btnHuy.setBackground(new java.awt.Color(126, 214, 223));
         btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnHuy.setForeground(new java.awt.Color(204, 0, 0));
-        btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/cancel button.png"))); // NOI18N
+        btnHuy.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\cancel button.png")); // NOI18N
         btnHuy.setText("Hủy");
         btnHuy.setBorderPainted(false);
         btnHuy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHuy.setFocusPainted(false);
-        btnHuy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHuyActionPerformed(evt);
+        btnHuy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
             }
         });
 
         btnThem.setBackground(new java.awt.Color(126, 214, 223));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem.setForeground(new java.awt.Color(0, 153, 0));
-        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/add button.png"))); // NOI18N
+        btnThem.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\add button.png")); // NOI18N
         btnThem.setText("Thêm");
         btnThem.setBorderPainted(false);
         btnThem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnThem.setFocusPainted(false);
+        btnThem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                        String ten = cbbThanhVien.getSelectedItem().toString(); 
+                        String hinhthuc = cbbHinhThuc.getSelectedItem().toString();
+                        int tien = 0;
+                        if (!txtSoTien.getText().isEmpty()){
+                            tien = Integer.parseInt(txtSoTien.getText());
+                        }
+                        dtNgayXuLy = new Date();
+                        ThanhVienModel matv =  tvCTL.getModelByName(ten);
+                        XuLyModel xl =new XuLyModel(1,hinhthuc,tien,dtNgayXuLy,0,matv);
+                        JOptionPane.showMessageDialog(null,xlCTL.addModel(xl));
+                        dispose();
+            }
+        });
+
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -143,16 +183,12 @@ public class ThemXyLy extends javax.swing.JDialog {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbbThanhVien, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cbbHinhThuc, 0, 0, Short.MAX_VALUE))
-                        .addGap(100, 100, 100))
+                        .addGap(143, 143, 143))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(83, 83, 83)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtSoTien)
-                            .addComponent(dtNgayXuLy, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(43, 43, 43))
+                        .addComponent(jLabel4)
+                        .addGap(112, 112, 112)
+                        .addComponent(txtSoTien, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(55, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -175,11 +211,7 @@ public class ThemXyLy extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel4)
                     .addComponent(txtSoTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(dtNgayXuLy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
+                .addGap(96, 96, 96)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThem, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -205,73 +237,46 @@ public class ThemXyLy extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbbHinhThucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbHinhThucActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbbHinhThucActionPerformed
-
-    private void txtSoTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSoTienActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSoTienActionPerformed
-
-    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHuyActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ThemXyLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ThemXyLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ThemXyLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ThemXyLy.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ThemXyLy dialog = new ThemXyLy();
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnThem;
     private javax.swing.JComboBox<String> cbbHinhThuc;
     private javax.swing.JComboBox<String> cbbThanhVien;
-    private com.toedter.calendar.JDateChooser dtNgayXuLy;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private java.util.Date dtNgayXuLy;
     private javax.swing.JTextField txtSoTien;
+    private Calendar calendar = Calendar.getInstance();
+    private Date currentDate = calendar.getTime();
+    private ThanhVienCTL tvCTL = new ThanhVienCTL();
+    private XuLyCTL xlCTL = new XuLyCTL();
+    // End of variables declaration//GEN-END:variables
+
+    private Font sgUI13b = new Font("Segoe UI", Font.BOLD, 13);
+    private Font sgUI15b = new Font("Segoe UI", Font.BOLD, 15);
+    private Font sgUI18b = new Font("Segoe UI", Font.BOLD, 17);
+    private Font sgUI13p = new Font("Segoe UI", Font.PLAIN, 13);
+    private Font sgUI15p = new Font("Segoe UI", Font.PLAIN, 15);
+    private Font sgUI15I = new Font("Segoe UI", Font.ITALIC, 15);
+    private Font tNR13i = new Font("Times New Roman", Font.ITALIC, 13);
+    private Font fontTittle = new Font("Tahoma", Font.BOLD, 25);
+    private Font fontSubTittle = new Font("Tahoma", Font.BOLD, 20);
+    private Font fontTable = new Font("Segoe UI", Font.BOLD, 13);
+    private DecimalFormat dcf = new DecimalFormat("###,###");
+    private Color btnoldColor = new Color(52, 152, 219);
+    private Color texfieldColor = new Color(45, 52, 54);
+    private MatteBorder matteBorderCB = new MatteBorder(2, 2, 2, 2, Color.decode("#EFEFEF"));
+    private LineBorder lineCB = new LineBorder(Color.white);
+    private MatteBorder borderTxt = new MatteBorder(2, 2, 2, 2, Color.decode("#EFEFEF"));
+    MatteBorder matteBorderCBDark = new MatteBorder(2, 2, 2, 2, Color.decode("#919191"));
+    MatteBorder borderTxtDark = new MatteBorder(2, 2, 2, 2, Color.decode("#919191"));
+    EmptyBorder emptyBorderTxt = new EmptyBorder(0, 7, 0, 7);
+    EmptyBorder emptyBorderCB = new EmptyBorder(0, 7, 0, 0);
+    private String colorTableCode = "#dee9fc";
     // End of variables declaration//GEN-END:variables
 }

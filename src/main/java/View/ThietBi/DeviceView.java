@@ -90,26 +90,44 @@ public class DeviceView extends javax.swing.JPanel {
 	public void event() {
 		loadDataTable();
 
-		// set sự kiện tìm kiếm có sự thay đổi trong text field
-		jtfTimKiem.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				performSearch();
-			}
+		// set sự kiện tìm kiếm có sự thay đổi trong text field tim kiem
+		jtfTimKiem.getDocument().addDocumentListener(documentListenerSearch);
 
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				performSearch();
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
-		});
 	}
 
-	public void loadDataTable() {
+	DocumentListener documentListenerSearch = new DocumentListener() {
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			performSearch();
+		}
 
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			performSearch();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+		}
+	};
+
+	DocumentListener documentListenerId = new DocumentListener() {
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			getNewestId();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			getNewestId();
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+		}
+	};
+
+	public void loadDataTable() {
 		DefaultTableModel model = (DefaultTableModel) jTableThietBi.getModel();
 		model.setRowCount(0); // Xóa dữ liệu hiện tại của bảng
 
@@ -156,10 +174,90 @@ public class DeviceView extends javax.swing.JPanel {
 		rowSorter.setRowFilter(combinedFilter);
 	}
 
+	public void getNewestId() {
+		String text = jtfDialogTen.getText();
+		String[] words = text.split("\\s+");
+
+		ArrayList<ThietBiModel> list = new ArrayList<>();
+
+		int id = 0;
+
+		switch (words[0]) {
+			case "Micro": {
+				list = thietBiCTL.getListById("1");
+				if (list.isEmpty())
+					id = 100001;
+
+			}
+				break;
+			case "Máy": {
+				if (words.length >= 2) {
+					if ("chiếu".equals(words[1])) {
+						list = thietBiCTL.getListById("2");
+						if (list.isEmpty())
+							id = 200001;
+
+					} else if ("ảnh".equals(words[1])) {
+						list = thietBiCTL.getListById("3");
+						if (list.isEmpty())
+							id = 300001;
+
+					}
+				}
+
+			}
+				break;
+			case "Cassette": {
+				list = thietBiCTL.getListById("4");
+				if (list.isEmpty())
+					id = 400001;
+
+			}
+				break;
+			case "Tivi": {
+				list = thietBiCTL.getListById("5");
+				if (list.isEmpty())
+					id = 500001;
+
+			}
+				break;
+			case "Quạt": {
+				if (words.length >= 2) {
+					if ("đứng".equals(words[1])) {
+						list = thietBiCTL.getListById("6");
+						if (list.isEmpty())
+							id = 600001;
+					}
+				}
+			}
+				break;
+			default:
+				list = null;
+				break;
+		}
+
+		if (list != null) {
+			if (id == 0) {
+				if (!list.isEmpty()) {
+					int len = list.size();
+					id = list.get(len - 1).getMaTB() + 1;
+					jtfDialogID.setText(id + "");
+				} else
+					jtfDialogID.setText("");
+			} else
+				jtfDialogID.setText(id + "");
+
+		} else
+			jtfDialogID.setText("");
+
+	}
+
 	public void refresh() {
 		jtfTimKiem.setText("");
 		jcbTimKiem.setSelectedItem("All");
 		jTableThietBi.clearSelection();
+
+		loadDataTable();
 	}
 
 	public void resetDialogTXS() {
@@ -184,11 +282,13 @@ public class DeviceView extends javax.swing.JPanel {
 		jlbDialogHeader = new javax.swing.JLabel();
 		jpnDialogContent = new javax.swing.JPanel();
 		jlbDialogID = new javax.swing.JLabel();
-		jtfDialogID = new javax.swing.JTextField();
 		jlbDialogTen = new javax.swing.JLabel();
 		jtfDialogTen = new javax.swing.JTextField();
 		jlbDialogMoTa = new javax.swing.JLabel();
 		jtfDialogMoTa = new javax.swing.JTextField();
+		jpnDialogID = new javax.swing.JPanel();
+		jtfDialogID = new javax.swing.JTextField();
+		jcbDialogLoaiId = new javax.swing.JComboBox<>();
 		jpnDialogFooter = new javax.swing.JPanel();
 		btnXacNhan = new javax.swing.JButton();
 		btnHuy = new javax.swing.JButton();
@@ -228,7 +328,7 @@ public class DeviceView extends javax.swing.JPanel {
 		jpnDialogContent.setBackground(new java.awt.Color(255, 255, 255));
 		jpnDialogContent.setPreferredSize(new java.awt.Dimension(500, 200));
 		java.awt.GridBagLayout jPanel3Layout = new java.awt.GridBagLayout();
-		jPanel3Layout.columnWidths = new int[] { 0, 30, 0 };
+		jPanel3Layout.columnWidths = new int[] { 0, 30, 0, 30, 0, 30, 0 };
 		jPanel3Layout.rowHeights = new int[] { 0, 5, 0, 5, 0 };
 		jpnDialogContent.setLayout(jPanel3Layout);
 
@@ -239,18 +339,6 @@ public class DeviceView extends javax.swing.JPanel {
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		jpnDialogContent.add(jlbDialogID, gridBagConstraints);
-
-		jtfDialogID.setEnabled(false);
-		jtfDialogID.setPreferredSize(new java.awt.Dimension(200, 30));
-		jtfDialogID.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jtfDialogIDActionPerformed(evt);
-			}
-		});
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 2;
-		gridBagConstraints.gridy = 0;
-		jpnDialogContent.add(jtfDialogID, gridBagConstraints);
 
 		jlbDialogTen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 		jlbDialogTen.setText("Tên thiết bị");
@@ -284,6 +372,41 @@ public class DeviceView extends javax.swing.JPanel {
 		gridBagConstraints.gridx = 2;
 		gridBagConstraints.gridy = 4;
 		jpnDialogContent.add(jtfDialogMoTa, gridBagConstraints);
+
+		jpnDialogID.setBackground(new java.awt.Color(255, 255, 255));
+
+		jtfDialogID.setEnabled(false);
+		jtfDialogID.setPreferredSize(new java.awt.Dimension(200, 30));
+		jtfDialogID.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jtfDialogIDActionPerformed(evt);
+			}
+		});
+		jpnDialogID.add(jtfDialogID);
+
+		jcbDialogLoaiId.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+		jcbDialogLoaiId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 - Micro", "2 - Máy chiếu",
+				"3 - Máy ảnh", "4 - Cassette", "5 - Tivi", "6 - Quạt đứng" }));
+		jcbDialogLoaiId.setPreferredSize(new java.awt.Dimension(200, 30));
+		jcbDialogLoaiId.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		jcbDialogLoaiId.setBackground(Color.WHITE);
+		jcbDialogLoaiId.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+		jcbDialogLoaiId.setBackground(Color.white);
+		// jcbDialogLoaiId.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		jcbDialogLoaiId.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(new LineBorder(Color.white));
+				return basicComboPopup;
+			}
+		});
+		jpnDialogID.add(jcbDialogLoaiId);
+
+		gridBagConstraints = new java.awt.GridBagConstraints();
+		gridBagConstraints.gridx = 2;
+		gridBagConstraints.gridy = 0;
+		jpnDialogContent.add(jpnDialogID, gridBagConstraints);
 
 		jDialogTXS.getContentPane().add(jpnDialogContent);
 
@@ -508,10 +631,13 @@ public class DeviceView extends javax.swing.JPanel {
 		// TODO add your handling code here:
 		resetDialogTXS();
 
-		jtfDialogID.setText(thietBiCTL.getNewestID() + "");
+		jtfDialogTen.getDocument().addDocumentListener(documentListenerId);
 
+		jtfDialogID.setVisible(true);
+		jcbDialogLoaiId.setVisible(false);
+
+		jlbDialogID.setText("ID");
 		btnXacNhan.setText("Xác nhận");
-		jtfDialogID.setEnabled(false);
 
 		jDialogTXS.setLocationRelativeTo(null);
 		jDialogTXS.setVisible(true);
@@ -597,8 +723,13 @@ public class DeviceView extends javax.swing.JPanel {
 		// TODO add your handling code here:
 		resetDialogTXS();
 
+		jtfDialogTen.getDocument().removeDocumentListener(documentListenerId);
+
+		jtfDialogID.setVisible(false);
+		jcbDialogLoaiId.setVisible(true);
+
 		btnXacNhan.setText("Xóa");
-		jtfDialogID.setEnabled(true);
+		jlbDialogID.setText("Loại thiết bị");
 
 		jDialogTXS.setLocationRelativeTo(null);
 		jDialogTXS.setVisible(true);
@@ -620,52 +751,73 @@ public class DeviceView extends javax.swing.JPanel {
 
 	private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnXacNhanActionPerformed
 		// TODO add your handling code here:
-		String id = jtfDialogID.getText();
 		String ten = jtfDialogTen.getText();
 		String moTa = jtfDialogMoTa.getText();
 
 		if ("Xác nhận".equals(btnXacNhan.getText())) {
-			int ID = Integer.parseInt(id);
-			ThietBiModel thietBiModel = thietBiCTL.getModel(ID);
-
-			if (thietBiModel != null) {
-				thietBiModel.setTenTB(ten);
-				thietBiModel.setMoTaTB(moTa);
-
-				JOptionPane.showMessageDialog(this, thietBiCTL.updateModel(thietBiModel), "Thông báo",
+			String id = jtfDialogID.getText();
+			if (id.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Bạn nhập sai định dạng tên thiết bị", "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				ThietBiModel thietBi = new ThietBiModel(ID, ten, moTa);
-				JOptionPane.showMessageDialog(this, thietBiCTL.addModel(thietBi), "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
+				int ID = Integer.parseInt(id);
+				ThietBiModel thietBiModel = thietBiCTL.getModel(ID);
 
-			jDialogTXS.setVisible(false);
+				if (thietBiModel != null) {
+					thietBiModel.setTenTB(ten);
+					thietBiModel.setMoTaTB(moTa);
+
+					JOptionPane.showMessageDialog(this, thietBiCTL.updateModel(thietBiModel), "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					ThietBiModel thietBi = new ThietBiModel(ID, ten, moTa);
+					JOptionPane.showMessageDialog(this, thietBiCTL.addModel(thietBi), "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+
+				jDialogTXS.setVisible(false);
+			}
 		} else {
-			ArrayList<ThietBiModel> list = thietBiCTL.getList();
+			ArrayList<ThietBiModel> list = new ArrayList<>();
 			ArrayList<ThietBiModel> listDelete = new ArrayList<>();
 
-			if (id.isEmpty() && ten.isEmpty() && moTa.isEmpty()) {
-				JOptionPane.showMessageDialog(this, "Vui lòng nhập điều kiện cần xóa", "Thông báo",
+			String selectedItem = (String) jcbDialogLoaiId.getSelectedItem();
+
+			switch (selectedItem) {
+				case "1 - Micro":
+					list = thietBiCTL.getListById("1");
+					break;
+				case "2 - Máy chiếu":
+					list = thietBiCTL.getListById("2");
+					break;
+				case "3 - Máy ảnh":
+					list = thietBiCTL.getListById("3");
+					break;
+				case "4 - Cassette":
+					list = thietBiCTL.getListById("4");
+					break;
+				case "5 - Tivi":
+					list = thietBiCTL.getListById("5");
+					break;
+				case "6 - Quạt đứng":
+					list = thietBiCTL.getListById("6");
+					break;
+			}
+
+			for (ThietBiModel thietBiModel : list) {
+				if (thietBiModel.getTenTB().contains(ten))
+					if (thietBiModel.getMoTaTB().contains(moTa))
+						listDelete.add(thietBiModel);
+			}
+
+			int option = JOptionPane.showConfirmDialog(this,
+					"Bạn chắc chắn muốn xóa " + listDelete.size() + " thiết bị không?", "Xác nhận xóa",
+					JOptionPane.YES_NO_OPTION);
+
+			if (option == JOptionPane.YES_OPTION) {
+				JOptionPane.showMessageDialog(this, thietBiCTL.deleteListModel(listDelete), "Thông báo",
 						JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				for (ThietBiModel thietBiModel : list) {
-					if (thietBiModel.getTenTB().contains(ten))
-						if (thietBiModel.getMoTaTB().contains(moTa))
-							if (String.valueOf(thietBiModel.getMaTB()).contains(id))
-								listDelete.add(thietBiModel);
-				}
-
-				int option = JOptionPane.showConfirmDialog(this,
-						"Bạn chắc chắn muốn xóa " + listDelete.size() + " thiết bị không?", "Xác nhận xóa",
-						JOptionPane.YES_NO_OPTION);
-
-				if (option == JOptionPane.YES_OPTION) {
-					JOptionPane.showMessageDialog(this, thietBiCTL.deleteListModel(listDelete), "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					jDialogTXS.setVisible(false);
-				}
-
+				jDialogTXS.setVisible(false);
 			}
 
 		}
@@ -696,12 +848,17 @@ public class DeviceView extends javax.swing.JPanel {
 			String ten = (String) jTableThietBi.getValueAt(jTableThietBi.getSelectedRow(), 1);
 			String moTa = (String) jTableThietBi.getValueAt(jTableThietBi.getSelectedRow(), 2);
 
+			jtfDialogTen.getDocument().removeDocumentListener(documentListenerId);
+
 			jtfDialogID.setText(id + "");
 			jtfDialogTen.setText(ten);
 			jtfDialogMoTa.setText(moTa);
 
+			jtfDialogID.setVisible(true);
+			jcbDialogLoaiId.setVisible(false);
+
 			btnXacNhan.setText("Xác nhận");
-			jtfDialogID.setEnabled(false);
+			jlbDialogID.setText("ID");
 
 			jDialogTXS.setLocationRelativeTo(null);
 			jDialogTXS.setVisible(true);
@@ -724,6 +881,7 @@ public class DeviceView extends javax.swing.JPanel {
 	private javax.swing.JDialog jDialogTXS;
 	private javax.swing.JScrollPane jScrollTable;
 	private javax.swing.JTable jTableThietBi;
+	private javax.swing.JComboBox<String> jcbDialogLoaiId;
 	private javax.swing.JComboBox<String> jcbTimKiem;
 	private javax.swing.JLabel jlbDialogHeader;
 	private javax.swing.JLabel jlbDialogID;
@@ -735,6 +893,7 @@ public class DeviceView extends javax.swing.JPanel {
 	private javax.swing.JPanel jpnDialogContent;
 	private javax.swing.JPanel jpnDialogFooter;
 	private javax.swing.JPanel jpnDialogHeader;
+	private javax.swing.JPanel jpnDialogID;
 	private javax.swing.JPanel jpnFooter;
 	private javax.swing.JPanel jpnHeader;
 	private javax.swing.JPanel jpnTopContent;

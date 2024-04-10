@@ -3,6 +3,7 @@ package DAL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -81,8 +82,11 @@ public class ThanhVienDAL {
 
 	public void deleteMultipleModelByCondition(String condition) {
 		session.beginTransaction();
-		String hql = "DELETE FROM ThanhVienModel WHERE " + condition;
-		Query query = session.createQuery(hql);
+		String hqlDelete = "DELETE FROM ThanhVienModel tv WHERE " + condition +
+				" AND tv.maTV NOT IN (SELECT x.thanhVien.maTV FROM XuLyModel x) " +
+				" AND tv.maTV NOT IN (SELECT t.thanhVien.maTV FROM ThongTinSdModel t)";
+
+		Query query = session.createQuery(hqlDelete);
 		query.executeUpdate();
 		session.getTransaction().commit();
 	}
@@ -93,6 +97,18 @@ public class ThanhVienDAL {
 			Row currentRow = sheet.getRow(i);
 			if (currentRow != null) {
 				int id = (int) currentRow.getCell(0).getNumericCellValue();
+
+				String idStr = Integer.toString(id);
+				int year = Calendar.getInstance().get(Calendar.YEAR);
+				int last2DigitsOfYear = Integer.parseInt(String.valueOf(year).substring(2,4));
+				if(idStr.length() != 10 || !idStr.startsWith("11") || Integer.parseInt(idStr.substring(2,4)) > last2DigitsOfYear) {
+					continue;
+				}
+
+				if(getModel(id) != null) {
+					continue;
+				}
+
 				String hoTen = getCellValueAsString(currentRow.getCell(1));
 				String khoa = getCellValueAsString(currentRow.getCell(2));
 				String nganh = getCellValueAsString(currentRow.getCell(3));

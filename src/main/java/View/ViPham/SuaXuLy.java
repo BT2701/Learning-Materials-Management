@@ -7,25 +7,42 @@ package View.ViPham;
 import Model.XuLyModel;
 import Controller.ThanhVienCTL;
 import Controller.XuLyCTL;
+import View.Styles.Styles;
 import View.ViPham.HandleView;
 import Model.ThanhVienModel;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 
 /**
  *
  * @author TOAN
  */
 public class SuaXuLy extends javax.swing.JDialog {
+	private Color mainColor = Color.decode("#dff9fb");
+	private Font sgUI18b = new Font("Segoe UI", Font.BOLD, 18);
+	private Styles style= new Styles();
     /**
      * Creates new form SuaXuLy1
      */
     public SuaXuLy(XuLyModel xuly) {
         this.xuly = xuly;
+        setSize(350, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setModal(true);
+        setTitle("Sửa");
         initComponents();
         setVisible(true);
     }
@@ -41,6 +58,7 @@ public class SuaXuLy extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel2.setBackground(Color.white);
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -49,12 +67,12 @@ public class SuaXuLy extends javax.swing.JDialog {
         btnHuy = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
         cbbName = new javax.swing.JComboBox<>();
+        
         xulyCtl = new XuLyCTL();
         tvCTL =new ThanhVienCTL();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(153, 204, 255));
+        jPanel1.setBackground(mainColor);
         jPanel1.setPreferredSize(new java.awt.Dimension(197, 80));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
@@ -86,9 +104,21 @@ public class SuaXuLy extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Số tiền");
 
-        cbbHinhThuc.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         cbbHinhThuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng","Khóa thẻ 1 tháng", "Khóa thẻ vĩnh viễn", "Bồi thường","Khoá thẻ 1 tháng và bồi " }));
         cbbHinhThuc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cbbHinhThuc.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbbHinhThuc.setBackground(Color.white);
+        cbbHinhThuc.setFont(style.getSgUI13b());
+        cbbHinhThuc.setPreferredSize(new Dimension(200, 30));
+        cbbHinhThuc.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+        cbbHinhThuc.setBorder(style.getMatteBorderCB());
 
         txtSoTien.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         if (this.xuly.getSoTien() != null)   txtSoTien.setText(this.xuly.getSoTien().toString());
@@ -96,7 +126,7 @@ public class SuaXuLy extends javax.swing.JDialog {
         btnHuy.setBackground(new java.awt.Color(126, 214, 223));
         btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18Nthường
         btnHuy.setForeground(new java.awt.Color(204, 0, 0));
-        btnHuy.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\cancel button.png")); // NOI18N
+        btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/cancel button.png"))); // NOI18N
         btnHuy.setText("Hủy");
         btnHuy.setBorderPainted(false);
         btnHuy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -112,7 +142,7 @@ public class SuaXuLy extends javax.swing.JDialog {
         btnThem.setBackground(new java.awt.Color(126, 214, 223));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem.setForeground(new java.awt.Color(0, 153, 0));
-        btnThem.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\icon submit.png")); // NOI18N
+        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/icon submit.png"))); // NOI18N
         btnThem.setText("Xác nhận");
         btnThem.setBorderPainted(false);
         btnThem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -126,6 +156,22 @@ public class SuaXuLy extends javax.swing.JDialog {
         });
 
         cbbName.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        cbbName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng","Khóa thẻ 1 tháng", "Khóa thẻ vĩnh viễn", "Bồi thường","Khoá thẻ 1 tháng và bồi " }));
+        cbbName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cbbName.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbbName.setBackground(Color.white);
+        cbbName.setFont(style.getSgUI13b());
+        cbbName.setPreferredSize(new Dimension(200, 30));
+        cbbName.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+        cbbName.setBorder(style.getMatteBorderCB());
+
         List<ThanhVienModel> tvList = tvCTL.getList();
         DefaultComboBoxModel<String> cbbTvModel = new DefaultComboBoxModel<>();
         for (ThanhVienModel thanhVien : tvList) {

@@ -9,9 +9,11 @@ import Util.HibernateUtil;
 
 public class ThietBiDAL {
 	Session session;
+        
 	public ThietBiDAL() {
 		session= HibernateUtil.getSessionFactory().openSession();
 	}
+        
 	public ArrayList<ThietBiModel> getList(){
 		ArrayList<ThietBiModel> list;
 		session.beginTransaction();
@@ -19,12 +21,14 @@ public class ThietBiDAL {
 		session.getTransaction().commit();
 		return list;
 	}
+        
 	public ThietBiModel getModel(int id) {
 		session.beginTransaction();
 		ThietBiModel thongtin= session.get(ThietBiModel.class, id);
 		session.getTransaction().commit();
 		return thongtin;
 	}
+        
 	public boolean addModel(ThietBiModel device) {
             try {
                 session.beginTransaction();
@@ -47,6 +51,7 @@ public class ThietBiDAL {
             }
 		
 	}
+        
 	public boolean deleteModel(ThietBiModel device) {            
             try {
                 session.beginTransaction();
@@ -83,4 +88,5 @@ public class ThietBiDAL {
                 return false; // Trả về false khi có lỗi
             }
         }
+        
 }

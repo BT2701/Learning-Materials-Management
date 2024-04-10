@@ -8,6 +8,8 @@ import Controller.ThanhVienCTL;
 import Controller.XuLyCTL;
 import Model.ThanhVienModel;
 import Model.XuLyModel;
+import View.Styles.Styles;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -24,13 +26,17 @@ import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 
 /**
  *
  * @author TOAN
  */
 public class ThemXuLy extends javax.swing.JDialog {
-
+	private Color mainColor = Color.decode("#dff9fb");
+	private Styles style= new Styles();
     /**
      * Creates new form ThemXyLy1
      */
@@ -56,6 +62,7 @@ public class ThemXuLy extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel2.setBackground(Color.white);
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -65,9 +72,8 @@ public class ThemXuLy extends javax.swing.JDialog {
         btnHuy = new javax.swing.JButton();
         btnThem = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(153, 204, 255));
+        jPanel1.setBackground(mainColor);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel1.setText("Thêm Xử Lý");
@@ -111,6 +117,21 @@ public class ThemXuLy extends javax.swing.JDialog {
         jLabel4.setForeground(Color.black);
 
         cbbThanhVien.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        cbbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng","Khóa thẻ 1 tháng", "Khóa thẻ vĩnh viễn", "Bồi thường","Khoá thẻ 1 tháng và bồi " }));
+        cbbThanhVien.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cbbThanhVien.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbbThanhVien.setBackground(Color.white);
+        cbbThanhVien.setFont(style.getSgUI13b());
+        cbbThanhVien.setPreferredSize(new Dimension(200, 30));
+        cbbThanhVien.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+        cbbThanhVien.setBorder(style.getMatteBorderCB());
         List<ThanhVienModel> tvList = tvCTL.getList();
         DefaultComboBoxModel<String> cbbTvModel = new DefaultComboBoxModel<>();
         for (ThanhVienModel thanhVien : tvList) {
@@ -122,6 +143,21 @@ public class ThemXuLy extends javax.swing.JDialog {
         cbbHinhThuc.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         cbbHinhThuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng","Khóa thẻ 2 tháng", "Khóa thẻ vĩnh viễn", "Bồi thường","Khoá thẻ 1 tháng và bồi thường" }));
         cbbHinhThuc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cbbHinhThuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Khóa thẻ 1 tháng","Khóa thẻ 1 tháng", "Khóa thẻ vĩnh viễn", "Bồi thường","Khoá thẻ 1 tháng và bồi " }));
+        cbbHinhThuc.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cbbHinhThuc.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbbHinhThuc.setBackground(Color.white);
+        cbbHinhThuc.setFont(style.getSgUI13b());
+        cbbHinhThuc.setPreferredSize(new Dimension(200, 30));
+        cbbHinhThuc.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+        cbbHinhThuc.setBorder(style.getMatteBorderCB());
         
 
         txtSoTien.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
@@ -130,7 +166,7 @@ public class ThemXuLy extends javax.swing.JDialog {
         btnHuy.setBackground(new java.awt.Color(126, 214, 223));
         btnHuy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnHuy.setForeground(new java.awt.Color(204, 0, 0));
-        btnHuy.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\cancel button.png")); // NOI18N
+        btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/cancel button.png"))); // NOI18N
         btnHuy.setText("Hủy");
         btnHuy.setBorderPainted(false);
         btnHuy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -145,7 +181,7 @@ public class ThemXuLy extends javax.swing.JDialog {
         btnThem.setBackground(new java.awt.Color(126, 214, 223));
         btnThem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem.setForeground(new java.awt.Color(0, 153, 0));
-        btnThem.setIcon(new javax.swing.ImageIcon("D:\\learn\\XDMH\\QLNV\\src\\main\\resources\\img\\add button.png")); // NOI18N
+        btnThem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/add button.png"))); // NOI18N
         btnThem.setText("Thêm");
         btnThem.setBorderPainted(false);
         btnThem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

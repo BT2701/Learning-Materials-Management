@@ -4,15 +4,18 @@
  */
 package View.ThanhVien;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -29,12 +32,14 @@ import Model.ThanhVienModel;
  *
  * @author phamv
  */
-public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
+public class FormThemCapNhatThanhVien extends JDialog {
     ThanhVienCTL tvCtl = new ThanhVienCTL();
     ThanhVienModel oldThanhVien = null;
     private String[] nganhList = {"", "Giáo dục tiểu học", "Quản trị kinh doanh", "Quản lý giáo ", "Khoa học máy tính", "Khoa học dữ liệu", "Khoa học môi trường", "Khoa học xã hội"};
     private String[] khoaList = {"", "GDTH", "TLH", "QTKD", "CNTT", "VL", "MT", "XH"};
+
     String titleForm;
+    String randomMaTv = "0";
     /**
      * Creates new form FormThemThanhVien
      */
@@ -70,16 +75,13 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
     }
 
     private void changeComponentForDiffForm(String titleForm){
-//        if(titleForm == "Xóa Nhiều Thành Viên"){
-//            txtThanhVien.setVisible(true);
-//            lbThanhVien.setVisible(true);
-//        }
-//        else{
-//            txtThanhVien.setVisible(false);
-//            lbThanhVien.setVisible(false);
-//        }
+        txtMaTV.setEditable(false);
+        cbNienKhoa.setVisible(false);
+
+        if(titleForm.equals("Thêm Thành Viên")) {
+            setRandomMaTV();
+        }
         if(titleForm.equals("Cập Nhật Thông Tin Thành Viên")) {
-            txtMaTV.setEditable(false);
             txtMaTV.setText(Integer.toString(oldThanhVien.getMaTV()));
 
             txtSdt.setText(oldThanhVien.getSdt());
@@ -89,6 +91,47 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
             cbNganh.addItem(oldThanhVien.getNganh());
             cbNganh.setSelectedItem(oldThanhVien.getNganh());
         }
+        if(titleForm.equals("Xóa Nhiều Thành Viên")) {
+            txtMaTV.setVisible(false);
+            cbNienKhoa.setVisible(true);
+            lbMaTV.setText("Khóa thứ");
+        }
+    }
+
+    private void generateLast2DigitsOfYearFrom2010ToNow() {
+        int startYear = 2010;
+        int currentYear = LocalDate.now().getYear();
+
+        ArrayList<String> lastTwoDigitsList = new ArrayList<String>();
+        lastTwoDigitsList.add("");
+        for (int year = startYear; year <= currentYear; year++) {
+            String lastTwoDigits = String.valueOf(year).substring(2);
+            lastTwoDigitsList.add(lastTwoDigits);
+        }
+
+        // Chuyển đổi danh sách thành mảng
+        String[] lastTwoDigitsArray = lastTwoDigitsList.toArray(new String[0]);
+        cbNienKhoa.setModel(new DefaultComboBoxModel<>(lastTwoDigitsArray));
+    }
+
+    private void setRandomMaTV() {
+        // 2 số đầu tiên
+        String soDau = "11";
+        // 2 số tiếp theo là khóa
+
+        // Lấy 2 số cuối cùng của năm
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        String yearStr = String.valueOf(year);
+        String khoaStr = yearStr.substring(2,4);
+
+        // Lấy 6 số số cuối
+        ArrayList<ThanhVienModel> thanhVienModelList = tvCtl.getListForUpdateMethod();
+        ThanhVienModel lastThanhVienModel = thanhVienModelList.get(thanhVienModelList.size() - 1);
+        String soCuoi = String.valueOf(lastThanhVienModel.getMaTV()).substring(4, 10);
+        int soCuoiInt = (Integer.parseInt(soCuoi) + 1);
+
+        randomMaTv = soDau + khoaStr + soCuoiInt;
+        txtMaTV.setText(randomMaTv);
     }
     
     private void initMyComponents(String titleForm){
@@ -110,7 +153,7 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         btnXacNhan.setFont(sgUI13b);
         btnXacNhan.setFocusPainted(false);
         btnXacNhan.setBorderPainted(false);
-        btnXacNhan.setPreferredSize(new java.awt.Dimension(100, 23));
+        btnXacNhan.setPreferredSize(new Dimension(100, 23));
         btnXacNhan.setBackground(Color.decode("#7ed6df"));
 
         // Xử lý sự kiện khi nhấn nút Xác Nhận
@@ -118,29 +161,11 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Trích xuất dữ liệu từ các trường và combobox
-                String maTVStr = txtMaTV.getText();
-                if (maTVStr.isEmpty() && !titleForm.equals("Xóa Nhiều Thành Viên")) {
-                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Vui lòng nhập mã thành viên!");
-                    return;
-                }
-
-                int maTV;
-                try {
-                    if(titleForm.equals("Xóa Nhiều Thành Viên") && maTVStr.isEmpty()) {
-                        maTV = 0;
-                    } else {
-                        maTV = Integer.parseInt(maTVStr);
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Mã thành viên phải là một số nguyên!");
-                    return;
-                }
-
                 String hoTen = txtHoTen.getText();
                 String sdt = txtSdt.getText();
                 String khoa = (String) cbKhoa.getSelectedItem();
                 String nganh = (String) cbNganh.getSelectedItem();
-                ThanhVienModel thanhvien = tvCtl.getModel(maTV);
+                String maTVStr = txtMaTV.getText();
 
                 if(!titleForm.equals("Xóa Nhiều Thành Viên")) {
                     if((khoa == null || khoa.isEmpty()) || (nganh == null || nganh.isEmpty()) || hoTen.isEmpty() || sdt.isEmpty()) {
@@ -150,14 +175,8 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                 }
 
                 if (titleForm.equals("Thêm Thành Viên")) {
-                    // Kiểm tra xem đối tượng đã tồn tại trong cơ sở dữ liệu chưa
-                    if (thanhvien != null) {
-                        JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Thành viên đã tồn tại!");
-                        return;
-                    }
-
                     // Thêm dữ liệu vào cơ sở dữ liệu
-                    tvCtl.addModel(new ThanhVienModel(maTV, hoTen, khoa, nganh, sdt, "", ""));
+                    tvCtl.addModel(new ThanhVienModel(Integer.parseInt(randomMaTv), hoTen, khoa, nganh, sdt, "", ""));
 
                     // Xóa dữ liệu sau khi thêm thành công
                     txtMaTV.setText("");
@@ -170,11 +189,14 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Thêm thành viên thành công!");
                     setVisible(false);
                 } else if (titleForm.equals("Cập Nhật Thông Tin Thành Viên")) {
+                    oldThanhVien = tvCtl.getModel(Integer.parseInt(maTVStr));
+                    ThanhVienModel thanhvien = tvCtl.getModel(Integer.parseInt(maTVStr));
                     if (thanhvien == null) {
                         JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Thành viên chưa tồn tại!");
                         return;
                     }
-                    ThanhVienModel updatedThanhvien = new ThanhVienModel(maTV, hoTen, khoa, nganh, sdt, "", "");
+
+                    ThanhVienModel updatedThanhvien = new ThanhVienModel(Integer.parseInt(maTVStr), hoTen, khoa, nganh, sdt, "", "");
                     tvCtl.updateModel(updatedThanhvien);
 
                     txtMaTV.setText("");
@@ -186,13 +208,15 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Cập Nhật thành viên thành công!");
                     setVisible(false);
                 } else if (titleForm.equals("Xóa Nhiều Thành Viên")) {
-                    if(maTV == 0 && hoTen.isEmpty() && (khoa != null && khoa.isEmpty()) && (nganh != null && nganh.isEmpty()) && sdt.isEmpty()) {
+                    String nienKhoa = (String) cbNienKhoa.getSelectedItem();
+                    if((nienKhoa !=null && nienKhoa.isEmpty()) && hoTen.isEmpty() && (khoa != null && khoa.isEmpty()) && (nganh != null && nganh.isEmpty()) && sdt.isEmpty()) {
                         JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Nhập 1 trong những điều kiện để xóa !");
                         return;
                     }
+
                     String queryToDelete = "";
-                    if(maTV != 0) {
-                        String query = "MaTV = '" + maTV + "'";
+                    if(!nienKhoa.isEmpty()) {
+                        String query = "substring(cast(MaTV as string), 3, 2) = '" + nienKhoa + "'";
                         queryToDelete += !queryToDelete.isEmpty() ? " and " + query : query;
                     }
                     if(!hoTen.isEmpty()) {
@@ -213,7 +237,6 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                     }
 
                     tvCtl.deleteMultipleModelByCondition(queryToDelete);
-//                    JOptionPane.showMessageDialog(FormThemCapNhatThanhVien.this, "Xóa nhiều thành viên thành công! " + queryToDelete + "--123");
 
                     txtMaTV.setText("");
                     txtHoTen.setText("");
@@ -230,14 +253,14 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         btnHuy.setFont(sgUI13b);
         btnHuy.setFocusPainted(false);
         btnHuy.setBorderPainted(false);
-        btnHuy.setPreferredSize(new java.awt.Dimension(100, 23));
+        btnHuy.setPreferredSize(new Dimension(100, 23));
         btnHuy.setBackground(Color.decode("#7ed6df"));
         
         
         btnLamMoi.setFont(sgUI13b);
         btnLamMoi.setFocusPainted(false);
         btnLamMoi.setBorderPainted(false);
-        btnLamMoi.setPreferredSize(new java.awt.Dimension(100, 23));
+        btnLamMoi.setPreferredSize(new Dimension(100, 23));
         btnLamMoi.setBackground(Color.decode("#7ed6df"));
         
         txtHoTen.setPreferredSize(new Dimension(200, 30));
@@ -260,7 +283,20 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
         txtThanhVien.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtThanhVien.setForeground(Color.black);
         txtThanhVien.setVisible(false);
-        
+
+        cbNienKhoa.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbNienKhoa.setBackground(Color.white);
+        cbNienKhoa.setFont(sgUI13b);
+        cbNienKhoa.setPreferredSize(new Dimension(100, 30));
+        cbNienKhoa.setUI(new BasicComboBoxUI() {
+            @Override
+            protected ComboPopup createPopup() {
+                BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+                basicComboPopup.setBorder(lineCB);
+                return basicComboPopup;
+            }
+        });
+
         cbKhoa.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
         cbKhoa.setBackground(Color.white);
         cbKhoa.setFont(sgUI13b);
@@ -286,6 +322,15 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
                 return basicComboPopup;
             }
         });
+
+        cbKhoa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(titleForm.equals("Thêm Thành Viên")) {
+                    setRandomMaTV();
+                }
+            }
+        });
     }
 
   
@@ -295,39 +340,40 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        header = new javax.swing.JPanel();
-        title = new javax.swing.JLabel();
-        content = new javax.swing.JPanel();
-        lbHoTen = new javax.swing.JLabel();
-        lbMaTV = new javax.swing.JLabel();
-        lbKhoa = new javax.swing.JLabel();
-        lbNganh = new javax.swing.JLabel();
-        lbSdt = new javax.swing.JLabel();
-        btnXacNhan = new javax.swing.JButton();
-        btnLamMoi = new javax.swing.JButton();
-        txtHoTen = new javax.swing.JTextField();
-        txtMaTV = new javax.swing.JTextField();
-        txtSdt = new javax.swing.JTextField();
-        cbKhoa = new javax.swing.JComboBox<>();
-        cbNganh = new javax.swing.JComboBox<>();
-        btnHuy = new javax.swing.JButton();
-        lbThanhVien = new javax.swing.JLabel();
-        txtThanhVien = new javax.swing.JTextField();
+        header = new JPanel();
+        title = new JLabel();
+        content = new JPanel();
+        lbHoTen = new JLabel();
+        lbMaTV = new JLabel();
+        lbKhoa = new JLabel();
+        lbNganh = new JLabel();
+        lbSdt = new JLabel();
+        btnXacNhan = new JButton();
+        btnLamMoi = new JButton();
+        txtHoTen = new JTextField();
+        txtMaTV = new JTextField();
+        txtSdt = new JTextField();
+        cbKhoa = new JComboBox<>();
+        cbNienKhoa = new JComboBox<>();
+        cbNganh = new JComboBox<>();
+        btnHuy = new JButton();
+        lbThanhVien = new JLabel();
+        txtThanhVien = new JTextField();
 
         
 
-        header.setBackground(new java.awt.Color(15, 145, 232));
-        header.setPreferredSize(new java.awt.Dimension(400, 50));
-        header.setLayout(new java.awt.BorderLayout());
+        header.setBackground(new Color(15, 145, 232));
+        header.setPreferredSize(new Dimension(400, 50));
+        header.setLayout(new BorderLayout());
 
-        title.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        title.setForeground(new java.awt.Color(255, 255, 255));
-        title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        title.setFont(new Font("Segoe UI", 1, 13)); // NOI18N
+        title.setForeground(new Color(255, 255, 255));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setText("title");
-        title.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        header.add(title, java.awt.BorderLayout.CENTER);
+        title.setHorizontalTextPosition(SwingConstants.CENTER);
+        header.add(title, BorderLayout.CENTER);
 
-        getContentPane().add(header, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(header, BorderLayout.PAGE_START);
 
         lbMaTV.setText("Mã thành viên");
 
@@ -339,92 +385,96 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
 
         lbSdt.setText("Số điện thoại");
 
-        btnXacNhan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/xacnhan_icon.png"))); // NOI18N
+        btnXacNhan.setIcon(new ImageIcon(getClass().getResource("/View/images/xacnhan_icon.png"))); // NOI18N
         btnXacNhan.setText("Xác nhận");
-        btnXacNhan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnXacNhan.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btnLamMoi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
+        btnLamMoi.setIcon(new ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
         btnLamMoi.setText("Làm mới");
-        btnLamMoi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLamMoi.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        cbKhoa.setModel(new javax.swing.DefaultComboBoxModel<>(khoaList));
+        cbKhoa.setModel(new DefaultComboBoxModel<>(khoaList));
 
-        cbNganh.setModel(new javax.swing.DefaultComboBoxModel<>(nganhList));
+        cbNganh.setModel(new DefaultComboBoxModel<>(nganhList));
 
-        btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/comeback_icon.png"))); // NOI18N
-        btnHuy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        generateLast2DigitsOfYearFrom2010ToNow();
+
+        btnHuy.setIcon(new ImageIcon(getClass().getResource("/View/images/comeback_icon.png"))); // NOI18N
+        btnHuy.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnHuy.setLabel("Hủy");
 
         lbThanhVien.setText("Thành Viên");
 
-        javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
+        GroupLayout contentLayout = new GroupLayout(content);
         content.setLayout(contentLayout);
         contentLayout.setHorizontalGroup(
-            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            contentLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(contentLayout.createSequentialGroup()
                 .addContainerGap(24, Short.MAX_VALUE)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(lbKhoa)
                     .addComponent(lbNganh)
                     .addComponent(btnXacNhan)
-                    .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lbMaTV, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbHoTen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbSdt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(lbMaTV, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbHoTen, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbSdt, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(lbThanhVien))
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(contentLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSdt, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSdt, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                             .addComponent(cbNganh, 0, 189, Short.MAX_VALUE)
                             .addComponent(cbKhoa, 0, 189, Short.MAX_VALUE)
-                            .addComponent(txtMaTV, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                            .addComponent(txtHoTen, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                            .addComponent(cbNienKhoa, 0, 189, Short.MAX_VALUE)
+                            .addComponent(txtMaTV, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                            .addComponent(txtHoTen, GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
                             .addComponent(txtThanhVien)))
                     .addGroup(contentLayout.createSequentialGroup()
                         .addGap(42, 42, 42)
-                        .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnHuy, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
                         .addGap(44, 44, 44)
                         .addComponent(btnLamMoi)))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
         contentLayout.setVerticalGroup(
-            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            contentLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(contentLayout.createSequentialGroup()
                 .addContainerGap(36, Short.MAX_VALUE)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtThanhVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtThanhVien, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbThanhVien))
                 .addGap(18, 18, Short.MAX_VALUE)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                     .addComponent(txtMaTV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                     .addComponent(cbNienKhoa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                     .addComponent(txtMaTV, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                      .addComponent(lbMaTV))
                 .addGap(18, 18, Short.MAX_VALUE)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtHoTen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbHoTen))
                 .addGap(18, 18, 18)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbKhoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbKhoa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbKhoa))
                 .addGap(18, 18, 18)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(lbNganh)
-                    .addComponent(cbNganh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbNganh, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(lbSdt)
-                    .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addGroup(contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSdt, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addGroup(contentLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(btnXacNhan)
                     .addComponent(btnHuy)
                     .addComponent(btnLamMoi))
                 .addContainerGap(39, Short.MAX_VALUE))
         );
 
-        getContentPane().add(content, java.awt.BorderLayout.CENTER);
+        getContentPane().add(content, BorderLayout.CENTER);
 
 
     }// </editor-fold>//GEN-END:initComponents
@@ -443,23 +493,23 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
          * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(java.util.logging.Level.SEVERE,
+            Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(Level.SEVERE,
                     null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(java.util.logging.Level.SEVERE,
+            Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(Level.SEVERE,
                     null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(java.util.logging.Level.SEVERE,
+            Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(Level.SEVERE,
                     null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(java.util.logging.Level.SEVERE,
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(FormThemCapNhatThanhVien.class.getName()).log(Level.SEVERE,
                     null, ex);
         }
         // </editor-fold>
@@ -469,24 +519,25 @@ public class FormThemCapNhatThanhVien extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnHuy;
-    private javax.swing.JButton btnLamMoi;
-    private javax.swing.JButton btnXacNhan;
-    private javax.swing.JComboBox<String> cbKhoa;
-    private javax.swing.JComboBox<String> cbNganh;
-    private javax.swing.JPanel content;
-    private javax.swing.JPanel header;
-    private javax.swing.JLabel lbMaTV;
-    private javax.swing.JLabel lbHoTen;
-    private javax.swing.JLabel lbKhoa;
-    private javax.swing.JLabel lbNganh;
-    private javax.swing.JLabel lbSdt;
-    private javax.swing.JLabel lbThanhVien;
-    private javax.swing.JLabel title;
-    private javax.swing.JTextField txtMaTV;
-    private javax.swing.JTextField txtHoTen;
-    private javax.swing.JTextField txtSdt;
-    private javax.swing.JTextField txtThanhVien;
+    private JButton btnHuy;
+    private JButton btnLamMoi;
+    private JButton btnXacNhan;
+    private JComboBox<String> cbKhoa;
+    private JComboBox<String> cbNganh;
+    private JComboBox<String> cbNienKhoa;
+    private JPanel content;
+    private JPanel header;
+    private JLabel lbMaTV;
+    private JLabel lbHoTen;
+    private JLabel lbKhoa;
+    private JLabel lbNganh;
+    private JLabel lbSdt;
+    private JLabel lbThanhVien;
+    private JLabel title;
+    private JTextField txtMaTV;
+    private JTextField txtHoTen;
+    private JTextField txtSdt;
+    private JTextField txtThanhVien;
     // End of variables declaration//GEN-END:variables
 
     // Custom font and color -start

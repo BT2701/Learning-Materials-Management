@@ -2,6 +2,7 @@ package View.ViPham;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -13,9 +14,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 import javax.swing.table.DefaultTableModel;
 
 import Model.XuLyModel;
+import View.Styles.Styles;
 import Controller.XuLyCTL;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +28,7 @@ import static java.awt.image.ImageObserver.WIDTH;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -39,6 +45,9 @@ import javax.swing.table.TableColumnModel;
  */
 public class HandleView extends javax.swing.JPanel {
     /** Creates new form HandleView1 */
+	private JPanel pnContentSearch;
+	private Color mainColor = Color.decode("#dff9fb");
+	Styles style= new Styles();
     public HandleView() {
         initComponents();
     }
@@ -54,11 +63,41 @@ public class HandleView extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         label1 = new java.awt.Label();
         jPanel4 = new javax.swing.JPanel();
+        pnContentSearch= new JPanel();
+        pnContentSearch.setLayout(new FlowLayout());
+        pnContentSearch.setBackground(Color.white);
         txtThongTin2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        
         cbbTimKiem2 = new javax.swing.JComboBox<>();
+        cbbTimKiem2.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbbTimKiem2.setBackground(Color.white);
+        cbbTimKiem2.setFont(style.getSgUI13b());
+        cbbTimKiem2.setPreferredSize(new Dimension(200, 30));
+        cbbTimKiem2.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+        cbbTimKiem2.setBorder(style.getMatteBorderCB());
         cbbTinhTrang = new javax.swing.JComboBox<>();
+        cbbTinhTrang.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbbTinhTrang.setBackground(Color.white);
+        cbbTinhTrang.setFont(style.getSgUI13b());
+        cbbTinhTrang.setPreferredSize(new Dimension(200, 30));
+        cbbTinhTrang.setUI(new BasicComboBoxUI() {
+			@Override
+			protected ComboPopup createPopup() {
+				BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+				basicComboPopup.setBorder(style.getLineCB());
+				return basicComboPopup;
+			}
+		});
+        cbbTinhTrang.setBorder(style.getMatteBorderCB());
         cbbTinhTrang.setVisible(false);
         btnXoa2 = new javax.swing.JButton();
         btnXuLy2 = new javax.swing.JButton();
@@ -70,10 +109,11 @@ public class HandleView extends javax.swing.JPanel {
         btnSua2 = new javax.swing.JButton();
         btnThem2 = new javax.swing.JButton();
 
-        jPanel1.setBackground(new java.awt.Color(153, 204, 255));
+        jPanel1.setBackground(mainColor);
 
-        label1.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        label1.setFont(sgUI18b); // NOI18N
         label1.setText("Xử Lý Vi Phạm");
+        pnContentSearch.add(cbbTinhTrang);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,9 +153,11 @@ public class HandleView extends javax.swing.JPanel {
             public void actionPerformed(ActionEvent e) {
                 String str = (String) cbbTimKiem2.getSelectedItem();
                 if (str.equals("Trạng thái")){
+                	pnContentSearch.setVisible(true);
                     cbbTinhTrang.setVisible(true);
                     txtThongTin2.setVisible(false);
                 }else{
+                	pnContentSearch.setVisible(false);
                     cbbTinhTrang.setVisible(false);
                     txtThongTin2.setVisible(true);
 
@@ -124,12 +166,11 @@ public class HandleView extends javax.swing.JPanel {
         });
         
         cbbTinhTrang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"Chưa xử lý", "Đã xử lý" }));
-        cbbTinhTrang.setPreferredSize(new Dimension(200, 30));
 
-        btnXoa2.setBackground(new java.awt.Color(126, 214, 223));
+        btnXoa2.setBackground(mainColor);
         btnXoa2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnXoa2.setForeground(new java.awt.Color(204, 0, 0));
-//        btnXoa2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/delete button.png"))); // NOI18N
+        btnXoa2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/delete button.png"))); // NOI18N
         btnXoa2.setText("Xóa");
         btnXoa2.setBorderPainted(false);
         btnXoa2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -148,7 +189,7 @@ public class HandleView extends javax.swing.JPanel {
 
         btnLamMoi2.setBackground(new java.awt.Color(126, 214, 223));
         btnLamMoi2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-//        btnLamMoi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
+        btnLamMoi2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/Refresh_icon.png"))); // NOI18N
         btnLamMoi2.setBorderPainted(false);
         btnLamMoi2.addActionListener(new ActionListener() {
 		@Override
@@ -211,7 +252,7 @@ public class HandleView extends javax.swing.JPanel {
 
         btnTimKiem2.setBackground(new java.awt.Color(126, 214, 223));
         btnTimKiem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-//        btnTimKiem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/search icon.png"))); // NOI18N
+        btnTimKiem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/search icon.png"))); // NOI18N
         btnTimKiem2.setText("Tìm Kiếm");
         btnTimKiem2.setBorderPainted(false);
         btnTimKiem2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -259,10 +300,10 @@ public class HandleView extends javax.swing.JPanel {
             }
         });
 
-        btnSua2.setBackground(new java.awt.Color(126, 214, 223));
+        btnSua2.setBackground(mainColor);
         btnSua2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnSua2.setForeground(new java.awt.Color(0, 0, 153));
-//        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
+        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
         btnSua2.setText("Sửa");
         btnSua2.setBorderPainted(false);
         btnSua2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -282,10 +323,10 @@ public class HandleView extends javax.swing.JPanel {
                 }
         });
         
-        btnXuLy2.setBackground(new java.awt.Color(126, 188, 223));
+        btnXuLy2.setBackground(mainColor);
         btnXuLy2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnXuLy2.setForeground(new java.awt.Color(130, 11, 153));
-//        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
+        btnSua2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/buttonDetails.png"))); // NOI18N
         btnXuLy2.setText("Xử lý");
         btnXuLy2.setBorderPainted(false);
         btnXuLy2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -307,10 +348,10 @@ public class HandleView extends javax.swing.JPanel {
                 }
         });
 
-        btnThem2.setBackground(new java.awt.Color(126, 214, 223));
+        btnThem2.setBackground(mainColor);
         btnThem2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnThem2.setForeground(new java.awt.Color(0, 153, 51));
-//        btnThem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/add button.png"))); // NOI18N
+        btnThem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/add button.png"))); // NOI18N
         btnThem2.setText("Thêm");
         btnThem2.setBorderPainted(false);
         btnThem2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -349,7 +390,7 @@ public class HandleView extends javax.swing.JPanel {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtThongTin2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbbTinhTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnContentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnTimKiem2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -361,7 +402,7 @@ public class HandleView extends javax.swing.JPanel {
                     .addComponent(jLabel6)
                     .addGap(18, 18, 18)
                     .addComponent(cbbTimKiem2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbbTinhTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnContentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(735, Short.MAX_VALUE)))
         );
         jPanel4Layout.setVerticalGroup(
@@ -389,7 +430,7 @@ public class HandleView extends javax.swing.JPanel {
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel6)
                         .addComponent(cbbTimKiem2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(cbbTinhTrang, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnContentSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(457, Short.MAX_VALUE)))
         );
 

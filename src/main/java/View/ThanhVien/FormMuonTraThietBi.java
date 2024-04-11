@@ -11,6 +11,7 @@ import Model.ThanhVienModel;
 import Model.ThietBiModel;
 import Model.ThongTinSdModel;
 import Model.XuLyModel;
+import View.Styles.Styles;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -32,6 +33,9 @@ import javax.swing.plaf.basic.ComboPopup;
  * @author phamv
  */
 public class FormMuonTraThietBi extends javax.swing.JDialog {
+	private Color mainColor = Color.decode("#dff9fb");
+	private Color tableColor= new java.awt.Color(126, 214, 223);
+	Styles style = new Styles();
     ThanhVienCTL tvCtl = new ThanhVienCTL();
     ThietBiCTL tbCtl = new ThietBiCTL();
     ThongTinSdCTL sdCtl = new ThongTinSdCTL();
@@ -48,12 +52,14 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
 //        super(parent, modal);
         initComponents();
         initMyComponents();
+        jpContent.setBackground(Color.white);
+        jpHeader.setBackground(Color.white);
         setVisible(true);
     }
 
     private void initMyComponents() {
         jlTitle.setFont(sgUI15b); // NOI18N
-        jlTitle.setForeground(new Color(255, 255, 255));
+        
 
         jlThanhVien.setFont(sgUI13b); // NOI18N
 
@@ -155,7 +161,7 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
         btnHuy = new javax.swing.JButton();
 
 
-        jpHeader.setBackground(new java.awt.Color(15, 145, 232));
+        jpHeader.setBackground(mainColor);
         jpHeader.setPreferredSize(new java.awt.Dimension(400, 50));
         jpHeader.setLayout(new java.awt.BorderLayout());
 

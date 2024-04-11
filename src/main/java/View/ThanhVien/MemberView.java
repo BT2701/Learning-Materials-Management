@@ -6,6 +6,7 @@ import Controller.XuLyCTL;
 import Model.ThanhVienModel;
 import Model.ThongTinSdModel;
 import Model.XuLyModel;
+import View.Styles.Styles;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -40,6 +41,9 @@ import javax.swing.table.TableRowSorter;
  */
 public class MemberView extends javax.swing.JPanel {
 
+	private Color mainColor = Color.decode("#dff9fb");
+	private Color tableColor= new java.awt.Color(126, 214, 223);
+	Styles style = new Styles();
     ThanhVienCTL tvCtl = new ThanhVienCTL();
     DefaultTableModel model;
     /**
@@ -56,7 +60,6 @@ public class MemberView extends javax.swing.JPanel {
     //ĐÓ LÀ LÍ DO CÓ FUNCTION NÀY
     private void initMyComponents(){
         JLHeader.setFont(fontTittle); 
-        JLHeader.setForeground(new java.awt.Color(255, 255, 255));
         
         txtTimKiem.setFont(sgUI13p);
         txtTimKiem.setForeground(texfieldColor);
@@ -83,8 +86,8 @@ public class MemberView extends javax.swing.JPanel {
         JTableHeader header = jTable2.getTableHeader();
         header.setPreferredSize(new java.awt.Dimension(header.getWidth(), 30)); // Customize the header height here
         header.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 13)); // Customize the font here
-        header.setBackground(new Color(15, 145, 232));
-        header.setForeground(new Color(255, 255, 255)); // Set the text color here
+        header.setBackground(tableColor);
+    
         
         btnThem.setFont(sgUI13b);
         btnThem.setFocusPainted(false);
@@ -167,12 +170,12 @@ public class MemberView extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(225, 500));
         setName("JFQLTV"); // NOI18N
 
-        JPHeader.setBackground(new java.awt.Color(15, 145, 232));
+        JPHeader.setBackground(mainColor);
         JPHeader.setPreferredSize(new java.awt.Dimension(300, 80));
         JPHeader.setLayout(new java.awt.BorderLayout());
 
         JLHeader.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        JLHeader.setForeground(new java.awt.Color(255, 255, 255));
+        
         JLHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         JLHeader.setText("Quản Lý Thành Viên");
         JLHeader.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -197,7 +200,7 @@ public class MemberView extends javax.swing.JPanel {
             }
         });
 
-        btnTimKiem.setBackground(new java.awt.Color(15, 145, 232));
+        btnTimKiem.setBackground(mainColor);
         btnTimKiem.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnTimKiem.setForeground(new java.awt.Color(255, 255, 255));
         btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/search_icon.png"))); // NOI18N

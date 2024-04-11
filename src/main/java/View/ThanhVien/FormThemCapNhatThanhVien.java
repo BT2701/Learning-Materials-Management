@@ -27,12 +27,16 @@ import javax.swing.plaf.basic.ComboPopup;
 
 import Controller.ThanhVienCTL;
 import Model.ThanhVienModel;
+import View.Styles.Styles;
 
 /**
  *
  * @author phamv
  */
 public class FormThemCapNhatThanhVien extends JDialog {
+	private Color mainColor = Color.decode("#dff9fb");
+	private Color tableColor= new java.awt.Color(126, 214, 223);
+	Styles style = new Styles();
     ThanhVienCTL tvCtl = new ThanhVienCTL();
     ThanhVienModel oldThanhVien = null;
     private String[] nganhList = {"", "Giáo dục tiểu học", "Quản trị kinh doanh", "Quản lý giáo ", "Khoa học máy tính", "Khoa học dữ liệu", "Khoa học môi trường", "Khoa học xã hội"};
@@ -55,6 +59,8 @@ public class FormThemCapNhatThanhVien extends JDialog {
         initComponents();
         initMyComponents(titleForm);
         changeComponentForDiffForm(titleForm);
+        content.setBackground(Color.white);
+        header.setBackground(Color.white);
         setVisible(true);
        
     }
@@ -146,10 +152,10 @@ public class FormThemCapNhatThanhVien extends JDialog {
         lbThanhVien.setVisible(false);
         txtSdt.setPreferredSize(new Dimension(200, 30));
         txtSdt.setFont(sgUI13p);
+        txtSdt.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         // txtSdt.setBorder(BorderFactory.createCompoundBorder(borderTxt, new
         // EmptyBorder(0, 3, 0, 3)));
-        txtSdt.setForeground(Color.black);
-        
+       
         btnXacNhan.setFont(sgUI13b);
         btnXacNhan.setFocusPainted(false);
         btnXacNhan.setBorderPainted(false);
@@ -267,16 +273,19 @@ public class FormThemCapNhatThanhVien extends JDialog {
         txtHoTen.setFont(sgUI13p);
         txtHoTen.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtHoTen.setForeground(Color.black);
+        txtHoTen.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
 
         txtMaTV.setPreferredSize(new Dimension(200, 30));
         txtMaTV.setFont(sgUI13p);
         txtMaTV.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtMaTV.setForeground(Color.black);
+        txtMaTV.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         
         txtSdt.setPreferredSize(new Dimension(200, 30));
         txtSdt.setFont(sgUI13p);
         txtSdt.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtSdt.setForeground(Color.black);
+        txtSdt.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         
         txtThanhVien.setPreferredSize(new Dimension(200, 30));
         txtThanhVien.setFont(sgUI13p);
@@ -341,8 +350,10 @@ public class FormThemCapNhatThanhVien extends JDialog {
     private void initComponents() {
 
         header = new JPanel();
+        header.setBackground(Color.white);
         title = new JLabel();
         content = new JPanel();
+        content.setBackground(Color.white);
         lbHoTen = new JLabel();
         lbMaTV = new JLabel();
         lbKhoa = new JLabel();
@@ -362,12 +373,12 @@ public class FormThemCapNhatThanhVien extends JDialog {
 
         
 
-        header.setBackground(new Color(15, 145, 232));
+        header.setBackground(mainColor);
         header.setPreferredSize(new Dimension(400, 50));
         header.setLayout(new BorderLayout());
 
         title.setFont(new Font("Segoe UI", 1, 13)); // NOI18N
-        title.setForeground(new Color(255, 255, 255));
+        
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setText("title");
         title.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -517,6 +528,7 @@ public class FormThemCapNhatThanhVien extends JDialog {
 
         
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnHuy;

@@ -10,6 +10,7 @@ import Controller.ThongTinSdCTL;
 import Model.ThanhVienModel;
 import Model.ThietBiModel;
 import Model.ThongTinSdModel;
+import View.Styles.Styles;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,6 +33,9 @@ import javax.swing.plaf.basic.ComboPopup;
  * @author phamv
  */
 public class FormKhuVucHocTap extends javax.swing.JDialog {
+	private Color mainColor = Color.decode("#dff9fb");
+	private Color tableColor= new java.awt.Color(126, 214, 223);
+	Styles style = new Styles();
     ThanhVienCTL tvCtl = new ThanhVienCTL();
     ThietBiCTL tbCtl = new ThietBiCTL();
     ThongTinSdCTL sdCtl = new ThongTinSdCTL();
@@ -49,7 +53,8 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         initComponents();
         intiMyComponents();
         changeValueOfTextfileWhenMaTVChange();
-
+        jpContent.setBackground(Color.white);
+        jpHeader.setBackground(Color.white);
         setVisible(true);
     }
     
@@ -162,13 +167,13 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         cbNganh = new javax.swing.JTextField();
 
 
-        jpHeader.setBackground(new java.awt.Color(15, 145, 232));
+        jpHeader.setBackground(mainColor);
         jpHeader.setMinimumSize(new java.awt.Dimension(100, 50));
         jpHeader.setPreferredSize(new java.awt.Dimension(400, 50));
         jpHeader.setLayout(new java.awt.BorderLayout());
 
         jlTitle.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        jlTitle.setForeground(new java.awt.Color(255, 255, 255));
+        
         jlTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlTitle.setText("Khu Vực Học Tập");
         jlTitle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

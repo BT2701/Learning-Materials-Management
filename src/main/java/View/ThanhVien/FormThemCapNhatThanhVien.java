@@ -27,12 +27,16 @@ import javax.swing.plaf.basic.ComboPopup;
 
 import Controller.ThanhVienCTL;
 import Model.ThanhVienModel;
+import View.Styles.Styles;
 
 /**
  *
  * @author phamv
  */
 public class FormThemCapNhatThanhVien extends JDialog {
+	private Color mainColor = Color.decode("#dff9fb");
+	private Color tableColor= new java.awt.Color(126, 214, 223);
+	Styles style = new Styles();
     ThanhVienCTL tvCtl = new ThanhVienCTL();
     ThanhVienModel oldThanhVien = null;
     private String[] nganhList = {"", "Giáo dục tiểu học", "Quản trị kinh doanh", "Quản lý giáo ", "Khoa học máy tính", "Khoa học dữ liệu", "Khoa học môi trường", "Khoa học xã hội"};
@@ -148,8 +152,7 @@ public class FormThemCapNhatThanhVien extends JDialog {
         txtSdt.setFont(sgUI13p);
         // txtSdt.setBorder(BorderFactory.createCompoundBorder(borderTxt, new
         // EmptyBorder(0, 3, 0, 3)));
-        txtSdt.setForeground(Color.black);
-        
+       
         btnXacNhan.setFont(sgUI13b);
         btnXacNhan.setFocusPainted(false);
         btnXacNhan.setBorderPainted(false);
@@ -362,12 +365,12 @@ public class FormThemCapNhatThanhVien extends JDialog {
 
         
 
-        header.setBackground(new Color(15, 145, 232));
+        header.setBackground(mainColor);
         header.setPreferredSize(new Dimension(400, 50));
         header.setLayout(new BorderLayout());
 
         title.setFont(new Font("Segoe UI", 1, 13)); // NOI18N
-        title.setForeground(new Color(255, 255, 255));
+        
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setText("title");
         title.setHorizontalTextPosition(SwingConstants.CENTER);

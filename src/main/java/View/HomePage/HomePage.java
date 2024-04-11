@@ -42,6 +42,8 @@ public class HomePage extends JFrame {
 	private JButton btnLogin;
 
 //	styles 
+	private String btnHover= "#95afc0";
+	private String btnExit= "#dff9fb";
 	private Font sgUI15 = new Font("Segoe UI", Font.PLAIN, 15);
 	private Font sgUI15b = new Font("Segoe UI", Font.BOLD, 15);
 	private Font sgUI16b = new Font("Segoe UI", Font.BOLD, 16);
@@ -154,7 +156,7 @@ public class HomePage extends JFrame {
 		pnWestContent = new JPanel();
 		pnWestContent.setLayout(new BoxLayout(pnWestContent, BoxLayout.Y_AXIS));
 		listPanel = new ArrayList<>();
-		mouseClicked=new ArrayList<>();
+		mouseClicked = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			pnWestContent.add(listbtn.get(i));
 			mouseClicked.add(false);
@@ -209,9 +211,9 @@ public class HomePage extends JFrame {
 			listbtn.get(i).setBackground(mainColor);
 			listbtn.get(i).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			pressedBtn();
-			if (mouseClicked.get(i)==false) {
-				hoverBtn(listbtn.get(i), 0);
-			}
+//			if (mouseClicked.get(i) == false) {
+//				hoverBtn(listbtn.get(i), 0);
+//			}
 
 		}
 
@@ -330,28 +332,95 @@ public class HomePage extends JFrame {
 		}
 	}
 
-	public void pressedBtn() {
-		for (int i = 0; i < listbtn.size(); i++) {
-			final int index = i;
-			listbtn.get(index).addActionListener(new ActionListener() {
+//	public void pressedBtn() {
+//		for (int i = 0; i < listbtn.size(); i++) {
+//			final int index = i;
+//			listbtn.get(index).addActionListener(new ActionListener() {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					// TODO Auto-generated method stub
+//
+//					listbtn.get(index).setBackground(Color.decode("#95afc0"));
+//					mouseClicked.set(index, true);
+//					setDisplayContent(index + 1);
+//					for (int j = 0; j < listbtn.size(); j++) {
+//						if (j != index) {
+//							listbtn.get(index).setBackground(mainColor);
+//						}
+//					}
+//
+//				}
+//			});
+//		}
+//
+//	}
 
+	public void settingColor(JButton x, String colorLight, String colorDark, String colorPos) {
+		setBackground();
+
+		run(x, Color.decode(colorLight));
+		x.setBackground(Color.decode(colorPos));
+		revalidate();
+		repaint();
+	}
+
+	public synchronized void run(JButton btn, Color color) {
+		new Thread(() -> {
+			btn.setLayout(null);
+			JPanel pn = new JPanel();
+			pn.setBackground(color);
+			JPanel pn1 = new JPanel();
+			pn1.setBackground(color);
+			btn.add(pn);
+			btn.add(pn1);
+			for (int i = 0; i <= btn.getWidth() / 2; i++) {
+				pn.setBounds(0, 0, btn.getWidth() / 2 - i, btn.getHeight());
+				pn1.setBounds(btn.getWidth() / 2 + i, 0, btn.getWidth() / 2, btn.getHeight());
+				repaint();
+				try {
+
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+				}
+			}
+			btn.remove(pn);
+			btn.remove(pn1);
+		}).start();
+	}
+
+	public void setBackground() {
+		for (JButton x : listbtn) {
+
+			x.setBackground(Color.decode(btnExit));
+
+		}
+	}
+
+	public void pressedBtn() {
+		for (JButton x : listbtn) {
+			x.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-
-					listbtn.get(index).setBackground(Color.decode("#95afc0"));
-					mouseClicked.set(index, true);
-					setDisplayContent(index + 1);
-					for (int j=0;j<listbtn.size();j++) {
-						if(j!=index) {
-							listbtn.get(index).setBackground(mainColor);
-						}
-					}
-
+					if (e.getSource() == listbtn.get(0)) {
+						settingColor(x, btnExit, "#FFFFFF", btnHover);
+						setDisplayContent(1);
+					} else if (e.getSource() == listbtn.get(1)) {
+						settingColor(x, btnExit, "#FFFFFF", btnHover);
+						setDisplayContent(2);
+					} else if (e.getSource() == listbtn.get(2)) {
+						setDisplayContent(3);
+						settingColor(x, btnExit, "#FFFFFF", btnHover);
+					} else if (e.getSource() == listbtn.get(3)) {
+						setDisplayContent(4);
+						settingColor(x, btnExit, "#FFFFFF", btnHover);
+					} else if (e.getSource() == listbtn.get(4)) {
+						setDisplayContent(4);
+						settingColor(x, btnExit, "#FFFFFF", btnHover);
+					} 
 				}
 			});
 		}
-
 	}
 
 }

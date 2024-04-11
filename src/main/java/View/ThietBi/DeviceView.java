@@ -17,6 +17,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
 import javax.swing.plaf.basic.ComboPopup;
+
+import View.Styles.Styles;
 import View.ThietBi.CustomTableRender;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -52,6 +54,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class DeviceView extends javax.swing.JPanel {
 
+	private Color mainColor = Color.decode("#dff9fb");
+	private Color tableColor= new java.awt.Color(126, 214, 223);
+	Styles style = new Styles();
 	// FORMAT
 	private Font sgUI15 = new Font("Segoe UI", Font.BOLD, 15);
 	private Font sgUI15p = new Font("Segoe UI", Font.PLAIN, 15);
@@ -314,7 +319,7 @@ public class DeviceView extends javax.swing.JPanel {
 		jDialogTXS.getContentPane()
 				.setLayout(new javax.swing.BoxLayout(jDialogTXS.getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-		jpnDialogHeader.setBackground(new java.awt.Color(102, 204, 255));
+		jpnDialogHeader.setBackground(mainColor);
 		jpnDialogHeader.setLayout(new java.awt.BorderLayout());
 
 		jlbDialogHeader.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -417,7 +422,7 @@ public class DeviceView extends javax.swing.JPanel {
 				.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		btnXacNhan.setText("Xác nhận");
 		btnXacNhan.setFont(buttonFont);
-		btnXacNhan.setBackground(Color.decode("#ebf2fc"));
+		btnXacNhan.setBackground(tableColor);
 		btnXacNhan.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnXacNhan.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnXacNhan.addActionListener(new java.awt.event.ActionListener() {
@@ -430,7 +435,7 @@ public class DeviceView extends javax.swing.JPanel {
 		btnHuy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/images/cancel button.png"))); // NOI18N
 		btnHuy.setText("Hủy");
 		btnHuy.setFont(buttonFont);
-		btnHuy.setBackground(Color.decode("#ebf2fc"));
+		btnHuy.setBackground(tableColor);
 		btnHuy.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnHuy.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnHuy.addActionListener(new java.awt.event.ActionListener() {
@@ -445,7 +450,7 @@ public class DeviceView extends javax.swing.JPanel {
 		setBackground(new java.awt.Color(255, 255, 255));
 		setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.Y_AXIS));
 
-		jpnHeader.setBackground(new java.awt.Color(153, 204, 255));
+		jpnHeader.setBackground(mainColor);
 		jpnHeader.setPreferredSize(new java.awt.Dimension(993, 50));
 		jpnHeader.setLayout(new java.awt.BorderLayout());
 
@@ -525,7 +530,7 @@ public class DeviceView extends javax.swing.JPanel {
 		Font headerFont = new Font("Segoe UI", Font.BOLD, 15);
 		jTableThietBi.getTableHeader().setFont(headerFont);
 		jTableThietBi.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		jTableThietBi.getTableHeader().setBackground(Color.decode(colorTableCode));
+		jTableThietBi.getTableHeader().setBackground(tableColor);
 
 		// jTableThietBi.getColumnModel().getColumn(0).setPreferredWidth(50);
 		jScrollTable.setViewportView(jTableThietBi);
@@ -544,7 +549,7 @@ public class DeviceView extends javax.swing.JPanel {
 				.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		btnThem.setText("Thêm");
 		btnThem.setFont(buttonFont);
-		btnThem.setBackground(Color.decode("#ebf2fc"));
+		btnThem.setBackground(tableColor);
 		btnThem.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnThem.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnThem.addActionListener(new java.awt.event.ActionListener() {
@@ -558,7 +563,7 @@ public class DeviceView extends javax.swing.JPanel {
 				.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		btnSua.setText("Sửa");
 		btnSua.setFont(buttonFont);
-		btnSua.setBackground(Color.decode("#ebf2fc"));
+		btnSua.setBackground(tableColor);
 		btnSua.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnSua.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnSua.addActionListener(new java.awt.event.ActionListener() {
@@ -572,7 +577,7 @@ public class DeviceView extends javax.swing.JPanel {
 				.getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		btnXoa.setText("Xóa");
 		btnXoa.setFont(buttonFont);
-		btnXoa.setBackground(Color.decode("#ebf2fc"));
+		btnXoa.setBackground(tableColor);
 		btnXoa.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnXoa.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnXoa.addActionListener(new java.awt.event.ActionListener() {
@@ -586,7 +591,7 @@ public class DeviceView extends javax.swing.JPanel {
 				.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		btnXoaNhieu.setText("Xóa nhiều");
 		btnXoaNhieu.setFont(buttonFont);
-		btnXoaNhieu.setBackground(Color.decode("#ebf2fc"));
+		btnXoaNhieu.setBackground(tableColor);
 		btnXoaNhieu.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnXoaNhieu.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnXoaNhieu.addActionListener(new java.awt.event.ActionListener() {
@@ -600,7 +605,7 @@ public class DeviceView extends javax.swing.JPanel {
 				.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		btnNhapExcel.setText("Nhập file Excel");
 		btnNhapExcel.setFont(buttonFont);
-		btnNhapExcel.setBackground(Color.decode("#ebf2fc"));
+		btnNhapExcel.setBackground(tableColor);
 		btnNhapExcel.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnNhapExcel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNhapExcel.addActionListener(new java.awt.event.ActionListener() {
@@ -614,7 +619,7 @@ public class DeviceView extends javax.swing.JPanel {
 				.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 		btnRefresh.setText("Refresh");
 		btnRefresh.setFont(buttonFont);
-		btnRefresh.setBackground(Color.decode("#ebf2fc"));
+		btnRefresh.setBackground(tableColor);
 		btnRefresh.setBorder(new EmptyBorder(8, 12, 8, 12));
 		btnRefresh.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRefresh.addActionListener(new java.awt.event.ActionListener() {

@@ -5,6 +5,7 @@ import Controller.ThanhVienCTL;
 import Controller.XuLyCTL;
 import Model.ThanhVienModel;
 import Model.XuLyModel;
+import View.Styles.Styles;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -32,6 +33,9 @@ import javax.swing.plaf.basic.ComboPopup;
  * @author phamv
  */
 public class FormCanhBaoViPham extends javax.swing.JDialog {
+	private Color mainColor = Color.decode("#dff9fb");
+	private Color tableColor= new java.awt.Color(126, 214, 223);
+	Styles style = new Styles();
     ThanhVienCTL tvCtl = new ThanhVienCTL();
     XuLyCTL xuLyCTL = new XuLyCTL();
     String[] viPhamList = {"Khóa thẻ 1 tháng", "Khóa thẻ 2 tháng", "Bồi thường mất tài sản", "Phạt tiền 10$", "Hủy thẻ"};
@@ -54,7 +58,7 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
     
     private void initMyComponents(){
         jlTitle.setFont(sgUI15b); // NOI18N
-        jlTitle.setForeground(new Color(255, 255, 255));
+        
         
         jlThanhVien.setFont(sgUI13b); // NOI18N
         
@@ -164,7 +168,7 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         btnXacNhan = new javax.swing.JButton();
         btnLamMoi = new javax.swing.JButton();
 
-        jpHeader.setBackground(new java.awt.Color(15, 145, 232));
+        jpHeader.setBackground(mainColor);
         jpHeader.setPreferredSize(new java.awt.Dimension(400, 50));
         jpHeader.setLayout(new java.awt.BorderLayout());
 

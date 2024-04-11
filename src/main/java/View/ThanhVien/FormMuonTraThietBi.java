@@ -52,6 +52,8 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
 //        super(parent, modal);
         initComponents();
         initMyComponents();
+        jpContent.setBackground(Color.white);
+        jpHeader.setBackground(Color.white);
         setVisible(true);
     }
 

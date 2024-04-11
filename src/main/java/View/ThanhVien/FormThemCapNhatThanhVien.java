@@ -59,6 +59,8 @@ public class FormThemCapNhatThanhVien extends JDialog {
         initComponents();
         initMyComponents(titleForm);
         changeComponentForDiffForm(titleForm);
+        content.setBackground(Color.white);
+        header.setBackground(Color.white);
         setVisible(true);
        
     }
@@ -150,6 +152,7 @@ public class FormThemCapNhatThanhVien extends JDialog {
         lbThanhVien.setVisible(false);
         txtSdt.setPreferredSize(new Dimension(200, 30));
         txtSdt.setFont(sgUI13p);
+        txtSdt.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         // txtSdt.setBorder(BorderFactory.createCompoundBorder(borderTxt, new
         // EmptyBorder(0, 3, 0, 3)));
        
@@ -270,16 +273,19 @@ public class FormThemCapNhatThanhVien extends JDialog {
         txtHoTen.setFont(sgUI13p);
         txtHoTen.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtHoTen.setForeground(Color.black);
+        txtHoTen.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
 
         txtMaTV.setPreferredSize(new Dimension(200, 30));
         txtMaTV.setFont(sgUI13p);
         txtMaTV.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtMaTV.setForeground(Color.black);
+        txtMaTV.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         
         txtSdt.setPreferredSize(new Dimension(200, 30));
         txtSdt.setFont(sgUI13p);
         txtSdt.setBorder(BorderFactory.createCompoundBorder(borderTxt, new EmptyBorder(0, 3, 0, 3)));
         txtSdt.setForeground(Color.black);
+        txtSdt.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         
         txtThanhVien.setPreferredSize(new Dimension(200, 30));
         txtThanhVien.setFont(sgUI13p);
@@ -344,8 +350,10 @@ public class FormThemCapNhatThanhVien extends JDialog {
     private void initComponents() {
 
         header = new JPanel();
+        header.setBackground(Color.white);
         title = new JLabel();
         content = new JPanel();
+        content.setBackground(Color.white);
         lbHoTen = new JLabel();
         lbMaTV = new JLabel();
         lbKhoa = new JLabel();
@@ -520,6 +528,7 @@ public class FormThemCapNhatThanhVien extends JDialog {
 
         
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JButton btnHuy;

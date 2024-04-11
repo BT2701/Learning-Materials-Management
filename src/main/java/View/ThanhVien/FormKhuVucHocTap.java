@@ -53,7 +53,8 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         initComponents();
         intiMyComponents();
         changeValueOfTextfileWhenMaTVChange();
-
+        jpContent.setBackground(Color.white);
+        jpHeader.setBackground(Color.white);
         setVisible(true);
     }
     

@@ -78,7 +78,7 @@ public class HomePage extends JFrame {
 
 		lbProcessFunc = new JLabel();
 
-		lbProcessHandle = new JLabel();
+		lbProcessHandle = new JLabel("/");
 
 		lbProcessHome = new JLabel("Home");
 
@@ -149,8 +149,9 @@ public class HomePage extends JFrame {
 		pnNorthProcess = new JPanel();
 		pnNorthProcess.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		pnNorthProcess.add(lbProcessHome);
-		pnNorthProcess.add(lbProcessFunc);
 		pnNorthProcess.add(lbProcessHandle);
+		pnNorthProcess.add(lbProcessFunc);
+		
 
 //		content of west panel
 		pnWestContent = new JPanel();
@@ -228,7 +229,7 @@ public class HomePage extends JFrame {
 		lbTittle.setFont(tNR18b);
 		lbProcessFunc.setFont(sgUI15);
 		lbProcessFunc.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		lbProcessHandle.setFont(sgUI15);
+		lbProcessHandle.setFont(sgUI15b);
 		lbProcessHandle.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lbProcessHome.setFont(sgUI15b);
 		lbProcessHome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -316,18 +317,23 @@ public class HomePage extends JFrame {
 				JPanel a = new PanelHome(getWidth(), getHeight());
 				pnCenterContent.setLayout(new BorderLayout());
 				pnCenterContent.add(a, BorderLayout.CENTER);
+				lbProcessFunc.setText("Trang chủ");
 				break;
 			case 2:
 				pnCenterContent.add(pnMember, BorderLayout.CENTER);
+				lbProcessFunc.setText("Quản lý thành viên");
 				break;
 			case 5:
 				pnCenterContent.add(pnStatistic, BorderLayout.CENTER);
+				lbProcessFunc.setText("Thống kê");
 				break;
 			case 4:
 				pnCenterContent.add(pnHandle, BorderLayout.CENTER);
+				lbProcessFunc.setText("Xử lý vi phạm");
 				break;
 			case 3:
 				pnCenterContent.add(pnDevice, BorderLayout.CENTER);
+				lbProcessFunc.setText("Quản lý thiết bị");
 				break;
 		}
 	}
@@ -415,7 +421,7 @@ public class HomePage extends JFrame {
 						setDisplayContent(4);
 						settingColor(x, btnExit, "#FFFFFF", btnHover);
 					} else if (e.getSource() == listbtn.get(4)) {
-						setDisplayContent(4);
+						setDisplayContent(5);
 						settingColor(x, btnExit, "#FFFFFF", btnHover);
 					} 
 				}

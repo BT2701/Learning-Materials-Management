@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -52,6 +53,8 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
 //        super(parent, modal);
         initComponents();
         initMyComponents();
+        jpContent.setBackground(Color.white);
+        jpHeader.setBackground(Color.white);
         setVisible(true);
     }
 
@@ -89,6 +92,7 @@ public class FormCanhBaoViPham extends javax.swing.JDialog {
         txtSoTien.setBackground(Color.white);
         txtSoTien.setFont(sgUI13b);
         txtSoTien.setPreferredSize(new Dimension(100, 30));
+        txtSoTien.setBorder(BorderFactory.createCompoundBorder(style.getBorderTxt(), new EmptyBorder(0, 3, 0, 3)));
         
         btnXacNhan.setFont(sgUI13b);
         btnXacNhan.setFocusPainted(false);

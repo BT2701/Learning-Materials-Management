@@ -107,9 +107,9 @@ public class HomePage extends JFrame {
 		btnHomePage = new JButton("Trang chủ");
 		btnHomePage.setIcon(homeicon);
 
-		ImageIcon loginicon = new ImageIcon(new ImageIcon(getClass().getResource("/View/images/login.png")).getImage()
+		ImageIcon loginicon = new ImageIcon(new ImageIcon(getClass().getResource("/View/images/logout.png")).getImage()
 				.getScaledInstance(30, 30, Image.SCALE_SMOOTH));
-		btnLogin = new JButton("Đăng nhập");
+		btnLogin = new JButton("Đăng xuất");
 		btnLogin.setIcon(loginicon);
 
 		ImageIcon membericon = new ImageIcon(new ImageIcon(getClass().getResource("/View/images/member.png")).getImage()

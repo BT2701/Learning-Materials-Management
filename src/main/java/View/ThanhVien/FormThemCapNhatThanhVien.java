@@ -259,9 +259,14 @@ public class FormThemCapNhatThanhVien extends JDialog {
         btnHuy.setFont(sgUI13b);
         btnHuy.setFocusPainted(false);
         btnHuy.setBorderPainted(false);
-        btnHuy.setPreferredSize(new Dimension(100, 23));
+        btnHuy.setPreferredSize(new Dimension(150, 23));
         btnHuy.setBackground(Color.decode("#7ed6df"));
-        
+        btnHuy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+            }
+        });
         
         btnLamMoi.setFont(sgUI13b);
         btnLamMoi.setFocusPainted(false);
@@ -410,7 +415,7 @@ public class FormThemCapNhatThanhVien extends JDialog {
 
         generateLast2DigitsOfYearFrom2010ToNow();
 
-        btnHuy.setIcon(new ImageIcon(getClass().getResource("/View/images/comeback_icon.png"))); // NOI18N
+//        btnHuy.setIcon(new ImageIcon(getClass().getResource("/View/images/comeback_icon.png"))); // NOI18N
         btnHuy.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnHuy.setLabel("Hủy");
 

@@ -8,11 +8,7 @@ import Model.ThongTinSdModel;
 import Model.XuLyModel;
 import View.Styles.Styles;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -20,6 +16,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -80,8 +78,12 @@ public class MemberView extends javax.swing.JPanel {
         btnTimKiem.setFocusPainted(false);
         btnTimKiem.setBorderPainted(false);
         btnTimKiem.setBackground(Color.decode("#7ed6df"));
-       
-        
+
+        btnXemChiTiet.setFont(sgUI13b); // NOI18N
+        btnXemChiTiet.setForeground(Color.black);
+        btnXemChiTiet.setFocusPainted(false);
+        btnXemChiTiet.setBorderPainted(false);
+        btnXemChiTiet.setBackground(Color.decode("#7ed6df"));
         
         JTableHeader header = jTable2.getTableHeader();
         header.setPreferredSize(new java.awt.Dimension(header.getWidth(), 30)); // Customize the header height here
@@ -145,7 +147,7 @@ public class MemberView extends javax.swing.JPanel {
             model.addRow(row);
         }
     }
-  
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -157,6 +159,7 @@ public class MemberView extends javax.swing.JPanel {
         JPContainSearchOperation = new javax.swing.JPanel();
         txtTimKiem = new javax.swing.JTextField();
         btnTimKiem = new javax.swing.JButton();
+        btnXemChiTiet = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         JPContainOperation = new javax.swing.JPanel();
@@ -221,12 +224,58 @@ public class MemberView extends javax.swing.JPanel {
             }
         });
 
+        btnXemChiTiet.setBackground(mainColor);
+        btnXemChiTiet.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnXemChiTiet.setForeground(new java.awt.Color(255, 255, 255));
+        btnXemChiTiet.setText("Xem chi tiết");
+        btnXemChiTiet.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        btnXemChiTiet.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnXemChiTiet.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = jTable2.getSelectedRow();
+                if(selectedRow<0) {
+                	return;
+                }
+                int maTV = (int) jTable2.getValueAt(selectedRow, 0);
+                String hoTen = (String) jTable2.getValueAt(selectedRow, 1);
+                String khoa = (String) jTable2.getValueAt(selectedRow, 2);
+                String nganh = (String) jTable2.getValueAt(selectedRow, 3);
+                String sdt = (String) jTable2.getValueAt(selectedRow, 4);
+
+                ThongTinSdCTL thongTinSdCTL = new ThongTinSdCTL();
+                ArrayList<ThongTinSdModel> listTB = (ArrayList<ThongTinSdModel>) thongTinSdCTL.getList().stream()
+                        .filter(ttsd -> ttsd.getThanhVien().getMaTV() == maTV && ttsd.getTgMuon() != null && ttsd.getTgTra() == null)
+                        .collect(Collectors.toList());
+                String thietBiDaMuon = !listTB.isEmpty()
+                        ? listTB.stream().map(t -> t.getThietBi().getTenTB()).collect(Collectors.joining(", "))
+                        : "Không có";
+
+                XuLyCTL xlCtl = new XuLyCTL();
+                ArrayList<XuLyModel> listXL = (ArrayList<XuLyModel>) xlCtl.getList().stream()
+                        .filter(xl -> xl.getThanhVien().getMaTV() == maTV && xl.getTrangThaiXL() == 1)
+                        .collect(Collectors.toList());
+                String xuLyDaCo = !listXL.isEmpty()
+                        ? listXL.stream().map(XuLyModel::getHinhThucXL).collect(Collectors.joining(", "))
+                        : "Không có";
+
+                ThanhVienCTL tvCtl = new ThanhVienCTL();
+                ThanhVienModel tv = tvCtl.getModel(maTV);
+                String email = !tv.getEmail().isEmpty() ? tv.getEmail() : "Chưa tạo";
+                String password = !tv.getPassword().isEmpty() ? tv.getPassword() : "Chưa tạo";
+
+                new FormXemChiTiet("Xem chi tiết thành viên", Integer.toString(maTV), hoTen, sdt, khoa, nganh, email, password, thietBiDaMuon, xuLyDaCo);
+            }
+        });
+
         javax.swing.GroupLayout JPContainSearchOperationLayout = new javax.swing.GroupLayout(JPContainSearchOperation);
         JPContainSearchOperation.setLayout(JPContainSearchOperationLayout);
         JPContainSearchOperationLayout.setHorizontalGroup(
             JPContainSearchOperationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(JPContainSearchOperationLayout.createSequentialGroup()
                 .addContainerGap(416, Short.MAX_VALUE)
+                .addComponent(btnXemChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79)
                 .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,6 +286,7 @@ public class MemberView extends javax.swing.JPanel {
             .addGroup(JPContainSearchOperationLayout.createSequentialGroup()
                 .addContainerGap(36, Short.MAX_VALUE)
                 .addGroup(JPContainSearchOperationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnXemChiTiet, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(36, Short.MAX_VALUE))
@@ -529,6 +579,7 @@ public class MemberView extends javax.swing.JPanel {
     private javax.swing.JButton btnMuonTraThietBi;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnTimKiem;
+    private javax.swing.JButton btnXemChiTiet;
     private javax.swing.JButton btnXoa;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;

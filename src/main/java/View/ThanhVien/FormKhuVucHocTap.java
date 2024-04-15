@@ -52,28 +52,43 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
 //        super(parent, modal);
         initComponents();
         intiMyComponents();
-        changeValueOfTextfileWhenMaTVChange();
+        changeValueOfTextfileWhenMaTVChange("");
         jpContent.setBackground(Color.white);
         jpHeader.setBackground(Color.white);
         setVisible(true);
     }
     
-    public void changeValueOfTextfileWhenMaTVChange() {
-        int id = Integer.parseInt((String) cbThanhVien.getSelectedItem());
-        ThanhVienModel thanhVienModel = tvCtl.getModel(id);
-        cbThanhVien.setSelectedItem(thanhVienModel.getMaTV());
+    public void changeValueOfTextfileWhenMaTVChange(String fill) {
+    	if(fill.equals("")) {
+    		txtHoTen.setText("");
+            txtHoTen.setEditable(false);
 
-        txtHoTen.setText(thanhVienModel.getHoTen());
-        txtHoTen.setEditable(false);
+            txtSdt.setText("");
+            txtSdt.setEditable(false);
 
-        txtSdt.setText(thanhVienModel.getSdt());
-        txtSdt.setEditable(false);
+            cbKhoa.setText("");
+            cbKhoa.setEditable(false);
 
-        cbKhoa.setText(thanhVienModel.getKhoa());
-        cbKhoa.setEditable(false);
+            cbNganh.setText("");
+            cbNganh.setEditable(false);
+    	}
+    	else {
+    		int id = Integer.parseInt((String) cbThanhVien.getText());
+            ThanhVienModel thanhVienModel = tvCtl.getModel(id);
+//            cbThanhVien.setSelectedItem(thanhVienModel.getMaTV());
 
-        cbNganh.setText(thanhVienModel.getNganh());
-        cbKhoa.setEditable(false);
+            txtHoTen.setText(thanhVienModel.getHoTen());
+            txtHoTen.setEditable(false);
+
+            txtSdt.setText(thanhVienModel.getSdt());
+            txtSdt.setEditable(false);
+
+            cbKhoa.setText(thanhVienModel.getKhoa());
+            cbKhoa.setEditable(false);
+
+            cbNganh.setText(thanhVienModel.getNganh());
+            cbNganh.setEditable(false);
+    	}
     }
 
     private void intiMyComponents(){
@@ -108,37 +123,47 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         btnLamMoi.setBackground(Color.decode("#7ed6df"));
         btnLamMoi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbThanhVien.setSelectedIndex(0);
+                cbThanhVien.setText("");
+                txtHoTen.setText("");
+                cbKhoa.setText("");
+                cbNganh.setText("");
+                txtSdt.setText("");
             }
         });
         
-        cbThanhVien.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
+        cbThanhVien.setBorder(new MatteBorder(2, 2, 2, 2, Color.decode("#EFEFEF")));
         cbThanhVien.setBackground(Color.white);
         cbThanhVien.setFont(sgUI13b);
         cbThanhVien.setPreferredSize(new Dimension(100, 30));
-        cbThanhVien.setUI(new BasicComboBoxUI() {
-            @Override
-            protected ComboPopup createPopup() {
-                BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
-                basicComboPopup.setBorder(lineCB);
-                return basicComboPopup;
-            }
-        });
+//        cbThanhVien.setUI(new BasicComboBoxUI() {
+//            @Override
+//            protected ComboPopup createPopup() {
+//                BasicComboPopup basicComboPopup = new BasicComboPopup(comboBox);
+//                basicComboPopup.setBorder(lineCB);
+//                return basicComboPopup;
+//            }
+//        });
         cbThanhVien.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                changeValueOfTextfileWhenMaTVChange();
+            	int id= Integer.parseInt(cbThanhVien.getText());
+            	if(tvCtl.getModel(id)==null) {
+            		cbThanhVien.setText("");
+            		changeValueOfTextfileWhenMaTVChange("");
+            		return;
+            	}
+                changeValueOfTextfileWhenMaTVChange("1");
             }
         });
 
         cbKhoa.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
         cbKhoa.setFont(sgUI13b);
-        cbNganh.setBackground(null);
+//        cbNganh.setBackground(null);
         cbKhoa.setPreferredSize(new Dimension(100, 30));
 
         cbNganh.setBorder(new MatteBorder(2, 2, 2, 0, Color.decode("#EFEFEF")));
         cbNganh.setFont(sgUI13b);
-        cbNganh.setBackground(null);
+//        cbNganh.setBackground(null);
         cbNganh.setPreferredSize(new Dimension(100, 30));
     }
     /**
@@ -162,7 +187,7 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         btnLamMoi = new javax.swing.JButton();
         txtHoTen = new javax.swing.JTextField();
         txtSdt = new javax.swing.JTextField();
-        cbThanhVien = new javax.swing.JComboBox<>();
+        cbThanhVien = new javax.swing.JTextField();
         cbKhoa = new javax.swing.JTextField();
         cbNganh = new javax.swing.JTextField();
 
@@ -207,7 +232,7 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
         String[] maTVArr = tvCtl.getList().stream()
                 .map(tv -> Integer.toString(tv.getMaTV()))
                 .toArray(String[]::new);
-        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(maTVArr));
+//        cbThanhVien.setModel(new javax.swing.DefaultComboBoxModel<>(maTVArr));
 
         javax.swing.GroupLayout jpContentLayout = new javax.swing.GroupLayout(jpContent);
         jpContent.setLayout(jpContentLayout);
@@ -280,7 +305,7 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
-        int maTV = Integer.parseInt(cbThanhVien.getSelectedItem().toString().split("-")[0]);
+        int maTV = Integer.parseInt(cbThanhVien.getText().toString().split("-")[0]);
 
         ThanhVienModel thanhVienModel = tvCtl.getModel(maTV);
         ThongTinSdModel thongTinSdModel = sdCtl.getModelByMaTVAndMaTB(maTV, -1);
@@ -334,7 +359,7 @@ public class FormKhuVucHocTap extends javax.swing.JDialog {
     private javax.swing.JButton btnXacNhan;
     private javax.swing.JTextField cbKhoa;
     private javax.swing.JTextField cbNganh;
-    private javax.swing.JComboBox<String> cbThanhVien;
+    private javax.swing.JTextField cbThanhVien;
     private javax.swing.JLabel jlHoTen;
     private javax.swing.JLabel jlKhoa;
     private javax.swing.JLabel jlNganh;

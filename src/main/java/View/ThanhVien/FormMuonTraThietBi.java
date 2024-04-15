@@ -277,6 +277,16 @@ public class FormMuonTraThietBi extends javax.swing.JDialog {
         ThietBiModel thietBiModel = tbCtl.getModel(maThietBi);
         ThongTinSdModel thongTinSdModel = sdCtl.getModelByMaTVAndMaTB(maTV, maThietBi);
 
+        ThongTinSdModel checkThietBiCoDuocSuDungChua = sdCtl.getList().stream()
+                .filter(ttsd -> (ttsd.getThietBi() != null && ttsd.getThietBi().getMaTB() == maThietBi) && ttsd.getTgMuon() != null && ttsd.getTgTra() == null)
+                .findFirst()
+                .orElse(null);
+
+        if(checkThietBiCoDuocSuDungChua != null) {
+            JOptionPane.showMessageDialog(FormMuonTraThietBi.this,  "Thiết bị này đã được mượn bởi thành viên khác!");
+            return;
+        }
+
         if(thongTinSdModel != null) {
             int id = thongTinSdModel.getMaTT();
             thongTinSdModel.setTgMuon(new Date());

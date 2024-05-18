@@ -38,7 +38,7 @@
     git clone https://github.com/BT2701/Learning-Materials-Management.git
     ```
 2. Import Database
-   `Open file LearningMaterialManagement/DATABASE/ql_thanhvien.sql in PhpMyAdmin (or other tool) and run file`
+   `Open file LearningMaterialManagement/DATABASE/qlthanhvien.sql in PhpMyAdmin (or other tool) and run file`
 
 3. Run project
     `run ../src/main/java/ActivityMain/index.java`
